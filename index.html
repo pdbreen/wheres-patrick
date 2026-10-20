@@ -1,0 +1,1198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#103b40" />
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,650&display=swap" rel="stylesheet" />
+  <title>Where's Patrick?</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f3f6f3;
+      --surface: #ffffff;
+      --surface-alt: #e4eeea;
+      --ink: #122625;
+      --muted: #516462;
+      --line: #cddad5;
+      --deep: #103b40;
+      --deep-2: #1d585a;
+      --mint: #a6ddd0;
+      --orange: #e7743b;
+      --gold: #e9bc61;
+      --shadow: 0 20px 54px rgba(19, 49, 48, .12);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0c1718;
+        --surface: #142426;
+        --surface-alt: #1d3333;
+        --ink: #edf7f2;
+        --muted: #b6c9c3;
+        --line: #34504d;
+        --deep: #092d32;
+        --deep-2: #17494b;
+        --mint: #8ed7c5;
+        --orange: #f18b57;
+        --gold: #f0c975;
+        --shadow: 0 22px 58px rgba(0, 0, 0, .3);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        linear-gradient(180deg, color-mix(in srgb, var(--surface-alt) 80%, transparent), transparent 38rem),
+        var(--bg);
+      color: var(--ink);
+      font: 400 16px/1.55 "IBM Plex Sans", sans-serif;
+      text-rendering: optimizeLegibility;
+    }
+    a { color: inherit; }
+    .page {
+      width: min(1180px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 24px 0 72px;
+    }
+
+    .status-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin: 2px 2px 14px;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+    .status-line strong { color: var(--ink); font-weight: 600; }
+    .live-key { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 4px color-mix(in srgb, var(--orange) 18%, transparent); }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.03fr .97fr;
+      min-height: 510px;
+      background: var(--deep);
+      color: #f7fffb;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .hero-copy {
+      position: relative;
+      min-width: 0;
+      padding: clamp(34px, 6vw, 74px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      isolation: isolate;
+    }
+    .hero-copy::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      left: -90px;
+      bottom: -92px;
+      border: 1px solid rgba(166, 221, 208, .28);
+      border-radius: 50%;
+      box-shadow: 0 0 0 35px rgba(166, 221, 208, .06), 0 0 0 75px rgba(166, 221, 208, .04);
+      z-index: -1;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #cbe8df;
+      font-size: .84rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 28px; height: 2px; background: var(--orange); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 610px;
+      margin: 22px 0 16px;
+      font: 650 clamp(3.2rem, 7vw, 5.6rem)/.88 "Newsreader", serif;
+      letter-spacing: -.045em;
+    }
+    .hero-copy > div > p {
+      max-width: 490px;
+      color: #d6e7e2;
+      font-size: clamp(1rem, 1.7vw, 1.2rem);
+      line-height: 1.6;
+    }
+    .arrival {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: center;
+      width: fit-content;
+      margin-top: 32px;
+      padding: 14px 18px;
+      background: rgba(255,255,255,.08);
+      border-top: 1px solid rgba(255,255,255,.16);
+    }
+    .arrival .calendar {
+      display: grid;
+      place-items: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: white;
+      font-weight: 600;
+      font-size: 1.04rem;
+    }
+    .arrival span { display: block; color: #b9d1ca; font-size: .78rem; }
+    .arrival strong { font-size: .96rem; font-weight: 600; }
+
+    .hero-photo { position: relative; min-height: 390px; }
+    .hero-photo img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: center; }
+    .hero-photo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(16,59,64,.34), transparent 30%), linear-gradient(0deg, rgba(7,27,29,.72), transparent 50%);
+    }
+    .photo-label {
+      position: absolute;
+      z-index: 2;
+      left: 28px;
+      right: 28px;
+      bottom: 26px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .photo-label strong { display: block; font: 650 2.15rem/1 "Newsreader", serif; }
+    .photo-label span { color: rgba(255,255,255,.82); font-size: .84rem; }
+    .photo-label .coords { text-align: right; letter-spacing: .04em; }
+
+    .tracking-note {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 16px;
+      align-items: center;
+      margin: 18px 0 0;
+      padding: 18px 22px;
+      background: var(--surface);
+      border-bottom: 3px solid var(--mint);
+      box-shadow: 0 8px 28px rgba(19, 49, 48, .07);
+    }
+    .tracking-note .pin {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--surface-alt);
+      color: var(--deep-2);
+      font-weight: 600;
+    }
+    .tracking-note strong { display: block; }
+    .tracking-note span { color: var(--muted); font-size: .9rem; }
+    .tracking-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: var(--deep);
+      color: #f7fffb;
+      font-size: .86rem;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .tracking-link:hover { background: var(--deep-2); }
+    .tracking-link:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+
+    section { margin-top: clamp(54px, 8vw, 92px); }
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(240px, .5fr);
+      align-items: end;
+      gap: 36px;
+      margin-bottom: 28px;
+    }
+    h2 {
+      margin-bottom: 0;
+      font: 650 clamp(2.2rem, 4vw, 4.2rem)/.98 "Newsreader", serif;
+      letter-spacing: -.035em;
+    }
+    .section-head p { margin: 0; color: var(--muted); }
+
+    .days {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .day { position: relative; padding: 26px 24px 30px 0; min-height: 205px; }
+    .day + .day { padding-left: 24px; border-left: 1px solid var(--line); }
+    .day:nth-child(4) { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+    .day:nth-child(n+5) { border-top: 1px solid var(--line); }
+    .date { display: block; color: var(--orange); font-size: .8rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+    .day h3 { margin: 30px 0 9px; font: 650 1.45rem/1.1 "Newsreader", serif; }
+    .day p { margin: 0; color: var(--muted); font-size: .93rem; line-height: 1.5; }
+    .weather-note {
+      margin: -10px 0 24px;
+      padding: 13px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .weather-note strong { color: var(--ink); font-weight: 600; }
+
+    .voyage {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .voyage-row {
+      display: grid;
+      grid-template-columns: 130px 18px minmax(0, 1fr) minmax(180px, .55fr);
+      gap: 18px;
+      align-items: center;
+      padding: 21px 26px;
+    }
+    .voyage-row + .voyage-row { border-top: 1px solid var(--line); }
+    .voyage-date { font-size: .84rem; font-weight: 600; color: var(--muted); }
+    .marker { width: 10px; height: 10px; border-radius: 50%; background: var(--deep-2); box-shadow: 0 0 0 5px var(--surface-alt); }
+    .voyage-row:first-child .marker { background: var(--orange); }
+    .place strong { display: block; font: 650 1.28rem/1.15 "Newsreader", serif; }
+    .place span, .detail { color: var(--muted); font-size: .91rem; }
+    .detail { text-align: right; }
+
+    .journeys {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 22px;
+    }
+    .next-primary {
+      background: var(--surface-alt);
+      border-radius: 20px 20px 64px 20px;
+      padding: clamp(28px, 4vw, 44px);
+      min-height: 310px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .next-primary .date { color: var(--deep-2); }
+    .next-primary h3 { margin: 14px 0 10px; font: 650 clamp(2rem, 4vw, 3.5rem)/.98 "Newsreader", serif; }
+    .next-primary p { max-width: 550px; margin: 0; color: var(--muted); }
+    .route-line { display: flex; align-items: center; gap: 12px; margin-top: 34px; font-size: .9rem; color: var(--muted); }
+    .route-line i { flex: 1; max-width: 180px; height: 1px; background: var(--line); position: relative; }
+    .route-line i::after { content: ""; position: absolute; right: 0; top: -3px; border-left: 6px solid var(--muted); border-top: 3px solid transparent; border-bottom: 3px solid transparent; }
+    .upcoming-list { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; }
+    .trip-row { display: grid; grid-template-columns: 76px 1fr; gap: 14px; padding: 16px 18px; }
+    .trip-row + .trip-row { border-top: 1px solid var(--line); }
+    .trip-row time { color: var(--orange); font-size: .75rem; font-weight: 600; line-height: 1.35; text-transform: uppercase; }
+    .trip-row strong { display: block; font-size: .95rem; line-height: 1.25; }
+    .trip-row span { color: var(--muted); font-size: .8rem; }
+
+    .history-list {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .memory {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(300px, .95fr);
+      gap: clamp(28px, 5vw, 72px);
+      align-items: center;
+      padding: clamp(28px, 5vw, 58px) 0;
+    }
+    .memory + .memory { border-top: 1px solid var(--line); }
+    .memory:nth-child(even) .memory-photo { order: 2; }
+    .memory:nth-child(even) .memory-copy { order: 1; padding-left: clamp(0px, 3vw, 34px); }
+    .memory-photo {
+      margin: 0;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border-radius: 18px;
+      background: var(--surface-alt);
+    }
+    .memory-photo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .memory-copy { max-width: 480px; }
+    .memory-copy time {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--orange);
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .memory-copy h3 {
+      margin: 0 0 14px;
+      font: 650 clamp(1.75rem, 3vw, 2.65rem)/1 "Newsreader", serif;
+      letter-spacing: -.02em;
+    }
+    .memory-copy p { margin: 0; color: var(--muted); line-height: 1.65; }
+    .memory.no-photo {
+      display: block;
+      margin: clamp(28px, 5vw, 58px) 0;
+      padding: clamp(28px, 5vw, 48px);
+      background: var(--surface-alt);
+      border: 0;
+      border-radius: 18px;
+    }
+    .memory.no-photo .memory-copy { max-width: 760px; }
+
+    .gallery { position: relative; }
+    .gallery-track { display: flex; height: 100%; transition: transform .45s ease; }
+    .gallery-track img { flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover; }
+    .gallery-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(9, 30, 32, .55);
+      color: #fff;
+      cursor: pointer;
+    }
+    .gallery-btn:hover { background: rgba(9, 30, 32, .82); }
+    .gallery-btn:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+    .gallery-btn.prev { left: 12px; }
+    .gallery-btn.next { right: 12px; }
+    .gallery-btn svg { width: 20px; height: 20px; }
+    .gallery-count {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      z-index: 2;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(9, 30, 32, .62);
+      color: #fff;
+      font-size: .78rem;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+    .gallery-dots {
+      position: absolute;
+      left: 12px;
+      bottom: 16px;
+      z-index: 2;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      max-width: calc(100% - 130px);
+    }
+    .gallery-dot {
+      width: 9px;
+      height: 9px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .5);
+      cursor: pointer;
+    }
+    .gallery-dot:hover { background: rgba(255, 255, 255, .85); }
+    .gallery-dot:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+    .gallery-dot[aria-current="true"] { background: #fff; }
+    @media (prefers-reduced-motion: reduce) { .gallery-track { transition: none; } }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      margin-top: 70px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .8rem;
+    }
+    footer p { margin: 0; max-width: 640px; }
+    footer a { text-underline-offset: 3px; }
+
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-copy { min-height: 460px; }
+      .hero-photo { min-height: 420px; }
+      .section-head { grid-template-columns: 1fr; gap: 14px; }
+      .days { grid-template-columns: 1fr 1fr; }
+      .day:nth-child(odd) { padding-left: 0; border-left: 0; }
+      .day:nth-child(n+3) { border-top: 1px solid var(--line); }
+      .journeys { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 580px) {
+      .page { width: min(100% - 24px, 1180px); padding-top: 12px; }
+      .status-line { align-items: flex-start; }
+      .status-line > span:first-child { max-width: 190px; }
+      .hero { min-height: 0; border-radius: 20px; }
+      .hero-copy { min-height: 430px; padding: 30px 24px 34px; }
+      h1 { font-size: clamp(3rem, 14vw, 4.1rem); overflow-wrap: break-word; }
+      .hero-photo { min-height: 330px; }
+      .photo-label { left: 22px; right: 22px; bottom: 20px; }
+      .photo-label .coords { display: none; }
+      .tracking-note { grid-template-columns: auto 1fr; }
+      .tracking-link { grid-column: 1 / -1; width: 100%; }
+      .days { grid-template-columns: 1fr; }
+      .day { min-height: 0; padding: 22px 4px 24px; }
+      .day + .day { padding-left: 4px; border-left: 0; border-top: 1px solid var(--line); }
+      .day h3 { margin-top: 13px; }
+      .voyage-row { grid-template-columns: 88px 12px 1fr; gap: 10px; padding: 18px 16px; }
+      .detail { grid-column: 3; text-align: left; }
+      .next-primary { border-radius: 18px 18px 48px 18px; }
+      .memory { grid-template-columns: 1fr; gap: 22px; padding: 30px 0; }
+      .memory:nth-child(even) .memory-photo,
+      .memory:nth-child(even) .memory-copy { order: initial; }
+      .memory:nth-child(even) .memory-copy { padding-left: 0; }
+      .memory-copy { max-width: none; }
+      .memory-copy h3 { font-size: 2rem; }
+      .memory.no-photo { margin: 30px 0; padding: 26px 22px; }
+      footer { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+    .view[hidden] { display: none; }
+    .archive-list { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .archive-card { display: flex; flex-direction: column; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 26px 28px; text-decoration: none; }
+    .archive-card time { color: var(--orange); font-size: .78rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+    .archive-card strong { font: 650 1.7rem/1.1 "Newsreader", serif; letter-spacing: -.02em; }
+    .archive-card .desc { color: var(--muted); font-size: .93rem; line-height: 1.55; }
+    .archive-card .go { margin-top: 10px; color: var(--deep-2); font-size: .9rem; font-weight: 600; }
+    .archive-card:hover { border-color: var(--deep-2); }
+    .archive-card:focus-visible, .back-link:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+    .back-link { display: inline-flex; align-items: center; min-height: 42px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--deep-2); font-size: .88rem; font-weight: 600; text-decoration: none; }
+    .back-link:hover { border-color: var(--deep-2); }
+    .archive-head { margin-top: 30px; }
+    .archive-view .history-list + .back-link { margin-top: 34px; }
+    @media (max-width: 860px) { .archive-list { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="view" id="view-main">
+    <div class="status-line" aria-label="Update status">
+      <span>Itinerary snapshot · <strong>Mon Oct 19</strong></span>
+      <span class="live-key"><span class="dot" aria-hidden="true"></span>Planned whereabouts</span>
+    </div>
+
+    <article class="hero" aria-labelledby="current-place">
+      <div class="hero-copy">
+        <div>
+          <span class="eyebrow">Today · Monday</span>
+          <h1 id="current-place">Messina, Sicily</h1>
+          <p>Mon Oct 19, 2026: First port day on Odyssey of the Seas — Sicily (Messina), 10:00 AM–9:00 PM. Mount Etna, Taormina &amp; Surroundings small-group tour (italytours.eu, confirmed &amp; paid, res Breen-ETNA-1019): meet 10:50–10:59 AM at the pier's PRIVATE TOURS area — driver holds a sign reading ETNA &amp; TAORMINA – Patrick Breen — depart 11:00 AM. Thunderstorm risk 2:00–7:59 PM, so the rain shell, a warm layer, and grippy shoes go in the day pack. Local bites: arancini; Bronte pistachios and Etna Rosso wine to bring home. Tomorrow: a full day at sea.</p>
+        </div>
+        <div class="arrival">
+          <div class="calendar" aria-hidden="true">19</div>
+          <div><span>Port day · Messina, Sicily → Odyssey of the Seas</span><strong>Tomorrow Tue Oct 20 — a full day at sea en route to Santorini.</strong></div>
+        </div>
+      </div>
+      <div class="hero-photo">
+        <img src="assets/img-001.jpg" alt="Venice rooftops and domes reflected in the Grand Canal at sunset" />
+        <div class="photo-label">
+          <div><span>Journey began in</span><strong>Venezia</strong></div>
+          <span class="coords">45.4408° N<br />12.3155° E</span>
+        </div>
+      </div>
+    </article>
+
+    <aside class="tracking-note" aria-label="Live tracking status">
+      <span class="pin" aria-hidden="true">◎</span>
+      <div><strong>Follow the Venice &amp; Transatlantic trip live.</strong><span>Polarsteps shows Patrick’s route and new stops as the journey unfolds.</span></div>
+      <a class="tracking-link" href="https://www.polarsteps.com/PatrickBreen/29451508-venice-transatlantic?s=89e3c43b-e084-4336-ac7e-72de4a92837b" target="_blank" rel="noopener noreferrer">Open Polarsteps ↗</a>
+    </aside>
+
+    <section aria-labelledby="week-heading">
+      <div class="section-head">
+        <h2 id="week-heading">What’s next</h2>
+        <p>The Odyssey's Greek Isles &amp; Italy sailing runs through the Aegean before the transatlantic crossing begins in Civitavecchia.</p>
+      </div>
+      <div class="days">
+        <article class="day"><span class="date">Tue · Oct 20</span><h3>At sea</h3><p>A full day aboard Odyssey of the Seas.</p></article>
+        <article class="day"><span class="date">Wed · Oct 21</span><h3>Santorini</h3><p>A self-guided Fira day, ending at PK Cocktail Bar.</p></article>
+        <article class="day"><span class="date">Thu · Oct 22</span><h3>Mykonos</h3><p>A self-guided walk through Chora.</p></article>
+        <article class="day"><span class="date">Fri · Oct 23</span><h3>At sea</h3><p>Another day aboard en route to Naples.</p></article>
+        <article class="day"><span class="date">Sat · Oct 24</span><h3>Naples</h3><p>Herculaneum excursion.</p></article>
+        <article class="day"><span class="date">Sun · Oct 25</span><h3>Rome (Civitavecchia), Italy</h3><p>Odyssey arrives 5:00 AM; the 14-night Spain &amp; Portugal transatlantic crossing departs 5:00 PM.</p></article>
+      </div>
+    </section>
+
+    <section aria-labelledby="route-heading">
+      <div class="section-head">
+        <h2 id="route-heading">The long way home</h2>
+        <p>Three back-to-back voyages carry Patrick from Civitavecchia to New York Harbor by way of Greece, Italy, Iberia, the Azores, and the Bahamas.</p>
+      </div>
+      <div class="voyage">
+        <div class="voyage-row"><time class="voyage-date" datetime="2026-10-18">Oct 18–25</time><span class="marker" aria-hidden="true"></span><div class="place"><strong>Italy &amp; the Greek Isles</strong><span>Civitavecchia · Sicily · Santorini · Mykonos · Naples</span></div><div class="detail">Odyssey of the Seas</div></div>
+        <div class="voyage-row"><time class="voyage-date" datetime="2026-10-25">Oct 25–Nov 8</time><span class="marker" aria-hidden="true"></span><div class="place"><strong>Across the Atlantic</strong><span>La Spezia · Barcelona · Cartagena · Lisbon · Ponta Delgada</span></div><div class="detail">Odyssey of the Seas</div></div>
+        <div class="voyage-row"><time class="voyage-date" datetime="2026-11-08">Nov 8–15</time><span class="marker" aria-hidden="true"></span><div class="place"><strong>Bahamas finale</strong><span>New Jersey · Port Canaveral · CocoCay · Nassau</span></div><div class="detail">Odyssey of the Seas</div></div>
+        <div class="voyage-row"><time class="voyage-date" datetime="2026-11-15">Sun · Nov 15</time><span class="marker" aria-hidden="true"></span><div class="place"><strong>Back in New England</strong><span>Home after forty days away</span></div><div class="detail">Until Seattle</div></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="next-heading">
+      <div class="section-head">
+        <h2 id="next-heading">What’s after Venice</h2>
+        <p>The calendar stays busy. These are broad plans only—lodging, bookings, and personal details stay off the public view.</p>
+      </div>
+      <div class="journeys">
+        <article class="next-primary">
+          <div><span class="date">November 19–23, 2026</span><h3>Seattle &amp; Redmond</h3><p>A family wedding weekend in Washington, with a little time around the Eastside and Seattle.</p></div>
+          <div class="route-line"><span>Boston</span><i aria-hidden="true"></i><span>Seattle</span></div>
+        </article>
+        <div class="upcoming-list" aria-label="Later journeys">
+          <div class="trip-row"><time>Nov 28<br />Dec 19</time><div><strong>Caribbean</strong><span>Bahamas, Dominican Republic, Aruba, Curaçao &amp; Mexico</span></div></div>
+          <div class="trip-row"><time>Jan 2<br />Jan 25</time><div><strong>Eastern &amp; Southern Caribbean</strong><span>Two voyages from New Jersey</span></div></div>
+          <div class="trip-row"><time>Feb 5<br />Feb 19</time><div><strong>Florida &amp; the Bahamas</strong><span>Miami, Estero and two short cruises</span></div></div>
+          <div class="trip-row"><time>Feb 26<br />May 5</time><div><strong>Pacific crossing</strong><span>Hawaii, Australia, New Zealand and the South Pacific</span></div></div>
+          <div class="trip-row"><time>May 12<br />May 29</time><div><strong>Spain &amp; the Mediterranean</strong><span>Barcelona, the western Med and Andalusia</span></div></div>
+          <div class="trip-row"><time>Aug 20<br />Sep 3</time><div><strong>Alaska</strong><span>Fairbanks to Vancouver by road, rail and sea</span></div></div>
+          <div class="trip-row"><time>Oct 4<br />Oct 30</time><div><strong>Panama Canal</strong><span>San Diego to Tampa, then the eastern Caribbean</span></div></div>
+          <div class="trip-row"><time>Mar 8<br />May 3<br />2028</time><div><strong>Japan</strong><span>Shanghai to Seattle via Tokyo &amp; Kyoto</span></div></div>
+        </div>
+      </div>
+    </section>
+
+
+    <section aria-labelledby="history-heading">
+      <div class="section-head">
+        <h2 id="history-heading">Where was Patrick</h2>
+        <p>Built from Patrick’s Day One journal, this history runs newest-first through October 2026 — journal entries up to Oct 15, plus the newest day in Split — including recent days in Venice, Ravenna, Kotor, Santorini, Athens and at sea. Entries tagged #private are excluded.</p>
+      </div>
+      <div class="history-list">
+        <!-- Placeholder entry for Sun Oct 18, 2026: auto-created from the itinerary; no Day One journal entry received yet. Replace this entry entirely when a journal entry for Oct 18 arrives. -->
+        <article class="memory no-photo" data-placeholder="oct-18-2026">
+          <div class="memory-copy"><time datetime="2026-10-18">Sun · Oct 18, 2026</time><h3>Civitavecchia, Italy</h3><p>Odyssey of the Seas boarding day: checkout at Guest House Museum, the 1 km waterfront walk to the Largo della Pace port-shuttle hub, and boarding (stateroom 4D 10266, Ocean View Balcony). Sails 4:00 PM on the 7-night Greek Isles &amp; Italy sailing.</p></div>
+        </article>
+        <!-- Placeholder entry for Sat Oct 17, 2026: auto-created from the itinerary; no Day One journal entry received yet. Replace this entry entirely when a journal entry for Oct 17 arrives. -->
+        <article class="memory no-photo" data-placeholder="oct-17-2026">
+          <div class="memory-copy"><time datetime="2026-10-17">Sat · Oct 17, 2026</time><h3>Ravenna → Civitavecchia, Italy</h3><p>Disembarked Explorer of the Seas at Ravenna this morning (ship arrived 6:00 AM; end of the 7nt Greece &amp; Adriatic sailing); Regionale 17546 Ravenna 11:43 AM → Bologna Centrale 12:55 PM; Frecciarossa 9535 Bologna 1:27 PM → Roma Termini 3:49 PM (Business, coach 4, seat 1D); Regionale Veloce 4136 Roma Termini 4:12 PM → Civitavecchia 5:13 PM. Overnight at Guest House Museum, Civitavecchia.</p></div>
+        </article>
+        <!-- Placeholder entry for Fri Oct 16, 2026: auto-created from the itinerary; no Day One journal entry received yet. Replace this entry entirely when a journal entry for Oct 16 arrives. -->
+        <article class="memory no-photo" data-placeholder="oct-16-2026">
+          <div class="memory-copy"><time datetime="2026-10-16">Fri · Oct 16, 2026</time><h3>Split, Croatia</h3><p>Explorer of the Seas in port 8:00 AM–5:00 PM — the last port day of the Greece &amp; Adriatic sailing. Split &amp; Trogir small-group tour at 9:30 AM.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Sea day">
+          <div class="gallery-track">
+          <img src="assets/img-002.jpg" alt="Sunrise at sea aboard Explorer of the Seas" loading="lazy" />
+          <img src="assets/img-003.jpg" alt="Journal photo from Sea day — photo 2 of 3" loading="lazy" />
+          <img src="assets/img-004.jpg" alt="Journal photo from Sea day — photo 3 of 3" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 3</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 3" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 3"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 3"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-10-15">Thu · Oct 15, 2026</time><h3>Sea day</h3><p>Sea day, morning. It was a mistake not heading back out into Piraeus after the tour — the walk wasn't far and there was plenty of time. Weather improved slightly, sun poking through. Skipped the headliner for another early bedtime; awake at 5am as a result and caught the sunrise. Canceled next week's Santorini beach club in favor of unstructured time in Fira, possibly staying for the 6:30pm sunset. Tried to reserve a table — payment went through but the site said it failed. Not much planned; will finally start the book.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Athens, Greece">
+          <div class="gallery-track">
+          <img src="assets/img-005.jpg" alt="Journal photo from Patrick’s day in Athens" loading="lazy" />
+          <img src="assets/img-006.jpg" alt="Journal photo from Athens, Greece — photo 2 of 6" loading="lazy" />
+          <img src="assets/img-007.jpg" alt="Journal photo from Athens, Greece — photo 3 of 6" loading="lazy" />
+          <img src="assets/img-008.jpg" alt="Journal photo from Athens, Greece — photo 4 of 6" loading="lazy" />
+          <img src="assets/img-009.jpg" alt="Journal photo from Athens, Greece — photo 5 of 6" loading="lazy" />
+          <img src="assets/img-010.jpg" alt="Journal photo from Athens, Greece — photo 6 of 6" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 6</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 6" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 6"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 6"></button><button class="gallery-dot" type="button" aria-label="Photo 4 of 6"></button><button class="gallery-dot" type="button" aria-label="Photo 5 of 6"></button><button class="gallery-dot" type="button" aria-label="Photo 6 of 6"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-10-14">Wed · Oct 14, 2026</time><h3>Athens, Greece</h3><p>Athens. First time here — Acropolis ship excursion as the must-do checklist item. The bus ride's "highlights of Athens" were extremely limited, but the guide ("shortie") made up for it with history and Greek mythology. Weather beat the forecast: occasional light rain and breeze, a shell without umbrella was enough. The climb wasn't bad. Headed back down about 40 minutes early and wandered until I found espresso. The ship was too far from anything at the terminal to make the walk worthwhile. Tonight's headliner is Tony Tillman — at least the third cruise with him on it — probably skipping for an early night before the sea day.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Santorini, Greece">
+          <div class="gallery-track">
+          <img src="assets/img-011.jpg" alt="Journal photo from Patrick’s day in Santorini" loading="lazy" />
+          <img src="assets/img-012.jpg" alt="Journal photo from Santorini, Greece — photo 2 of 8" loading="lazy" />
+          <img src="assets/img-013.jpg" alt="Journal photo from Santorini, Greece — photo 3 of 8" loading="lazy" />
+          <img src="assets/img-014.jpg" alt="Journal photo from Santorini, Greece — photo 4 of 8" loading="lazy" />
+          <img src="assets/img-015.jpg" alt="Journal photo from Santorini, Greece — photo 5 of 8" loading="lazy" />
+          <img src="assets/img-016.jpg" alt="Journal photo from Santorini, Greece — photo 6 of 8" loading="lazy" />
+          <img src="assets/img-017.jpg" alt="Journal photo from Santorini, Greece — photo 7 of 8" loading="lazy" />
+          <img src="assets/img-018.jpg" alt="Journal photo from Santorini, Greece — photo 8 of 8" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 8</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 8" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 8"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 8"></button><button class="gallery-dot" type="button" aria-label="Photo 4 of 8"></button><button class="gallery-dot" type="button" aria-label="Photo 5 of 8"></button><button class="gallery-dot" type="button" aria-label="Photo 6 of 8"></button><button class="gallery-dot" type="button" aria-label="Photo 7 of 8"></button><button class="gallery-dot" type="button" aria-label="Photo 8 of 8"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-10-13">Tue · Oct 13, 2026</time><h3>Santorini, Greece</h3><p>Santorini. Royal Beach Club first thing — 7am meeting made the morning rushed since Windjammer didn't open until 6:30. At the club by 8:15; getting off the tender was interesting with rolling seas rocking the boat. Chill vibe, decent free beer but kept it light with the Oia and Fira tours after. Lunch at the club was good — chicken skewers and Greek salad the favorites, plus good Greek desserts. Then Oia (about a 30-minute drive) — nearly identical to Fira with fewer alleyways to explore; wandered shops, sat with a beer in the ~90 minutes at each. Decent enough day to keep the same tour booked for next week.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-019.jpg" alt="Journal photo from a sea day aboard Explorer of the Seas" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-10-12">Mon · Oct 12, 2026</time><h3>Sea day</h3><p>Sea day. Morning working with Muse on future trips. Loyalty event lightly attended — "the numbers show why" — though most of the Pinnacles were there. Pizza, a casino-bar drink, the ice-skating show (Four Seasons theme, easy to follow), the belly flop, then sun on deck. Evening: back in the casino losing too much money. But a Serenade sailing looks possible before the Panama crossing — kills the San Diego exploration, adds an overnight in San Francisco. Santorini beach club meets at 7am tomorrow.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Kotor, Montenegro">
+          <div class="gallery-track">
+          <img src="assets/img-020.jpg" alt="Journal photo from Patrick’s day in Kotor, Montenegro" loading="lazy" />
+          <img src="assets/img-021.jpg" alt="Journal photo from Kotor, Montenegro — photo 2 of 9" loading="lazy" />
+          <img src="assets/img-022.jpg" alt="Journal photo from Kotor, Montenegro — photo 3 of 9" loading="lazy" />
+          <img src="assets/img-023.jpg" alt="Journal photo from Kotor, Montenegro — photo 4 of 9" loading="lazy" />
+          <img src="assets/img-024.jpg" alt="Journal photo from Kotor, Montenegro — photo 5 of 9" loading="lazy" />
+          <img src="assets/img-025.jpg" alt="Journal photo from Kotor, Montenegro — photo 6 of 9" loading="lazy" />
+          <img src="assets/img-026.jpg" alt="Journal photo from Kotor, Montenegro — photo 7 of 9" loading="lazy" />
+          <img src="assets/img-027.jpg" alt="Journal photo from Kotor, Montenegro — photo 8 of 9" loading="lazy" />
+          <img src="assets/img-028.jpg" alt="Journal photo from Kotor, Montenegro — photo 9 of 9" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 9</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 9" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 9"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 9"></button><button class="gallery-dot" type="button" aria-label="Photo 4 of 9"></button><button class="gallery-dot" type="button" aria-label="Photo 5 of 9"></button><button class="gallery-dot" type="button" aria-label="Photo 6 of 9"></button><button class="gallery-dot" type="button" aria-label="Photo 7 of 9"></button><button class="gallery-dot" type="button" aria-label="Photo 8 of 9"></button><button class="gallery-dot" type="button" aria-label="Photo 9 of 9"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-10-11">Sun · Oct 11, 2026</time><h3>Kotor, Montenegro</h3><p>Kotor, Montenegro. Scenic morning sail through the bay to the anchorage — weather not great, not terrible. Royal tour: bus to Perast, ferry to Our Lady of the Rocks, very prominent entering the bay. Would have liked a waterfront lunch but the tour clock was ticking. Back to Kotor for the old-city walking tour — light rain killed the headset, and after 30 minutes standing in the rain with sciatica, dropped the tour for beers. Wandered the old city instead — every alley a surprise — rain stopped, cats came out. Would return for the old city and the hike up to the church. Tender lines the only downside (peak around 5pm, last tender 7pm). Love &amp; Marriage in the evening — left after the first half.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Venice → Ravenna → Explorer of the Seas">
+          <div class="gallery-track">
+          <img src="assets/img-029.jpg" alt="Casino win aboard Explorer of the Seas" loading="lazy" />
+          <img src="assets/img-030.jpg" alt="Journal photo from Venice → Ravenna → Explorer of the Seas — photo 2 of 9" loading="lazy" />
+          <img src="assets/img-031.jpg" alt="Journal photo from Venice → Ravenna → Explorer of the Seas — photo 3 of 9" loading="lazy" />
+          <img src="assets/img-032.jpg" alt="Journal photo from Venice → Ravenna → Explorer of the Seas — photo 4 of 9" loading="lazy" />
+          <img src="assets/img-033.jpg" alt="Journal photo from Venice → Ravenna → Explorer of the Seas — photo 5 of 9" loading="lazy" />
+          <img src="assets/img-034.jpg" alt="Journal photo from Venice → Ravenna → Explorer of the Seas — photo 6 of 9" loading="lazy" />
+          <img src="assets/img-035.jpg" alt="Journal photo from Venice → Ravenna → Explorer of the Seas — photo 7 of 9" loading="lazy" />
+          <img src="assets/img-036.jpg" alt="Journal photo from Venice → Ravenna → Explorer of the Seas — photo 8 of 9" loading="lazy" />
+          <img src="assets/img-037.jpg" alt="Journal photo from Venice → Ravenna → Explorer of the Seas — photo 9 of 9" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 9</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 9" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 9"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 9"></button><button class="gallery-dot" type="button" aria-label="Photo 4 of 9"></button><button class="gallery-dot" type="button" aria-label="Photo 5 of 9"></button><button class="gallery-dot" type="button" aria-label="Photo 6 of 9"></button><button class="gallery-dot" type="button" aria-label="Photo 7 of 9"></button><button class="gallery-dot" type="button" aria-label="Photo 8 of 9"></button><button class="gallery-dot" type="button" aria-label="Photo 9 of 9"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-10-10">Sat · Oct 10, 2026</time><h3>Venice → Ravenna → Explorer of the Seas</h3><p>Venice to Ravenna to Explorer. Morning: beer and food at Laguna ("enjoyable location"), a spritz to check off the list, gelato, buranelli cookies from a market stop, espresso and croissant at Dolce Vita. Packed out and bussed from Tronchetto — five busloads of cruisers. Ravenna: at the port by 2pm, slow security with all the buses arriving at once, then quick. Rooms ready — muster done, passport in the safe. Errands: booked the first Japan 2028 cruise, cut the Coke Zero amenity rewards, gave up the fixed MDR seat, sorted Ravenna station transport. The NextCruise woman, Alessandra, was on Brilliance earlier this year — recognized her. Casino: back-to-back wins, OBC turned to cash, up $400 including OBC. ("The trick is not to lose it all!") Tonight's show was repeat ventriloquist Celia Muñoz — left early, as expected. Cruise director Michelle (on Odyssey May last year) speaks many languages; ran into a Brilliance bartender in the Windjammer. Halloween balloon drop — stayed awake and mostly sober.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Murano, Burano &amp; Venice">
+          <div class="gallery-track">
+          <img src="assets/img-038.jpg" alt="Colorful Burano homes lining a broad canal beneath a blue sky" loading="lazy" />
+          <img src="assets/img-039.jpg" alt="Journal photo from Murano, Burano &amp; Venice — photo 2 of 7" loading="lazy" />
+          <img src="assets/img-040.jpg" alt="Journal photo from Murano, Burano &amp; Venice — photo 3 of 7" loading="lazy" />
+          <img src="assets/img-041.jpg" alt="Journal photo from Murano, Burano &amp; Venice — photo 4 of 7" loading="lazy" />
+          <img src="assets/img-042.jpg" alt="Journal photo from Murano, Burano &amp; Venice — photo 5 of 7" loading="lazy" />
+          <img src="assets/img-043.jpg" alt="Journal photo from Murano, Burano &amp; Venice — photo 6 of 7" loading="lazy" />
+          <img src="assets/img-044.jpg" alt="Journal photo from Murano, Burano &amp; Venice — photo 7 of 7" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 7</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 7" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 7"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 7"></button><button class="gallery-dot" type="button" aria-label="Photo 4 of 7"></button><button class="gallery-dot" type="button" aria-label="Photo 5 of 7"></button><button class="gallery-dot" type="button" aria-label="Photo 6 of 7"></button><button class="gallery-dot" type="button" aria-label="Photo 7 of 7"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-10-09">Fri · Oct 9, 2026</time><h3>Murano, Burano &amp; Venice</h3><p>Dinner last night, since I did go out: anchovies and onions to start, cuttlefish with squid ink for main — both flagged typical Venetian, both ok, nothing I'd ever seek out again. Long walk to the tour meeting point — the shorter route needed a Grand Canal transit, so I took the bridge route. Made it on time. The gallery after the glass-making demo was amazing, no pictures allowed — if I read the prices right, a drinking glass was over €100. Short walk around Murano; sciatica acting up (Aleve tomorrow). Burano was the better stop by far — no idea why Murano gets more attention. Shops lining the main street and canal; with sciatica still bothering me I found a café for a bite and beers, then a beer-focused café for one more. One photo: a house tracking flood waters — November 2019 was a bad month.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Venice">
+          <div class="gallery-track">
+          <img src="assets/img-045.jpg" alt="Ornate gilded interior of the Doge’s Palace in Venice" loading="lazy" />
+          <img src="assets/img-046.jpg" alt="Journal photo from Venice — photo 2 of 11" loading="lazy" />
+          <img src="assets/img-047.jpg" alt="Journal photo from Venice — photo 3 of 11" loading="lazy" />
+          <img src="assets/img-048.jpg" alt="Journal photo from Venice — photo 4 of 11" loading="lazy" />
+          <img src="assets/img-049.jpg" alt="Journal photo from Venice — photo 5 of 11" loading="lazy" />
+          <img src="assets/img-050.jpg" alt="Journal photo from Venice — photo 6 of 11" loading="lazy" />
+          <img src="assets/img-051.jpg" alt="Journal photo from Venice — photo 7 of 11" loading="lazy" />
+          <img src="assets/img-052.jpg" alt="Journal photo from Venice — photo 8 of 11" loading="lazy" />
+          <img src="assets/img-053.jpg" alt="Journal photo from Venice — photo 9 of 11" loading="lazy" />
+          <img src="assets/img-054.jpg" alt="Journal photo from Venice — photo 10 of 11" loading="lazy" />
+          <img src="assets/img-055.jpg" alt="Journal photo from Venice — photo 11 of 11" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 11</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 11" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 11"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 11"></button><button class="gallery-dot" type="button" aria-label="Photo 4 of 11"></button><button class="gallery-dot" type="button" aria-label="Photo 5 of 11"></button><button class="gallery-dot" type="button" aria-label="Photo 6 of 11"></button><button class="gallery-dot" type="button" aria-label="Photo 7 of 11"></button><button class="gallery-dot" type="button" aria-label="Photo 8 of 11"></button><button class="gallery-dot" type="button" aria-label="Photo 9 of 11"></button><button class="gallery-dot" type="button" aria-label="Photo 10 of 11"></button><button class="gallery-dot" type="button" aria-label="Photo 11 of 11"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-10-08">Thu · Oct 8, 2026</time><h3>Venice</h3><p>Up early for the 8:30 tour — coffee and a croissant on the way, the only one with a latte. Small group of 16; the guide's a historian and former teacher, 30 years in Venice — a firehose of information. Great energy and love for the city, but I stopped retaining anything after the second hour. Rialto market and bridge, gondola ride, St Mark's and the Doge's Palace — 6 hours total. Bought a Hard Rock shirt right by the gondola. Seagulls inside the Rialto fish market — saw one get lucky and steal a fish. Morning threatened rain; sun was out when the tour ended. Wandered back with beer stops and an ATM stop, destination Punta della Dogana — the point of land at the Grand Canal entrance. Favorite stop: Laguna Bar, facing the setting sun with enough foot traffic to be interesting. Big pizza slice at lunch; the hotel does free food at 6:30. But I should go out.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Madrid → Bologna → Venice">
+          <div class="gallery-track">
+          <img src="assets/img-056.jpg" alt="Welcome drink and finger food waiting at Hotel Moresco in Venice" loading="lazy" />
+          <img src="assets/img-057.jpg" alt="Journal photo from Madrid → Bologna → Venice — photo 2 of 5" loading="lazy" />
+          <img src="assets/img-058.jpg" alt="Journal photo from Madrid → Bologna → Venice — photo 3 of 5" loading="lazy" />
+          <img src="assets/img-059.jpg" alt="Journal photo from Madrid → Bologna → Venice — photo 4 of 5" loading="lazy" />
+          <img src="assets/img-060.jpg" alt="Journal photo from Madrid → Bologna → Venice — photo 5 of 5" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 5</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 5" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 5"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 5"></button><button class="gallery-dot" type="button" aria-label="Photo 4 of 5"></button><button class="gallery-dot" type="button" aria-label="Photo 5 of 5"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-10-07">Wed · Oct 7, 2026</time><h3>Madrid → Bologna → Venice</h3><p>Flight 45 minutes early, big tailwind — 1050kph ground speed. Expecting the usual EES issue, but the kiosk sent me to the gate (2nd try) and the e-gate worked (2nd try, agent holding the passport on the scanner). Running low on Schengen days in the 180 window, but plenty by next May. Half-liter airport beer: €5. Then Bologna: bad rudder, emergency landing where there were no crosswinds. Fire trucks lined the runway; it was a very normal landing, just not at the right airport. Through immigration again — the agent stared at my data on the screen a while before waving me through. Buses to Venice, about 2 hours; hopefully at the hotel by 6pm, and hopefully the luggage made it. Underway just before 6pm. At the hotel around 7 — passport handed over, welcome drink and finger food on offer, a welcoming room tour. Debated going out, but with a 7:30am departure tomorrow and a 6am alarm, I opened the chilled Prosecco instead.</p></div>
+        </article>
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-10-06">Tue · Oct 6, 2026</time><h3>Travel day</h3><p>Nashua to Boston to Madrid to Venice. Checked bag cost $120 — guess it wasn't included in the mileage reward. Terminal E in Boston isn't terrible even without lounge access. TSA started chitchat about Royal because of the shirt I was wearing — always takes me longer than it should to realize it's just chitchat.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="archive-heading">
+      <div class="section-head">
+        <h2 id="archive-heading">Trip archive</h2>
+        <p>Earlier journeys, kept day by day — every journal entry and photo from the summer’s travels.</p>
+      </div>
+      <div class="archive-list">
+        <a class="archive-card" href="#bayonne-miami-sep-2026">
+          <time>Sep 2 to Sep 28, 2026</time>
+          <strong>New England, Bermuda &amp; Virgin Voyages</strong>
+          <span class="desc">The Bayonne sailing — New England, Canada and Bermuda — followed by the Virgin Voyages sailing out of Miami.</span>
+          <span class="go">Read the trip journal →</span>
+        </a>
+        <a class="archive-card" href="#spain-transatlantic-jul-aug-2026">
+          <time>Jul 22 to Aug 29, 2026</time>
+          <strong>Spain &amp; Transatlantic</strong>
+          <span class="desc">Madrid and Spain, the transatlantic crossing, Orlando and Universal Studios, Utopia of the Seas, and Rhapsody of the Seas ending in San Juan.</span>
+          <span class="go">Read the trip journal →</span>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <p>This page shows Patrick’s planned itinerary, not a live GPS position. Follow the current trip through the Polarsteps link above for live route updates.</p>
+      <p>Venice photograph: <a href="https://jooinn.com/venice-sunset.html" target="_blank" rel="noopener noreferrer">Jooinn</a></p>
+    </footer>
+    </div>
+
+    <div class="view archive-view" id="spain-transatlantic-jul-aug-2026" data-title="Spain &amp; Transatlantic — Jul 22 to Aug 29, 2026" hidden>
+      <a class="back-link" href="#">← Back to Where's Patrick?</a>
+      <header class="section-head archive-head">
+        <h2>Spain &amp; Transatlantic</h2>
+        <p>Jul 22 to Aug 29, 2026 · Madrid and Spain, the transatlantic crossing, Orlando and Universal Studios, Utopia of the Seas, and Rhapsody of the Seas ending in San Juan.</p>
+      </header>
+      <div class="history-list">
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-08-29">Sat · Aug 29, 2026</time><h3>San Juan, Puerto Rico</h3><p>Waiting on a 2pm flight. The Escape Lounge is at tarmac level — very unusual. Realized today I need some way of storing where I am each day, or I'll never remember what I thought or even where I was. (This is the entry that started the Where's Patrick? page.)</p></div>
+        </article>
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-08-27">Thu · Aug 27, 2026</time><h3>Dominica</h3><p>"Bubbles and Waterfalls" — a pretty amazing day. Viator tour starting with snorkeling at Champagne Reef, partly over an actively venting volcano: bubbles coming up from the bottom, the water over the vents very warm. Then a gorge swim through to a waterfall you could step out into — a Pirates of the Caribbean 2 scene was filmed there. Finished at volcanic sulfur baths and rode back to the cabin smelling totally of sulfur. Lush, green, laid-back — I'd go back.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-061.jpg" alt="Journal photo from Patrick’s day in St Maarten" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-08-25">Tue · Aug 25, 2026</time><h3>St Maarten</h3><p>St Maarten. Off the ship early for a walk into town — only two ships in (usually at least four). Walked the boardwalk end to end, back through an empty main shopping street. Piranha Joe's for yet another shirt, then Marley's: a bucket of beer plus a few more, lunch, good chat with staff and guests. Cheap. Definitely plans to return.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from San Juan, Puerto Rico">
+          <div class="gallery-track">
+          <img src="assets/img-062.jpg" alt="Journal photo from boarding Rhapsody of the Seas in San Juan" loading="lazy" />
+          <img src="assets/img-063.jpg" alt="Journal photo from San Juan, Puerto Rico — photo 2 of 4" loading="lazy" />
+          <img src="assets/img-064.jpg" alt="Journal photo from San Juan, Puerto Rico — photo 3 of 4" loading="lazy" />
+          <img src="assets/img-065.jpg" alt="Journal photo from San Juan, Puerto Rico — photo 4 of 4" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 4</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 4" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 4"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 4"></button><button class="gallery-dot" type="button" aria-label="Photo 4 of 4"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-08-22">Sat · Aug 22, 2026</time><h3>San Juan, Puerto Rico</h3><p>San Juan. Boarding Rhapsody for a second week in the Caribbean.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-066.jpg" alt="Journal photo from Hideaway Beach at CocoCay" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-08-12">Wed · Aug 12, 2026</time><h3>CocoCay, Bahamas</h3><p>CocoCay. Hideaway Beach — normal seat and routine, lunch on the island before heading back aboard. Forecast shows possible storms during the Rhapsody cruises out of San Juan.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Nassau, Bahamas">
+          <div class="gallery-track">
+          <img src="assets/img-067.jpg" alt="Journal photo from Royal Beach Club in Nassau" loading="lazy" />
+          <img src="assets/img-068.jpg" alt="Journal photo from Nassau, Bahamas — photo 2 of 4" loading="lazy" />
+          <img src="assets/img-069.jpg" alt="Journal photo from Nassau, Bahamas — photo 3 of 4" loading="lazy" />
+          <img src="assets/img-070.jpg" alt="Journal photo from Nassau, Bahamas — photo 4 of 4" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 4</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 4" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 4"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 4"></button><button class="gallery-dot" type="button" aria-label="Photo 4 of 4"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-08-11">Tue · Aug 11, 2026</time><h3>Nassau, Bahamas</h3><p>Nassau. Royal Beach Club — same chair as last time. Likes the food here; needs a lighter breakfast next visit.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-071.jpg" alt="Journal photo from boarding day on Utopia of the Seas" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-08-10">Mon · Aug 10, 2026</time><h3>Utopia of the Seas</h3><p>Utopia of the Seas. Boarding day. Got put in a timeout after 26 drinks.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Universal Studios, Orlando">
+          <div class="gallery-track">
+          <img src="assets/img-072.jpg" alt="Journal photo from Universal Studios in Orlando" loading="lazy" />
+          <img src="assets/img-073.jpg" alt="Journal photo from Universal Studios, Orlando — photo 2 of 5" loading="lazy" />
+          <img src="assets/img-074.jpg" alt="Journal photo from Universal Studios, Orlando — photo 3 of 5" loading="lazy" />
+          <img src="assets/img-075.jpg" alt="Journal photo from Universal Studios, Orlando — photo 4 of 5" loading="lazy" />
+          <img src="assets/img-076.jpg" alt="Journal photo from Universal Studios, Orlando — photo 5 of 5" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 5</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 5" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 5"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 5"></button><button class="gallery-dot" type="button" aria-label="Photo 4 of 5"></button><button class="gallery-dot" type="button" aria-label="Photo 5 of 5"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-08-09">Sun · Aug 9, 2026</time><h3>Universal Studios, Orlando</h3><p>Universal Studios. Hotel shuttle got me to Islands of Adventure before the 9am opening — one of the first in. Spider-Man first, then the Dudley Do-Right flume, Skull Island, and Harry Potter and the Forbidden Journey. Took the Hogwarts Express to the original park; the walk into the Harry Potter area was impressive. Butterbeer and Escape from Gringotts. Done riding by ~1pm — lunch at the world's largest Hard Rock (good merch selection), then bar-hopped CityWalk. Voodoo Donuts: the berry one and the enormous apple fritter. No Universal merch appealed.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-077.jpg" alt="Journal photo from Patrick’s hotel stay in Orlando" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-08-08">Sat · Aug 8, 2026</time><h3>Orlando, Florida</h3><p>Orlando. Debark day — immigration was horrible: in the debark line at 8:30am, didn't make the car rental pickup until 11am. No facial scans, so everyone was processed manually. Hotel is decent: pleasant reception, upgraded to a top-floor lake view. Walked around the lake, stopping at a bar along the way. (Don't recall where I ate — writing this in mid-October.)</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-078.jpg" alt="Journal photo from the final sea days of the Atlantic crossing" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-08-05">Wed · Aug 5, 2026</time><h3>Sea day</h3><p>Sea day, still great weather — nearly the end of the crossing with one sea day left. Diverted to Bermuda (again!) to offload a medical emergency.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-079.jpg" alt="Journal photo from the pool deck during the Atlantic crossing" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-08-03">Mon · Aug 3, 2026</time><h3>Sea day</h3><p>Sea day. Nice weather.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Sea day">
+          <div class="gallery-track">
+          <img src="assets/img-080.jpg" alt="Ship tracker during the Atlantic crossing" loading="lazy" />
+          <img src="assets/img-081.jpg" alt="Journal photo from Sea day — photo 2 of 3" loading="lazy" />
+          <img src="assets/img-082.jpg" alt="Journal photo from Sea day — photo 3 of 3" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 3</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 3" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 3"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 3"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-08-02">Sun · Aug 2, 2026</time><h3>Sea day</h3><p>Sea day, still crossing. Seas are calm.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-083.jpg" alt="Journal photo from a sea day on the Atlantic crossing" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-08-01">Sat · Aug 1, 2026</time><h3>Sea day</h3><p>Sea day, still crossing. Fiddler was good.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-084.jpg" alt="The Biggest Family at Sea loyalty display during the Atlantic crossing" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-07-31">Fri · Jul 31, 2026</time><h3>Transatlantic crossing</h3><p>Sea day — first day of the crossing. Big loyalty numbers.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Cádiz, Spain">
+          <div class="gallery-track">
+          <img src="assets/img-085.jpg" alt="Cruise ship off the coast near Cádiz" loading="lazy" />
+          <img src="assets/img-086.jpg" alt="Journal photo from Cádiz, Spain — photo 2 of 3" loading="lazy" />
+          <img src="assets/img-087.jpg" alt="Journal photo from Cádiz, Spain — photo 3 of 3" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 3</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 3" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 3"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 3"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-07-30">Thu · Jul 30, 2026</time><h3>Cádiz, Spain</h3><p>I'd liked Cádiz on a short visit with Sean long ago, so I stayed in Cádiz instead of spending the day on a bus to Seville or Jerez. Started with a Viator walking tour that meandered through the city nicely — only a few hours, leaving plenty of time for wandering, beers, and lunch before heading back to the ship to begin the crossing.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-088.jpg" alt="Friends sharing drinks at an outdoor table in Málaga" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-07-29">Wed · Jul 29, 2026</time><h3>Málaga, Spain</h3><p>Morning with Sean and Iza, afternoon with Sean after dropping Iza at work. Drove to Nerja and wandered, including the Balcony of Europe. Lunch up in the hill town of Frigiliana — after exploring the alleyways on foot all the way up, we settled at a restaurant in Plaza de las Tres Culturas. Back near the port after lunch for a smoothie and beers before the ship. The democracy debate that started in May continued.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Cartagena, Spain">
+          <div class="gallery-track">
+          <img src="assets/img-089.jpg" alt="Ornate church architecture in Cartagena" loading="lazy" />
+          <img src="assets/img-090.jpg" alt="Journal photo from Cartagena, Spain — photo 2 of 6" loading="lazy" />
+          <img src="assets/img-091.jpg" alt="Journal photo from Cartagena, Spain — photo 3 of 6" loading="lazy" />
+          <img src="assets/img-092.jpg" alt="Journal photo from Cartagena, Spain — photo 4 of 6" loading="lazy" />
+          <img src="assets/img-093.jpg" alt="Journal photo from Cartagena, Spain — photo 5 of 6" loading="lazy" />
+          <img src="assets/img-094.jpg" alt="Journal photo from Cartagena, Spain — photo 6 of 6" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 6</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 6" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 6"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 6"></button><button class="gallery-dot" type="button" aria-label="Photo 4 of 6"></button><button class="gallery-dot" type="button" aria-label="Photo 5 of 6"></button><button class="gallery-dot" type="button" aria-label="Photo 6 of 6"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-07-28">Tue · Jul 28, 2026</time><h3>Cartagena, Spain</h3><p>Tour starting in Murcia — guided tour plus free time to explore, then a short walking tour back in Cartagena. I left the tour near its end in Plaza de San Francisco for tapas and beer outdoors.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Palma de Mallorca, Spain">
+          <div class="gallery-track">
+          <img src="assets/img-095.jpg" alt="Mountain landscape seen on the trip to Valldemossa" loading="lazy" />
+          <img src="assets/img-096.jpg" alt="Journal photo from Palma de Mallorca, Spain — photo 2 of 4" loading="lazy" />
+          <img src="assets/img-097.jpg" alt="Journal photo from Palma de Mallorca, Spain — photo 3 of 4" loading="lazy" />
+          <img src="assets/img-098.jpg" alt="Journal photo from Palma de Mallorca, Spain — photo 4 of 4" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 4</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 4" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 4"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 4"></button><button class="gallery-dot" type="button" aria-label="Photo 4 of 4"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-07-27">Mon · Jul 27, 2026</time><h3>Palma de Mallorca, Spain</h3><p>Did a Viator tour that was kind of interesting — except the guide was upset he wasn't allowed to give the tour he wanted, and spent a lot of time on the phone arguing with the tour company while we just stood around. Very odd. We did get to Valldemossa and saw a bit of Palma, but next time I'd rather walk from the ship into town and spend the day exploring, shopping, and eating. Long walk, but very doable.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Barcelona, Spain">
+          <div class="gallery-track">
+          <img src="assets/img-099.jpg" alt="View through a coach window on Barcelona boarding day" loading="lazy" />
+          <img src="assets/img-100.jpg" alt="Journal photo from Barcelona, Spain — photo 2 of 3" loading="lazy" />
+          <img src="assets/img-101.jpg" alt="Journal photo from Barcelona, Spain — photo 3 of 3" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 3</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 3" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 3"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 3"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-07-26">Sun · Jul 26, 2026</time><h3>Barcelona, Spain</h3><p>Boarding day. I'd planned to walk to the shuttle bus for the terminals at the World Trade Center, but traffic was at an absolute standstill so I ended up walking the entire way — not terrible, just warm. Boarding was a little slower than normal with additional customs for the transatlantic. I always drink a bit more than I should on boarding day with the drink package, and today was no exception.</p></div>
+        </article>
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-07-25">Sat · Jul 25, 2026</time><h3>Madrid → Barcelona, Spain</h3><p>Iryo fast train from Madrid to Barcelona — the station was an easy walk from the hotel, though it took me a bit to realize trains board from the upper level. Picked up a USB-to-USB-C charging cable after seeing someone else use one on the bus. Train is very fast — top speed shown was about 330kmh. Not much to see en route but pleasant enough. Metro to Plaça de Catalunya, walked to the H10 Madison. Burger at Craft Barcelona near the Catedral, then beers at La Cava Universal at the end of La Rambla.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Madrid, Spain">
+          <div class="gallery-track">
+          <img src="assets/img-102.jpg" alt="Grand historic buildings beneath a blue Madrid sky" loading="lazy" />
+          <img src="assets/img-103.jpg" alt="Journal photo from Madrid, Spain — photo 2 of 6" loading="lazy" />
+          <img src="assets/img-104.jpg" alt="Journal photo from Madrid, Spain — photo 3 of 6" loading="lazy" />
+          <img src="assets/img-105.jpg" alt="Journal photo from Madrid, Spain — photo 4 of 6" loading="lazy" />
+          <img src="assets/img-106.jpg" alt="Journal photo from Madrid, Spain — photo 5 of 6" loading="lazy" />
+          <img src="assets/img-107.jpg" alt="Journal photo from Madrid, Spain — photo 6 of 6" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 6</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 6" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 6"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 6"></button><button class="gallery-dot" type="button" aria-label="Photo 4 of 6"></button><button class="gallery-dot" type="button" aria-label="Photo 5 of 6"></button><button class="gallery-dot" type="button" aria-label="Photo 6 of 6"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-07-24">Fri · Jul 24, 2026</time><h3>Madrid, Spain</h3><p>Early-entry guided tour at the Prado — we were the only people in it. Decent highlights tour, though I can't recall any of the details (adding this in October). I was the only one who'd also booked the palace tour, which essentially turned into a private walking tour from the Prado to the palace — the guide pointed out landmarks, lunch and dinner options, even an archaeological site behind my hotel's reception desk. Second time through the palace and I didn't recall much from the first. Drinks in an alley outside Plaza Mayor after, shopping on Gran Via — Primark had Patriots logo clothing on prominent display.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Segovia, Ávila &amp; Toledo, Spain">
+          <div class="gallery-track">
+          <img src="assets/img-108.jpg" alt="Historic stone church façade on the three-town day trip" loading="lazy" />
+          <img src="assets/img-109.jpg" alt="Journal photo from Segovia, Ávila &amp; Toledo, Spain — photo 2 of 13" loading="lazy" />
+          <img src="assets/img-110.jpg" alt="Journal photo from Segovia, Ávila &amp; Toledo, Spain — photo 3 of 13" loading="lazy" />
+          <img src="assets/img-111.jpg" alt="Journal photo from Segovia, Ávila &amp; Toledo, Spain — photo 4 of 13" loading="lazy" />
+          <img src="assets/img-112.jpg" alt="Journal photo from Segovia, Ávila &amp; Toledo, Spain — photo 5 of 13" loading="lazy" />
+          <img src="assets/img-113.jpg" alt="Journal photo from Segovia, Ávila &amp; Toledo, Spain — photo 6 of 13" loading="lazy" />
+          <img src="assets/img-114.jpg" alt="Journal photo from Segovia, Ávila &amp; Toledo, Spain — photo 7 of 13" loading="lazy" />
+          <img src="assets/img-115.jpg" alt="Journal photo from Segovia, Ávila &amp; Toledo, Spain — photo 8 of 13" loading="lazy" />
+          <img src="assets/img-116.jpg" alt="Journal photo from Segovia, Ávila &amp; Toledo, Spain — photo 9 of 13" loading="lazy" />
+          <img src="assets/img-117.jpg" alt="Journal photo from Segovia, Ávila &amp; Toledo, Spain — photo 10 of 13" loading="lazy" />
+          <img src="assets/img-118.jpg" alt="Journal photo from Segovia, Ávila &amp; Toledo, Spain — photo 11 of 13" loading="lazy" />
+          <img src="assets/img-119.jpg" alt="Journal photo from Segovia, Ávila &amp; Toledo, Spain — photo 12 of 13" loading="lazy" />
+          <img src="assets/img-120.jpg" alt="Journal photo from Segovia, Ávila &amp; Toledo, Spain — photo 13 of 13" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 13</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 13" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 13"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 13"></button><button class="gallery-dot" type="button" aria-label="Photo 4 of 13"></button><button class="gallery-dot" type="button" aria-label="Photo 5 of 13"></button><button class="gallery-dot" type="button" aria-label="Photo 6 of 13"></button><button class="gallery-dot" type="button" aria-label="Photo 7 of 13"></button><button class="gallery-dot" type="button" aria-label="Photo 8 of 13"></button><button class="gallery-dot" type="button" aria-label="Photo 9 of 13"></button><button class="gallery-dot" type="button" aria-label="Photo 10 of 13"></button><button class="gallery-dot" type="button" aria-label="Photo 11 of 13"></button><button class="gallery-dot" type="button" aria-label="Photo 12 of 13"></button><button class="gallery-dot" type="button" aria-label="Photo 13 of 13"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-07-23">Thu · Jul 23, 2026</time><h3>Segovia, Ávila &amp; Toledo, Spain</h3><p>Viator bus trip to three towns outside Madrid — Segovia, Ávila, Toledo. Great weather but still hot. Very long day with an early start and late return, a lot of time on the bus, but worth it. Decent burger for lunch in a plaza outside the castle in Ávila.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Madrid, Spain">
+          <div class="gallery-track">
+          <img src="assets/img-121.jpg" alt="Puerta del Sol metro entrance in Madrid" loading="lazy" />
+          <img src="assets/img-122.jpg" alt="Journal photo from Madrid, Spain — photo 2 of 3" loading="lazy" />
+          <img src="assets/img-123.jpg" alt="Journal photo from Madrid, Spain — photo 3 of 3" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 3</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 3" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 3"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 3"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-07-22">Wed · Jul 22, 2026</time><h3>Madrid, Spain</h3><p>Arrival day after the overnight business-class flight. Passport control was odd — told me I didn't need to register, but then the gates didn't open. Metro from the airport to Puerta del Sol and the NH Collection Palacio de Tepa. Very hot. Drinks and food outside in Plaza de Santa Ana — very touristy, but nice to sit outside.</p></div>
+        </article>
+      </div>
+      <a class="back-link" href="#">← Back to Where's Patrick?</a>
+    </div>
+
+    <div class="view archive-view" id="bayonne-miami-sep-2026" data-title="New England, Bermuda &amp; Virgin Voyages — Sep 2 to Sep 28, 2026" hidden>
+      <a class="back-link" href="#">← Back to Where's Patrick?</a>
+      <header class="section-head archive-head">
+        <h2>New England, Bermuda &amp; Virgin Voyages</h2>
+        <p>Sep 2 to Sep 28, 2026 · The Bayonne sailing — New England, Canada and Bermuda — followed by the Virgin Voyages sailing out of Miami.</p>
+      </header>
+      <div class="history-list">
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-09-28">Mon · Sep 28, 2026</time><h3>Miami → Boston</h3><p>Up at 5am, packed, showered, coffee at 6. Hung in the cabin, then the empty Sip Lounge — watched the SpaceX rocket launch. Off the ship about 9:30 to queue for the 10:30 bus; on board 9:45 but held till 10:30 for two missing passengers. Flight delay notice: about 2 hours, arriving 7:20pm — though FlightAware had us coming in after midnight. Curious if they plan to board and pull back, then hold in Miami without telling us till we're locked in. Delay stretched past 3 hours, blamed on Boston air traffic management. On board — 8:33pm arrival now. Overall, a decent vacation month. Gambled too much, didn't take enough pictures, bought too many clothes — but no major mistakes. Hard to believe this trip started weeks ago heading north to Boston and Canada, and I've spent the last dozen days in Florida and the Caribbean.</p></div>
+        </article>
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-09-27">Sun · Sep 27, 2026</time><h3>Bimini</h3><p>Up early for coffee, first tram to the beach club. Party pool, planning to leave after lunch. Nicer day than last cruise — hot in direct sun. Good conversation with chair neighbors both sides. Lunch: ceviche, watermelon salad, rice &amp; beans (with sriracha, of course) — decent, definitely better without the fried things. Left about 1, stopped for a shirt at Fisherman's Village — expensive, nearly $50. Back to the pool; friendly bar staff, got to know a few over the two cruises. Grab &amp; go dinner — noodle place closes early, nothing else appealed; skipped Opa hour, didn't want to risk the crowd. Finished Unabomber, bed before 9. Extra afternoon coffee kept me tossing a bit.</p></div>
+        </article>
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-09-26">Sat · Sep 26, 2026</time><h3>Sea day</h3><p>Didn't get out of bed till after 8 — up earlier, just didn't feel like it. Coffee in the Galley, several hours at the pool. Hot. The trio of women from the grog walk showed up, plus the strange guy. Not liking the flow of Accomplice to the Villain — might leave it behind unfinished. Afternoon in the hammock, some streaming. 5:30 dinner at Pink Agave: guacamole and ribeye, good not amazing — server Marvelous was very nice. Started Unabomber, lights out by 9.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-124.jpg" alt="Waterfront and marina in Key West" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-09-25">Fri · Sep 25, 2026</time><h3>Key West &amp; sail-away</h3><p>Sail away, then Key West. Wings and burger at Razzle Dazzle — quick, good. $300 in the casino, up to $400 on a $211 win, gave it all back. Debated the grog walk, went — not terrible, talked to people, but I'm poor at the card questions ("If you could go back in time, what year would you choose and why?" 1920?? No idea why that was my answer). Ended at the PJ party in my moose caboose jammies, up till midnight. One of the grog walkers recognized me by name in the morning — confused me. Key West: snorkeling canceled for low signups, so the day was wide open. Off at 9, Duval and the Truman Annex, some sciatic pain. The Bull for beers — good vibe. Irish Kevin's: crowded, live music, less pleasant. Sloppy Joe's: bar nearly full but found a seat; a brother-sister pair next to me, he was Sean Patrick — loud music made it an awkward conversation. Last stop Island Dogs, nice and chill. Back about 3, pool deck, some grog-walk faces. Probably too much to drink — 10 beers in town plus a few on the ship. Pizza dinner. Missed another Scarlet Night.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-125.jpg" alt="Cruise ship in port during the Miami turnaround" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-09-24">Thu · Sep 24, 2026</time><h3>Miami turnaround</h3><p>Up at 5am, packed, coffee and fruit at 6, out before 7 to kill four hours — not sure Virgin offers a "get off for the day" option. Pool deck before noon, in the room and unpacked by 1:30, panini lunch. Several Ultras. Only reservations: Razzle Dazzle and Pink Agave. Got charged three times for the free WiFi — guest services visit later, they fixed it last cruise. Sad news: bad math on my part, I won't make Pinnacle before year end. One more cruise buying internet, potentially a double crystal for Odyssey, and it shifts one of the blocks off an Icon class.</p></div>
+        </article>
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-09-23">Wed · Sep 23, 2026</time><h3>Bimini</h3><p>Bimini. 50/50 rain forecast, slight drizzle off the ship at 8:30. Tram to the club, seat by the loud pool — finished the book. Lunch: not as good as I remember, chose the wrong side (the crispy things weren't good; pretty sure it was a rice side last time). Jerk chicken thigh was good. Back on the tram about 1pm, before the pool gets really loud. New shop at Fisherman's Village — I'll get a shirt next cruise; five Bimini visits and not a single shirt. Room hadn't been serviced yet, odd. Pool deck with the next book. Coffee shop cookies are very different from Royal's but very good — chocolate chip and chocolate chip macadamia so far; need to try the chocolate one next cruise. Dinner at Extra Virgin: meatballs and pappardelle, good and quick — tables very close together, happy to leave as both sides filled. Lizzie Borden episode 2, bed at 9.</p></div>
+        </article>
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-09-22">Tue · Sep 22, 2026</time><h3>Sea day</h3><p>Coffee and 7am breakfast, then the pool deck — the woman reading the same book series is directly in front again; we chat briefly when she finishes the first book. Pizza at noon: the truffle and egg I liked last time, still good — pepperoni next week if I do pizza again. Still so many galley spots untried. Afternoon reading in the hammock. Dinner at Pink Agave: guacamole, street corn, pescado — all good, though something disagreed with me later. Stopped at the manor food festival: free drinks but small and not great, one food item on a halved cucumber — not good. Left after 10–15 minutes. The Mind Mangler show was cancelled; watched Disclosure Day, asleep by 9.</p></div>
+        </article>
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-09-21">Mon · Sep 21, 2026</time><h3>Grand Turk</h3><p>Thunderstorms early, cloudy skies. Off at 8:30 for exploring and shopping — Jack's Shack for a beer, looks like a decent day spot. Local beer $7.30. Dry fit and swim trunks from Piranha Joe's, trio of shirts from Ron Jon. Back aboard to drop the goods, grab towel and camera case. Margaritaville pool with a spicy margarita about 10:30. Snorkeling at 12:30: first spot had very clear water, lots of fish, nice variety — saw a small nurse shark. Second stop was only interesting for the huge abrupt depth change — coral reef, then just dark blue water. First stop better overall. Dinner at Razzle Dazzle: pork belly and fried chicken, long wait for the chicken but both good — an hour without dessert, pretty slow for Virgin. Scarlet Night tonight, but I'll just watch a movie.</p></div>
+        </article>
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-09-20">Sun · Sep 20, 2026</time><h3>Sea day</h3><p>Sea day. Sometime Friday night I fell on the side table in my hotel room — not sure what happened, but I definitely bruised a rib. Painful to roll over in bed, coughing very uncomfortable. Coffee and fruit for breakfast, probably a poke bowl for lunch, no dinner. Pool deck finishing my first book — the woman in front of me is reading One Dark Window, which I finished last month. The Dock House was terrible: 15 minutes to take the order, 30 minutes with no food, had to flag a server who grabbed it after two tries. Glad it was free. Shrimp good as always; the swordfish was dry and tasteless in a small pita. Guest services fixed the WiFi charge. Early bed, before 8pm.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-126.jpg" alt="Brickell tower illuminated at night in Miami" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-09-19">Sat · Sep 19, 2026</time><h3>Miami → Virgin</h3><p>Miami at night, then boarding day. Rooftop pool bar was dead, so I headed to Brickell — the intersection where CitizenM sits. Ended up in One K for cocktails: $50 for two drinks, and I'm not sure why — probably should've checked whether a third got added. Boarding day: hotel till noon checkout, Uber at 12:30 (driver 15 early). Virgin's terminal is first so no port traffic; priority line 12:40, check-in exactly 1pm, Rock Star boarding 1:30. Coffee and a burger, unpacked — don't love the regular bathroom's lack of storage. Managed 5:30 tables at all 4 restaurants I wanted; hoping for the same next sailing. Not sure I have premium internet — only the basic package was showing.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Miami">
+          <div class="gallery-track">
+          <img src="assets/img-127.jpg" alt="A stop on the Little Havana food and cultural tour in Miami" loading="lazy" />
+          <img src="assets/img-128.jpg" alt="Journal photo from Miami — photo 2 of 4" loading="lazy" />
+          <img src="assets/img-129.jpg" alt="Journal photo from Miami — photo 3 of 4" loading="lazy" />
+          <img src="assets/img-130.jpg" alt="Journal photo from Miami — photo 4 of 4" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 4</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 4" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 4"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 4"></button><button class="gallery-dot" type="button" aria-label="Photo 4 of 4"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-09-18">Fri · Sep 18, 2026</time><h3>Miami</h3><p>Booked the Little Havana food &amp; cultural tour for 11:30 — start point about 2 miles out, so I walked over via a Starbucks. Very warm and humid. Tour was larger than expected for a weekday off-season — maybe it's always tourist season in Miami. Guide was a native Cuban, 13 years in Miami — easy to understand, entertaining, engaging. Good mix of food and history: empanadas, cafecito, mojito, Cuban sandwich, guava pastry, mango juice, churro. Some drizzle, no downpours. Trolley back to Brickell, beers at 305 Sports before the hotel.</p></div>
+        </article>
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-09-17">Thu · Sep 17, 2026</time><h3>Bayonne → Miami</h3><p>Out of the room by 7, off the boat about 7:45. Bus to Newark left late — 8:45 — arriving 9:30 with lots of port congestion. Terminal A was quite nice: easy check-in, bag drop, security. The crystal block triggered a bag inspection, as expected. No lounge, decent seating; I'd booked an extra-legroom seat, which was ok. Flight on time but slow luggage. Metro rail to Brickell, walked to the hotel — decent room, no real view. Walked to CRAFT, extremely high Google ratings: beer and pizza, slow service, pizza just ok. Maybe the reviews are for breakfast? Grabbed beers for the room and watched Big Brother — double eviction.</p></div>
+        </article>
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-09-16">Wed · Sep 16, 2026</time><h3>Sea day</h3><p>A bit of weather overnight — bags out on the upper floors this morning. Windy on deck, but I found a sheltered sunny seat at the rear of the top deck. Spent most of the time researching what a land tour ahead of a Seward cruise would entail — the southbound Alaska cruise is the best casino-award option, though I'd probably have to leave late August for the full Fairbanks-to-Seward train ride. Some HBO. Price is Right, then the 7pm comedy show — a comic I hadn't seen before, pretty good.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-131.jpg" alt="A traditional Bermuda moongate-style shelter on a Hamilton street" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-09-15">Tue · Sep 15, 2026</time><h3>Bermuda / Hamilton</h3><p>Let ChatGPT decide: beach or Hamilton — with iffy weather it chose Hamilton. 9am ferry ran 30 minutes late. Vineyard Vines first — expensive, noted things for a possible return; the shop just around the corner had a great selection at decent prices, bought 4 shirts. The AI-recommended pro sport shop sucked for tourist stuff. Church: ok. Meant to do Fort Hamilton but ended up below it — should've stayed on Church Street. Walked all of Front Street; the AI's bar picks weren't open at 11, so Flanagan's Irish — local Bermuda microbrew on tap, pretty good. Hog Penny for lunch: lively bartender Steven with the full history — apparently the inspiration for Cheers. Back to Vineyard Vines, 1pm ferry, no rain. Two more shirts at Davidsons before boarding about 2pm.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-132.jpg" alt="Striped fish swimming in Bermuda’s blue water" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-09-14">Mon · Sep 14, 2026</time><h3>Bermuda</h3><p>Not sure why I booked snorkeling at 1pm — killed half the day. 45-minute boat ride to the wrecks; tried to be first off for the clearest water. Found the Montana and swam around it, wooden wreck right next to it — the bags of cement that became bag-shaped blocks of cement was funny. Fish just ok, coral varied. Decent trip, not as amazing as Dominica, and pictures still sucked. Sushi at the Dockyard mall restaurant — good — then beers at the Frog &amp; Onion, very expensive. Headliner Jonathan Burns: unusual comedy-magic act, very entertaining. In bed by 9.</p></div>
+        </article>
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-09-13">Sun · Sep 13, 2026</time><h3>Sea day</h3><p>Pool deck morning, top-tier event at 10am, chicken and chips for lunch. Belly flop competition, then Love and Marriage (men went off first). Too much casino time, waffling over whether the points are worth it to add the 3-day Wonder cruise in February — ended over 800 points, still undecided. Skipped the dancing show, in bed a little after 7pm. Snorkeling tomorrow.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-133.jpg" alt="The Tear Drop Memorial at Bayonne’s waterfront" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-09-12">Sat · Sep 12, 2026</time><h3>Bayonne, New Jersey</h3><p>Nothing nearby worth seeing in the 8am–2pm window, so I stayed on the ship — pool deck after customs, back on about 10am. Got some reading done. Gambled $500 down to $90 and back to $550. The welcome comedian was last cruise's farewell comedian with some new jokes mixed in. In bed a bit after 8pm old time. Never saw my room attendant after early morning — rough day for all of them.</p></div>
+        </article>
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-09-11">Fri · Sep 11, 2026</time><h3>Sea day</h3><p>A rough one. Leaving Sydney the ship took a decent list from the wind; this morning the captain said winds were hurricane strength and they'd had to shift liquids to balance her. 10–12 foot seas as we turned into the wind, bags out on the stairwells. Ended up in the casino trying to be disciplined — was up about $150 on top of the $280 already banked, but kept playing. Ended down $500 for the night, $220 for the cruise, 825 points. Loyalty points for the two Rhapsody cruises still haven't posted; stopped by the C&amp;A desk since I was due a 560-point block — she sent the details shoreside. Boring otherwise, too cool and windy for the pool — some Netflix, then the ice show and farewell comedy.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-134.jpg" alt="Sydney cruise terminal seen from beneath a ship’s lifeboat" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-09-10">Thu · Sep 10, 2026</time><h3>Sydney, Nova Scotia</h3><p>Short day — back on board by 1:30. Not Europe: couldn't find anything serving beer. Same walk as last visit — boardwalk to Wentworth Park, up Charlotte Street. Flea-market magnet for the steward, then killed time at Tim Hortons. Daniel's opened at 10am — two beers, engaging bartender, maybe a bit too much so. Governor's for lunch: huge line last time, no line today with the early hour and bad weather. Donair was good. Two beers, two ciders. Back on ship.</p></div>
+        </article>
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-09-09">Wed · Sep 9, 2026</time><h3>Sea day</h3><p>Spent it listening in on other people's conversations — guy with the Buc-ee's shirt will be on Odyssey in October for 21 days. New drink menu at Boleros, the Jolopo was good; Captain's Corner good too. Casino: cashed out at $1,180 on $900 put in with 110 points, gave back $100. Got upgraded on Virgin — hammock all 9 days.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-135.jpg" alt="Saint John waterfront on the second day in port" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-09-08">Tue · Sep 8, 2026</time><h3>Saint John, New Brunswick · Day 2</h3><p>Lazy morning after a "real" breakfast — eggs, half English muffin, a little bacon. Off around 10:15 for Cask &amp; Kettle (closed yesterday for Labour Day). Several beers — Bumble was my favorite — then wings with habanero sauce, warned to get it on the side. Good heat. Back to Wasted Day after lunch, upper tier of their outdoor container, nice weather and good conversations with locals. Juggler/comedian Marcus Monroe was new to me — pretty good act. In bed by 8:30.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-136.jpg" alt="Cruise ships docked along the Saint John waterfront" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-09-07">Mon · Sep 7, 2026</time><h3>Saint John, New Brunswick</h3><p>Macaroons from Sweet Vanilla — overrated for the price. Second Cup to kill time, cheap and average. Market walk felt smaller, mostly quick eats, like Faneuil Hall. Picaroons for a few beers at 11. Gahan House fish and chips for lunch — good. Wasted Day in the container for a few more. Picked up a magnet for the steward from 506 containers. Sun and pool in the afternoon.</p></div>
+        </article>
+        <article class="memory no-photo">
+          <div class="memory-copy"><time datetime="2026-09-06">Sun · Sep 6, 2026</time><h3>Portland, Maine</h3><p>Decent weather, short sleeves. Morning walk to Bread &amp; Friends — the Everything Pull-Apart was very good; the maple rosemary latte turned odd and bitter at the end (rosemary syrup?). Shipyard when they opened, same seat as last time. Brickyard Hollow near the waterfront: slow service, average sour, probably not worth a return. Lunch at Kings Head instead of Flatbread — Thee Scotch Egg and chowder, average and a bit pricey, not worth a return either. Afternoon by the pool in the sunshine. In bed by 8pm, missed the 11pm adult comedy. Losing an hour overnight.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Boston">
+          <div class="gallery-track">
+          <img src="assets/img-137.jpg" alt="Boston Seaport seen during a brewery crawl" loading="lazy" />
+          <img src="assets/img-138.jpg" alt="Journal photo from Boston — photo 2 of 3" loading="lazy" />
+          <img src="assets/img-139.jpg" alt="Journal photo from Boston — photo 3 of 3" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 3</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 3" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 3"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 3"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-09-05">Sat · Sep 5, 2026</time><h3>Boston</h3><p>I'd planned to stay on the ship, but there's a lot near the seaport a block from the dock — so after coffee I drank my way back: Trillium, Cisco, Harpoon, Lord Hobo. Verdicts: Lord Hobo sucked (snooty vibe, high prices, not many guests). Cisco was weird — all outside, big astroturf ringed by food trucks and tent bars, dog friendly, very pricey merch. Trillium was on. Harpoon smaller than expected but glad to finally visit — cheap merch, $40 performance fleece.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo"><img src="assets/img-140.jpg" alt="The Biggest Family at Sea loyalty display aboard the ship" loading="lazy" /></figure>
+          <div class="memory-copy"><time datetime="2026-09-04">Fri · Sep 4, 2026</time><h3>Sea day</h3><p>Dolphins, whale spouts, and fog — low enough that the sun kept the pool deck warm. Lots of Crown &amp; Anchor members; I think it's the first sailing north out of Bayonne this season. Definitely an older Royal crowd — fewer than 80 under 18. Comedian Derrick Cameron was pretty good last night; I'll try to stay awake for his adult show Sunday.</p></div>
+        </article>
+        <article class="memory">
+          <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Bayonne → New York">
+          <div class="gallery-track">
+          <img src="assets/img-141.jpg" alt="Cruise ship sailing past Manhattan on the Hudson River" loading="lazy" />
+          <img src="assets/img-142.jpg" alt="Journal photo from Bayonne → New York — photo 2 of 3" loading="lazy" />
+          <img src="assets/img-143.jpg" alt="Journal photo from Bayonne → New York — photo 3 of 3" loading="lazy" />
+          </div>
+          <button class="gallery-btn prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="gallery-btn next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          <span class="gallery-count" aria-live="polite">1 of 3</span>
+          <div class="gallery-dots"><button class="gallery-dot" type="button" aria-label="Photo 1 of 3" aria-current="true"></button><button class="gallery-dot" type="button" aria-label="Photo 2 of 3"></button><button class="gallery-dot" type="button" aria-label="Photo 3 of 3"></button></div>
+          </figure>
+          <div class="memory-copy"><time datetime="2026-09-03">Thu · Sep 3, 2026</time><h3>Bayonne → New York</h3><p>The captain took us left, up the Hudson — unexpected and amazing. Past Lady Liberty, the Manhattan skyline up close from the river, NCL Aqua pulling out as we did our spin. The captain said it's the first time he's done it since 1992. Very lucky.</p></div>
+        </article>
+      </div>
+      <a class="back-link" href="#">← Back to Where's Patrick?</a>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var main = document.getElementById("view-main");
+      var slugs = ["spain-transatlantic-jul-aug-2026", "bayonne-miami-sep-2026"];
+      function route() {
+        var slug = window.location.hash.replace(/^#/, "");
+        var active = null;
+        for (var i = 0; i < slugs.length; i++) {
+          var view = document.getElementById(slugs[i]);
+          view.hidden = slugs[i] !== slug;
+          if (slugs[i] === slug) { active = view; }
+        }
+        main.hidden = !!active;
+        document.title = active ? active.getAttribute("data-title") + " · Where's Patrick?" : "Where's Patrick?";
+        window.scrollTo(0, 0);
+      }
+      window.addEventListener("hashchange", route);
+      route();
+    })();
+
+    (function () {
+      var galleries = document.querySelectorAll("[data-gallery]");
+      Array.prototype.forEach.call(galleries, function (g) {
+        var track = g.querySelector(".gallery-track");
+        var total = track.children.length;
+        var count = g.querySelector(".gallery-count");
+        var dots = g.querySelectorAll(".gallery-dot");
+        var i = 0;
+        function go(n) {
+          i = ((n % total) + total) % total;
+          track.style.transform = "translateX(" + (-i * 100) + "%)";
+          count.textContent = (i + 1) + " of " + total;
+          Array.prototype.forEach.call(dots, function (d, di) {
+            if (di === i) { d.setAttribute("aria-current", "true"); }
+            else { d.removeAttribute("aria-current"); }
+          });
+        }
+        g.querySelector(".gallery-btn.prev").addEventListener("click", function () { go(i - 1); });
+        g.querySelector(".gallery-btn.next").addEventListener("click", function () { go(i + 1); });
+        Array.prototype.forEach.call(dots, function (d, di) {
+          d.addEventListener("click", function () { go(di); });
+        });
+        var x0 = null;
+        g.addEventListener("touchstart", function (e) {
+          x0 = e.changedTouches[0].clientX;
+        }, { passive: true });
+        g.addEventListener("touchend", function (e) {
+          if (x0 === null) { return; }
+          var dx = e.changedTouches[0].clientX - x0;
+          x0 = null;
+          if (Math.abs(dx) > 40) { go(i + (dx < 0 ? 1 : -1)); }
+        }, { passive: true });
+      });
+    })();
+  </script>
+</body>
+</html>
