@@ -13,6 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,650&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <title>Where's Patrick?</title>
   <style>
     :root {
@@ -181,6 +182,34 @@
     .photo-label strong { display: block; font: 650 2.15rem/1 "Newsreader", serif; }
     .photo-label span { color: rgba(255,255,255,.82); font-size: .84rem; }
     .photo-label .coords { text-align: right; letter-spacing: .04em; }
+    .hero-next {
+      position: absolute;
+      z-index: 2;
+      top: 22px;
+      left: 28px;
+      margin: 0;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(7, 27, 29, .6);
+      color: rgba(255, 255, 255, .88);
+      font-size: .84rem;
+      font-weight: 500;
+      letter-spacing: .01em;
+    }
+    .hero-next[hidden] { display: none; }
+    .hero-credit {
+      position: absolute;
+      z-index: 2;
+      right: 28px;
+      bottom: 7px;
+      margin: 0;
+      color: rgba(255, 255, 255, .78);
+      font-size: .7rem;
+      letter-spacing: .01em;
+      text-align: right;
+      text-shadow: 0 1px 4px rgba(7, 27, 29, .55);
+    }
+    .hero-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 
     .tracking-note {
       display: grid;
@@ -463,6 +492,8 @@
       .hero-photo { min-height: 330px; }
       .photo-label { left: 22px; right: 22px; bottom: 20px; }
       .photo-label .coords { display: none; }
+      .hero-next { top: 16px; left: 22px; }
+      .hero-credit { right: 22px; }
       .tracking-note { grid-template-columns: auto 1fr; }
       .tracking-link { grid-column: 1 / -1; width: 100%; }
       .days { grid-template-columns: 1fr; }
@@ -497,6 +528,81 @@
     .archive-head { margin-top: 30px; }
     .archive-view .history-list + .back-link { margin-top: 34px; }
     @media (max-width: 860px) { .archive-list { grid-template-columns: 1fr; } }
+
+    .local-time { margin: 16px 0 0; color: #b9d1ca; font-size: .92rem; }
+    .local-time strong { color: #f7fffb; font-weight: 600; }
+
+    .countdown { display: block; margin-top: 3px; color: var(--muted); font-size: .78rem; font-style: italic; }
+    .next-primary .countdown { margin-top: 12px; font-size: .88rem; }
+
+    .loyalty { margin: 18px 0 0; padding: 18px 22px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }
+    .loyalty-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px 16px; flex-wrap: wrap; }
+    .loyalty-head strong { font-size: .95rem; }
+    .loyalty-head span { color: var(--muted); font-size: .88rem; font-weight: 600; }
+    .loyalty-bar { margin-top: 12px; height: 8px; border-radius: 999px; background: var(--surface-alt); overflow: hidden; }
+    .loyalty-fill { height: 100%; width: 81.9%; border-radius: 999px; background: var(--gold); }
+    .loyalty p { margin: 10px 0 0; color: var(--muted); font-size: .85rem; }
+
+    .map-caption { margin: 26px 0 0; color: var(--muted); font-size: .92rem; }
+    .map-caption strong { color: var(--ink); font-weight: 600; }
+    .trip-map { height: 400px; margin-top: 14px; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; }
+    .stats-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 22px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; }
+    .stat-card strong { display: block; font: 650 2rem/1 "Newsreader", serif; }
+    .stat-card span { color: var(--muted); font-size: .85rem; }
+
+    .journal-filters { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; margin-bottom: 6px; }
+    .journal-filters label { display: grid; gap: 6px; color: var(--muted); font-size: .78rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+    .journal-filters select, .journal-filters input { min-height: 42px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); font: 400 .95rem "IBM Plex Sans", sans-serif; }
+    .journal-filters .filter-search { flex: 1 1 220px; }
+    .journal-filters .filter-search input { width: 100%; }
+    .filter-empty { color: var(--muted); margin: 18px 0 4px; }
+
+    .throwback { margin-top: clamp(54px, 8vw, 92px); background: var(--surface-alt); border-radius: 20px 20px 56px 20px; padding: clamp(24px, 4vw, 38px); }
+    .throwback:empty { display: none; }
+    .throwback .date { color: var(--deep-2); }
+    .throwback h3 { margin: 12px 0 10px; font: 650 clamp(1.6rem, 3vw, 2.3rem)/1.05 "Newsreader", serif; }
+    .throwback p { margin: 0; max-width: 720px; color: var(--muted); line-height: 1.6; }
+    .throwback a { display: inline-block; margin-top: 14px; color: var(--deep-2); font-weight: 600; font-size: .92rem; }
+    .memory.flash { outline: 3px solid var(--orange); outline-offset: 6px; }
+
+    @media (max-width: 580px) {
+      .stats-strip { gap: 10px; }
+      .stat-card { padding: 14px; }
+      .stat-card strong { font-size: 1.45rem; }
+      .trip-map { height: 320px; }
+    }
+
+    .trip-row.clickable { cursor: pointer; }
+    .trip-row.clickable:hover { background: var(--surface-alt); }
+    .trip-row.clickable:focus-visible { outline: 3px solid var(--orange); outline-offset: -3px; }
+    .trip-hint { display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; color: var(--deep-2); font-size: .78rem; font-weight: 600; letter-spacing: .02em; }
+    .trip-hint svg { width: 13px; height: 13px; }
+
+    .trip-modal[hidden] { display: none; }
+    .trip-modal { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 20px; }
+    .trip-modal-backdrop { position: absolute; inset: 0; background: rgba(7, 27, 29, .62); }
+    .trip-modal-card { position: relative; width: min(620px, 100%); max-height: min(84vh, 760px); overflow-y: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); padding: 30px 32px 28px; }
+    .trip-modal-dates { margin: 0 0 6px; color: var(--orange); font-size: .8rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+    .trip-modal-card h3 { margin: 0 44px 4px 0; font: 650 2rem/1.05 "Newsreader", serif; letter-spacing: -.02em; }
+    .trip-modal-card h4 { margin: 22px 0 8px; color: var(--deep-2); font-size: .82rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+    .trip-modal-card ul { margin: 0; padding: 0; list-style: none; }
+    .trip-modal-bookings li { padding: 7px 0; color: var(--ink); font-size: .93rem; line-height: 1.5; border-top: 1px solid var(--line); }
+    .trip-modal-bookings li:first-child { border-top: 0; padding-top: 2px; }
+    .trip-modal-stops li { display: grid; grid-template-columns: 92px 1fr; gap: 12px; padding: 6px 0; font-size: .93rem; line-height: 1.5; }
+    .trip-modal-stops li + li { border-top: 1px solid var(--line); }
+    .trip-modal-stops time { color: var(--orange); font-size: .78rem; font-weight: 600; text-transform: uppercase; line-height: 1.5; padding-top: 2px; }
+    .trip-modal-stops span { color: var(--muted); }
+    .trip-modal-stops span strong { color: var(--ink); font-weight: 600; }
+    .trip-modal-x { position: absolute; top: 14px; right: 14px; display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: var(--surface); color: var(--ink); cursor: pointer; }
+    .trip-modal-x:hover { border-color: var(--deep-2); color: var(--deep-2); }
+    .trip-modal-x:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+    .trip-modal-x svg { width: 18px; height: 18px; }
+    @media (max-width: 580px) {
+      .trip-modal { padding: 0; place-items: end stretch; }
+      .trip-modal-card { width: 100%; max-height: 92vh; border-radius: 20px 20px 0 0; padding: 26px 22px 30px; }
+      .trip-modal-stops li { grid-template-columns: 76px 1fr; }
+    }
   </style>
   <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac8ec613a4e94bc989bad09cb803ab8b"}'></script><!-- End Cloudflare Web Analytics -->
 </head>
@@ -508,12 +614,13 @@
       <span class="live-key"><span class="dot" aria-hidden="true"></span>Planned whereabouts</span>
     </div>
 
-    <article class="hero" aria-labelledby="current-place">
+    <article class="hero" id="hero" data-tz="Europe/Athens" aria-labelledby="current-place">
       <div class="hero-copy">
         <div>
           <span class="eyebrow">Today · Thursday</span>
           <h1 id="current-place">Mykonos, Greece</h1>
           <p>Thu Oct 22, 2026: Mykonos, Greece — aboard Odyssey of the Seas, in port 7:00 AM–5:00 PM. Self-guided Chora walking day: Old Port waterfront → Panagia Paraportiani → Little Venice → Kato Mili windmills, lunch at Kastro's (Agion Anargyron 1, Little Venice — featured meal). €12 cruise-passenger island fee (October shoulder rate, auto-added to the onboard account). Tomorrow (Fri Oct 23): sea day, cruising toward Naples.</p>
+          <p class="local-time" id="local-time"></p>
         </div>
         <div class="arrival">
           <div class="calendar" aria-hidden="true">22</div>
@@ -521,11 +628,13 @@
         </div>
       </div>
       <div class="hero-photo">
-        <img src="assets/img-a4681745dd24.jpg" alt="Venice rooftops and domes reflected in the Grand Canal at sunset" />
+        <img id="hero-img" src="assets/img-a4681745dd24.jpg" alt="Venice rooftops and domes reflected in the Grand Canal at sunset" />
+        <p class="hero-next" id="hero-next" hidden></p>
         <div class="photo-label">
-          <div><span>Journey began in</span><strong>Venezia</strong></div>
-          <span class="coords">45.4408° N<br />12.3155° E</span>
+          <div><span id="hero-label-kicker">Journey began in</span><strong id="hero-label-place">Venezia</strong></div>
+          <span class="coords" id="hero-label-coords">45.4408° N<br />12.3155° E</span>
         </div>
+        <p class="hero-credit" id="hero-credit"></p>
       </div>
     </article>
 
@@ -534,6 +643,12 @@
       <div><strong>Follow the Venice &amp; Transatlantic trip live.</strong><span>Polarsteps shows Patrick’s route and new stops as the journey unfolds.</span></div>
       <a class="tracking-link" href="https://www.polarsteps.com/PatrickBreen/29451508-venice-transatlantic?s=89e3c43b-e084-4336-ac7e-72de4a92837b" target="_blank" rel="noopener noreferrer">Open Polarsteps ↗</a>
     </aside>
+
+    <div class="loyalty" aria-label="Crown and Anchor loyalty progress">
+      <div class="loyalty-head"><strong>Crown &amp; Anchor — Diamond Plus</strong><span>573 / 700 points to Pinnacle</span></div>
+      <div class="loyalty-bar" role="progressbar" aria-valuemin="0" aria-valuemax="700" aria-valuenow="573" aria-label="573 of 700 points toward Pinnacle Club"><div class="loyalty-fill"></div></div>
+      <p>127 points to go — Pinnacle Club is projected around Jan 6, 2027, three nights into the January Odyssey sailing.</p>
+    </div>
 
     <section aria-labelledby="week-heading">
       <div class="section-head">
@@ -561,39 +676,60 @@
         <div class="voyage-row"><time class="voyage-date" datetime="2026-11-08">Nov 8–15</time><span class="marker" aria-hidden="true"></span><div class="place"><strong>Bahamas finale</strong><span>New Jersey · Port Canaveral · CocoCay · Nassau</span></div><div class="detail">Odyssey of the Seas</div></div>
         <div class="voyage-row"><time class="voyage-date" datetime="2026-11-15">Sun · Nov 15</time><span class="marker" aria-hidden="true"></span><div class="place"><strong>Back in New England</strong><span>Home after forty days away</span></div><div class="detail">Until Seattle</div></div>
       </div>
+      <p class="map-caption"><strong>The current sailing, mapped</strong> — Odyssey of the Seas, Italy &amp; the Greek Isles, Oct 18–25. Tap a pin for the port and date.</p>
+      <div class="trip-map" id="trip-map" role="img" aria-label="Map of the current sailing's ports: Civitavecchia, Messina, Santorini, Mykonos and Naples"></div>
+      <div class="stats-strip" aria-label="The current sailing by the numbers">
+        <div class="stat-card"><strong>5</strong><span>Ports</span></div>
+        <div class="stat-card"><strong>2</strong><span>Sea days</span></div>
+        <div class="stat-card"><strong>2</strong><span>Countries — Italy &amp; Greece</span></div>
+      </div>
     </section>
 
     <section aria-labelledby="next-heading">
       <div class="section-head">
         <h2 id="next-heading">What’s after Venice</h2>
-        <p>The calendar stays busy. These are broad plans only—lodging, bookings, and personal details stay off the public view.</p>
+        <p>The calendar stays busy.</p>
       </div>
       <div class="journeys">
-        <article class="next-primary">
-          <div><span class="date">November 19–23, 2026</span><h3>Seattle &amp; Redmond</h3><p>A family wedding weekend in Washington, with a little time around the Eastside and Seattle.</p></div>
+        <article class="next-primary" data-start="2026-11-19">
+          <div data-cd-slot><span class="date">November 19–23, 2026</span><h3>Seattle &amp; Redmond</h3><p>A family wedding weekend in Washington, with a little time around the Eastside and Seattle.</p></div>
           <div class="route-line"><span>Boston</span><i aria-hidden="true"></i><span>Seattle</span></div>
         </article>
         <div class="upcoming-list" aria-label="Later journeys">
-          <div class="trip-row"><time>Nov 28<br />Dec 19</time><div><strong>Caribbean</strong><span>Bahamas, Dominican Republic, Aruba, Curaçao &amp; Mexico</span></div></div>
-          <div class="trip-row"><time>Jan 2<br />Jan 25</time><div><strong>Eastern &amp; Southern Caribbean</strong><span>Two voyages from New Jersey</span></div></div>
-          <div class="trip-row"><time>Feb 5<br />Feb 19</time><div><strong>Florida &amp; the Bahamas</strong><span>Miami, Estero and two short cruises</span></div></div>
-          <div class="trip-row"><time>Feb 26<br />May 5</time><div><strong>Pacific crossing</strong><span>Hawaii, Australia, New Zealand and the South Pacific</span></div></div>
-          <div class="trip-row"><time>May 12<br />May 29</time><div><strong>Spain &amp; the Mediterranean</strong><span>Barcelona, the western Med and Andalusia</span></div></div>
-          <div class="trip-row"><time>Aug 20<br />Sep 3</time><div><strong>Alaska</strong><span>Fairbanks to Vancouver by road, rail and sea</span></div></div>
-          <div class="trip-row"><time>Sep 26<br />Oct 30</time><div><strong>Panama Canal</strong><span>Vancouver down the Pacific coast to San Diego, through the Canal to Tampa, then the eastern Caribbean</span></div></div>
-          <div class="trip-row"><time>Mar 8<br />May 3<br />2028</time><div><strong>Japan</strong><span>Shanghai to Seattle via Tokyo &amp; Kyoto</span></div></div>
+          <div class="trip-row" data-start="2026-11-28" data-end="2026-12-19" data-trip="december-caribbean"><time>Nov 28<br />Dec 19</time><div data-cd-slot><strong>Caribbean</strong><span>Bahamas, Dominican Republic, Aruba, Curaçao &amp; Mexico</span></div></div>
+          <div class="trip-row" data-start="2027-01-02" data-end="2027-01-25" data-trip="january-caribbean"><time>Jan 2<br />Jan 25</time><div data-cd-slot><strong>Eastern &amp; Southern Caribbean</strong><span>Two voyages from New Jersey</span></div></div>
+          <div class="trip-row" data-start="2027-02-05" data-end="2027-02-19" data-trip="february-caribbean"><time>Feb 5<br />Feb 19</time><div data-cd-slot><strong>Florida &amp; the Bahamas</strong><span>Miami, Estero and two short cruises</span></div></div>
+          <div class="trip-row" data-start="2027-02-26" data-end="2027-05-05" data-trip="australia"><time>Feb 26<br />May 5</time><div data-cd-slot><strong>Pacific crossing</strong><span>Hawaii, Australia, New Zealand and the South Pacific</span></div></div>
+          <div class="trip-row" data-start="2027-05-12" data-end="2027-05-29" data-trip="legend"><time>May 12<br />May 29</time><div data-cd-slot><strong>Spain &amp; the Mediterranean</strong><span>Barcelona, the western Med and Andalusia</span></div></div>
+          <div class="trip-row" data-start="2027-08-20" data-end="2027-09-03" data-trip="alaska"><time>Aug 20<br />Sep 3</time><div data-cd-slot><strong>Alaska</strong><span>Fairbanks to Vancouver by road, rail and sea</span></div></div>
+          <div class="trip-row" data-start="2027-09-26" data-end="2027-10-30" data-trip="panama-canal"><time>Sep 26<br />Oct 30</time><div data-cd-slot><strong>Panama Canal</strong><span>Vancouver down the Pacific coast to San Diego, through the Canal to Tampa, then the eastern Caribbean</span></div></div>
+          <div class="trip-row" data-start="2028-03-08" data-end="2028-05-03" data-trip="japan"><time>Mar 8<br />May 3<br />2028</time><div data-cd-slot><strong>Japan</strong><span>Shanghai to Seattle via Tokyo &amp; Kyoto</span></div></div>
         </div>
       </div>
     </section>
 
 
+    <div id="throwback"></div>
+
     <section aria-labelledby="history-heading">
       <div class="section-head">
         <h2 id="history-heading">Where was Patrick</h2>
-        <p>Built from Patrick’s Day One journal, this history runs newest-first through October 2026 — journal entries up to Oct 21 — including recent days in Messina, Split, Venice, Ravenna, Kotor, Santorini, Athens and at sea. Entries tagged #private are excluded.</p>
+        <p>Built from Patrick’s Day One journal, this history runs newest-first through October 2026 — journal entries up to Oct 21 — including recent days in Messina, Split, Venice, Ravenna, Kotor, Santorini, Athens and at sea.</p>
       </div>
+      <div class="journal-filters" role="search">
+        <label>Trip
+          <select id="filter-trip"><option value="">All trips</option></select>
+        </label>
+        <label>Year
+          <select id="filter-year"><option value="">All years</option></select>
+        </label>
+        <label class="filter-search">Search the journal
+          <input type="search" id="filter-q" placeholder="Try “Santorini” or “sea day”" autocomplete="off" />
+        </label>
+      </div>
+      <p class="filter-empty" id="filter-empty" hidden>No journal entries match — try clearing the search or filters.</p>
       <div class="history-list">
-        <article class="memory">
+        <article class="memory" id="entry-2026-10-21" data-date="2026-10-21" data-year="2026" data-trip="venice-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Santorini">
           <div class="gallery-track">
           <img src="assets/img-b5854c37f7b6.jpg" alt="Sunset over the Santorini caldera, a small boat crossing the golden water" loading="lazy" />
@@ -612,7 +748,7 @@
           <div class="memory-copy"><time datetime="2026-10-21">Wed · Oct 21, 2026</time><h3>Santorini</h3><p>Santorini. No line for the tender at about 9am. A bit of a wait for the cable car, but it's better than walking up! I started with a bit of a wander through Fira before starting the longer walk to Imerovigli — uphill most of the way. I didn't do the walk down to Skaros rock fearing the climb back up! But I was able to see similar views from the town. After the walk back, I picked a random restaurant very near the cable car exit. Not the greatest view, but the moussaka was good. Very hot sitting in the sun, so I headed to an indoor bar to cool off a bit.</p><p>By about 1:30, I was definitely certain I wouldn't make it until sunset at ~6:30pm, so I headed to PK Bar on the cliff and asked if I could use my reservation credit early which they allowed. So, I had a pair of drinks from their house specials section before taking the donkey trail back down to the tender.</p><p>After a short nap, I was up to catch the entire Cirque de Machine show. Lots of staging — I wonder if it was a semi-permanent booking for many weeks or months.</p></div>
           <p class="fitness-stats">13,849 steps · 6.9 mi · 20 flights climbed</p>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-10-20" data-date="2026-10-20" data-year="2026" data-trip="venice-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Sea day">
           <div class="gallery-track">
           <img src="assets/img-247602313cea.jpg" alt="The pool deck aboard Odyssey of the Seas in bright sun" loading="lazy" />
@@ -627,7 +763,7 @@
           <div class="memory-copy"><time datetime="2026-10-20">Tue · Oct 20, 2026</time><h3>Sea day</h3><p>Sea day. The usual schedule — up early for coffee and breakfast, pool deck until the loyalty event, back to the pool deck until the belly flop contest. Price is Right in the afternoon, casino with mixed results. The headliner show was good, but too tired to enjoy it — same show tonight, so I should be able to see it.</p></div>
           <p class="fitness-stats">5,399 steps · 2.8 mi · 5 flights climbed</p>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-10-19" data-date="2026-10-19" data-year="2026" data-trip="venice-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Messina — Mt Etna &amp; Taormina">
           <div class="gallery-track">
           <img src="assets/img-93fb54f2a319.jpg" alt="Red volcanic rock on the slopes of Mt Etna, Sicily" loading="lazy" />
@@ -646,16 +782,16 @@
           <div class="memory-copy"><time datetime="2026-10-19">Mon · Oct 19, 2026</time><h3>Messina — Mt Etna &amp; Taormina</h3><p>Messina. Small-group tour to Mt Etna and Taormina. Weather wasn't great — no view of the sea or the top of the volcano, no Etna view from Taormina — but at 6000ft we were mostly above the clouds and rain, no active lava flow, and hiking the dormant craters was worth the long drive. The highway tunnels are pretty amazing. Taormina: sweets, pistachio and chocolate bars at the same shops as last time; a bland lunch I should have checked reviews for; public gardens (they were shooting a movie or TV show) — pleasant, but not as amazing as the theater. Back at the ship after sunset, about 7pm.</p></div>
           <p class="fitness-stats">17,052 steps · 8.7 mi · 44 flights climbed</p>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-10-18" data-date="2026-10-18" data-year="2026" data-trip="venice-transatlantic">
           <figure class="memory-photo"><img src="assets/img-8041ef00ae4b.jpg" alt="The pool deck aboard Odyssey of the Seas on embarkation day — striped loungers and the splash park in bright sun" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-10-18">Sun · Oct 18, 2026</time><h3>Odyssey embarkation, Civitavecchia</h3><p>Odyssey embarkation. €2.70 latte and croissant at the big kiosk, morning sun on the roof patio near the fort. Walked to the shuttles at 9:45, terminal by 10am — priority luggage drop and a Suite-card swap put me in the first boarding group at 10:30 (one of the few places the full Royal Plus benefits are recognized). Muster, towel station, lime &amp; coconut, then a sunny pool-deck recliner until rooms were ready.</p></div>
           <p class="fitness-stats">7,618 steps · 4.0 mi · 16 flights climbed</p>
         </article>
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-10-17" data-date="2026-10-17" data-year="2026" data-trip="venice-transatlantic">
           <div class="memory-copy"><time datetime="2026-10-17">Sat · Oct 17, 2026</time><h3>Ravenna → Civitavecchia</h3><p>Ravenna to Civitavecchia. Normal debark routine — latest bus to Ravenna station. Trains: Ravenna→Bologna (Imola stop — unexpected, kind of cool from an F1 perspective), Bologna→Roma Termini high-speed in business class (surprise Florence stop — didn't realize how close it was to Bologna). Train late, but made the 10-minute Rome transfer with time to spare. Museum Guest House — same room as last time. Strada for dinner: pizza loaded with cheese, should have gone for the smashed chicken. In bed before 9pm.</p></div>
           <p class="fitness-stats">7,640 steps · 3.9 mi · 4 flights climbed</p>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-10-16" data-date="2026-10-16" data-year="2026" data-trip="venice-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Split, Croatia">
           <div class="gallery-track">
           <img src="assets/img-bda75e61280f.jpg" alt="The bell tower of Split Cathedral rising above Diocletian's Palace, Split, Croatia" loading="lazy" />
@@ -674,7 +810,7 @@
           <div class="memory-copy"><time datetime="2026-10-16">Fri · Oct 16, 2026</time><h3>Split, Croatia</h3><p>Split. Viator tour: Diocletian's palace — unlike the palace tour I took in May, this time I learned who Diocletian was and why the palace is in Split. Not as stunning as the story, but impressive for 1700 years old. Then 45 minutes to Trogir ('pocket Venice'): marbled alleys, a very good prosciutto sandwich at an outdoor café, bus back in Split at 3pm. Morning in the casino: got my point balance over 2,000 — down over $200 at times, walked away up $200. Evening: Gold Art Duo headliner (seen before, stayed for most). First free room-service breakfast — wouldn't do it again.</p></div>
           <p class="fitness-stats">9,598 steps · 5.2 mi · 10 flights climbed</p>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-10-15" data-date="2026-10-15" data-year="2026" data-trip="venice-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Sea day">
           <div class="gallery-track">
           <img src="assets/img-18f02cda47f5.jpg" alt="Sunrise at sea aboard Explorer of the Seas" loading="lazy" />
@@ -689,7 +825,7 @@
           <div class="memory-copy"><time datetime="2026-10-15">Thu · Oct 15, 2026</time><h3>Sea day</h3><p>Sea day, morning. It was a mistake not heading back out into Piraeus after the tour — the walk wasn't far and there was plenty of time. Weather improved slightly, sun poking through. Skipped the headliner for another early bedtime; awake at 5am as a result and caught the sunrise. Canceled next week's Santorini beach club in favor of unstructured time in Fira, possibly staying for the 6:30pm sunset. Tried to reserve a table — payment went through but the site said it failed. Not much planned; will finally start the book.</p></div>
           <p class="fitness-stats">4,653 steps · 2.5 mi · 8 flights climbed</p>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-10-14" data-date="2026-10-14" data-year="2026" data-trip="venice-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Athens, Greece">
           <div class="gallery-track">
           <img src="assets/img-3fcc06840382.jpg" alt="Journal photo from Patrick’s day in Athens" loading="lazy" />
@@ -707,7 +843,7 @@
           <div class="memory-copy"><time datetime="2026-10-14">Wed · Oct 14, 2026</time><h3>Athens, Greece</h3><p>Athens. First time here — Acropolis ship excursion as the must-do checklist item. The bus ride's "highlights of Athens" were extremely limited, but the guide ("shortie") made up for it with history and Greek mythology. Weather beat the forecast: occasional light rain and breeze, a shell without umbrella was enough. The climb wasn't bad. Headed back down about 40 minutes early and wandered until I found espresso. The ship was too far from anything at the terminal to make the walk worthwhile. Tonight's headliner is Tony Tillman — at least the third cruise with him on it — probably skipping for an early night before the sea day.</p></div>
           <p class="fitness-stats">7,194 steps · 4.0 mi · 17 flights climbed</p>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-10-13" data-date="2026-10-13" data-year="2026" data-trip="venice-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Santorini, Greece">
           <div class="gallery-track">
           <img src="assets/img-12092bed9a02.jpg" alt="Journal photo from Patrick’s day in Santorini" loading="lazy" />
@@ -727,12 +863,12 @@
           <div class="memory-copy"><time datetime="2026-10-13">Tue · Oct 13, 2026</time><h3>Santorini, Greece</h3><p>Santorini. Royal Beach Club first thing — 7am meeting made the morning rushed since Windjammer didn't open until 6:30. At the club by 8:15; getting off the tender was interesting with rolling seas rocking the boat. Chill vibe, decent free beer but kept it light with the Oia and Fira tours after. Lunch at the club was good — chicken skewers and Greek salad the favorites, plus good Greek desserts. Then Oia (about a 30-minute drive) — nearly identical to Fira with fewer alleyways to explore; wandered shops, sat with a beer in the ~90 minutes at each. Decent enough day to keep the same tour booked for next week.</p></div>
           <p class="fitness-stats">11,278 steps · 6.3 mi · 19 flights climbed</p>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-10-12" data-date="2026-10-12" data-year="2026" data-trip="venice-transatlantic">
           <figure class="memory-photo"><img src="assets/img-97701468627a.jpg" alt="Journal photo from a sea day aboard Explorer of the Seas" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-10-12">Mon · Oct 12, 2026</time><h3>Sea day</h3><p>Sea day. Morning working with Muse on future trips. Loyalty event lightly attended — "the numbers show why" — though most of the Pinnacles were there. Pizza, a casino-bar drink, the ice-skating show (Four Seasons theme, easy to follow), the belly flop, then sun on deck. Evening: back in the casino losing too much money. But a Serenade sailing looks possible before the Panama crossing — kills the San Diego exploration, adds an overnight in San Francisco. Santorini beach club meets at 7am tomorrow.</p></div>
           <p class="fitness-stats">4,909 steps · 2.6 mi · 14 flights climbed</p>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-10-11" data-date="2026-10-11" data-year="2026" data-trip="venice-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Kotor, Montenegro">
           <div class="gallery-track">
           <img src="assets/img-af799967866b.jpg" alt="Journal photo from Patrick’s day in Kotor, Montenegro" loading="lazy" />
@@ -753,7 +889,7 @@
           <div class="memory-copy"><time datetime="2026-10-11">Sun · Oct 11, 2026</time><h3>Kotor, Montenegro</h3><p>Kotor, Montenegro. Scenic morning sail through the bay to the anchorage — weather not great, not terrible. Royal tour: bus to Perast, ferry to Our Lady of the Rocks, very prominent entering the bay. Would have liked a waterfront lunch but the tour clock was ticking. Back to Kotor for the old-city walking tour — light rain killed the headset, and after 30 minutes standing in the rain with sciatica, dropped the tour for beers. Wandered the old city instead — every alley a surprise — rain stopped, cats came out. Would return for the old city and the hike up to the church. Tender lines the only downside (peak around 5pm, last tender 7pm). Love &amp; Marriage in the evening — left after the first half.</p></div>
           <p class="fitness-stats">10,903 steps · 6.2 mi · 20 flights climbed</p>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-10-10" data-date="2026-10-10" data-year="2026" data-trip="venice-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Venice → Ravenna → Explorer of the Seas">
           <div class="gallery-track">
           <img src="assets/img-6facf8f8d2d1.jpg" alt="Casino win aboard Explorer of the Seas" loading="lazy" />
@@ -774,7 +910,7 @@
           <div class="memory-copy"><time datetime="2026-10-10">Sat · Oct 10, 2026</time><h3>Venice → Ravenna → Explorer of the Seas</h3><p>Venice to Ravenna to Explorer. Morning: beer and food at Laguna ("enjoyable location"), a spritz to check off the list, gelato, buranelli cookies from a market stop, espresso and croissant at Dolce Vita. Packed out and bussed from Tronchetto — five busloads of cruisers. Ravenna: at the port by 2pm, slow security with all the buses arriving at once, then quick. Rooms ready — muster done, passport in the safe. Errands: booked the first Japan 2028 cruise, cut the Coke Zero amenity rewards, gave up the fixed MDR seat, sorted Ravenna station transport. The NextCruise woman, Alessandra, was on Brilliance earlier this year — recognized her. Casino: back-to-back wins, OBC turned to cash, up $400 including OBC. ("The trick is not to lose it all!") Tonight's show was repeat ventriloquist Celia Muñoz — left early, as expected. Cruise director Michelle (on Odyssey May last year) speaks many languages; ran into a Brilliance bartender in the Windjammer. Halloween balloon drop — stayed awake and mostly sober.</p></div>
           <p class="fitness-stats">9,621 steps · 5.1 mi · 24 flights climbed</p>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-10-09" data-date="2026-10-09" data-year="2026" data-trip="venice-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Murano, Burano &amp; Venice">
           <div class="gallery-track">
           <img src="assets/img-592cd3e58dac.jpg" alt="Colorful Burano homes lining a broad canal beneath a blue sky" loading="lazy" />
@@ -793,7 +929,7 @@
           <div class="memory-copy"><time datetime="2026-10-09">Fri · Oct 9, 2026</time><h3>Murano, Burano &amp; Venice</h3><p>Dinner last night, since I did go out: anchovies and onions to start, cuttlefish with squid ink for main — both flagged typical Venetian, both ok, nothing I'd ever seek out again. Long walk to the tour meeting point — the shorter route needed a Grand Canal transit, so I took the bridge route. Made it on time. The gallery after the glass-making demo was amazing, no pictures allowed — if I read the prices right, a drinking glass was over €100. Short walk around Murano; sciatica acting up (Aleve tomorrow). Burano was the better stop by far — no idea why Murano gets more attention. Shops lining the main street and canal; with sciatica still bothering me I found a café for a bite and beers, then a beer-focused café for one more. One photo: a house tracking flood waters — November 2019 was a bad month.</p></div>
           <p class="fitness-stats">12,769 steps · 6.5 mi · 12 flights climbed</p>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-10-08" data-date="2026-10-08" data-year="2026" data-trip="venice-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Venice">
           <div class="gallery-track">
           <img src="assets/img-cf04d0c776bc.jpg" alt="Ornate gilded interior of the Doge’s Palace in Venice" loading="lazy" />
@@ -815,7 +951,7 @@
           </figure>
           <div class="memory-copy"><time datetime="2026-10-08">Thu · Oct 8, 2026</time><h3>Venice</h3><p>Up early for the 8:30 tour — coffee and a croissant on the way, the only one with a latte. Small group of 16; the guide's a historian and former teacher, 30 years in Venice — a firehose of information. Great energy and love for the city, but I stopped retaining anything after the second hour. Rialto market and bridge, gondola ride, St Mark's and the Doge's Palace — 6 hours total. Bought a Hard Rock shirt right by the gondola. Seagulls inside the Rialto fish market — saw one get lucky and steal a fish. Morning threatened rain; sun was out when the tour ended. Wandered back with beer stops and an ATM stop, destination Punta della Dogana — the point of land at the Grand Canal entrance. Favorite stop: Laguna Bar, facing the setting sun with enough foot traffic to be interesting. Big pizza slice at lunch; the hotel does free food at 6:30. But I should go out.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-10-07" data-date="2026-10-07" data-year="2026" data-trip="venice-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Madrid → Bologna → Venice">
           <div class="gallery-track">
           <img src="assets/img-952b4a4f6ffd.jpg" alt="Welcome drink and finger food waiting at Hotel Moresco in Venice" loading="lazy" />
@@ -831,7 +967,7 @@
           </figure>
           <div class="memory-copy"><time datetime="2026-10-07">Wed · Oct 7, 2026</time><h3>Madrid → Bologna → Venice</h3><p>Flight 45 minutes early, big tailwind — 1050kph ground speed. Expecting the usual EES issue, but the kiosk sent me to the gate (2nd try) and the e-gate worked (2nd try, agent holding the passport on the scanner). Running low on Schengen days in the 180 window, but plenty by next May. Half-liter airport beer: €5. Then Bologna: bad rudder, emergency landing where there were no crosswinds. Fire trucks lined the runway; it was a very normal landing, just not at the right airport. Through immigration again — the agent stared at my data on the screen a while before waving me through. Buses to Venice, about 2 hours; hopefully at the hotel by 6pm, and hopefully the luggage made it. Underway just before 6pm. At the hotel around 7 — passport handed over, welcome drink and finger food on offer, a welcoming room tour. Debated going out, but with a 7:30am departure tomorrow and a 6am alarm, I opened the chilled Prosecco instead.</p></div>
         </article>
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-10-06" data-date="2026-10-06" data-year="2026" data-trip="venice-transatlantic">
           <div class="memory-copy"><time datetime="2026-10-06">Tue · Oct 6, 2026</time><h3>Travel day</h3><p>Nashua to Boston to Madrid to Venice. Checked bag cost $120 — guess it wasn't included in the mileage reward. Terminal E in Boston isn't terrible even without lounge access. TSA started chitchat about Royal because of the shirt I was wearing — always takes me longer than it should to realize it's just chitchat.</p></div>
         </article>
       </div>
@@ -871,17 +1007,17 @@
         <p>Jul 22 to Aug 29, 2026 · Madrid and Spain, the transatlantic crossing, Orlando and Universal Studios, Utopia of the Seas, and Rhapsody of the Seas ending in San Juan.</p>
       </header>
       <div class="history-list">
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-08-29" data-date="2026-08-29" data-year="2026" data-trip="spain-transatlantic">
           <div class="memory-copy"><time datetime="2026-08-29">Sat · Aug 29, 2026</time><h3>San Juan, Puerto Rico</h3><p>Waiting on a 2pm flight. The Escape Lounge is at tarmac level — very unusual. Realized today I need some way of storing where I am each day, or I'll never remember what I thought or even where I was. (This is the entry that started the Where's Patrick? page.)</p></div>
         </article>
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-08-27" data-date="2026-08-27" data-year="2026" data-trip="spain-transatlantic">
           <div class="memory-copy"><time datetime="2026-08-27">Thu · Aug 27, 2026</time><h3>Dominica</h3><p>"Bubbles and Waterfalls" — a pretty amazing day. Viator tour starting with snorkeling at Champagne Reef, partly over an actively venting volcano: bubbles coming up from the bottom, the water over the vents very warm. Then a gorge swim through to a waterfall you could step out into — a Pirates of the Caribbean 2 scene was filmed there. Finished at volcanic sulfur baths and rode back to the cabin smelling totally of sulfur. Lush, green, laid-back — I'd go back.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-08-25" data-date="2026-08-25" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo"><img src="assets/img-d49d8e2364d0.jpg" alt="Journal photo from Patrick’s day in St Maarten" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-08-25">Tue · Aug 25, 2026</time><h3>St Maarten</h3><p>St Maarten. Off the ship early for a walk into town — only two ships in (usually at least four). Walked the boardwalk end to end, back through an empty main shopping street. Piranha Joe's for yet another shirt, then Marley's: a bucket of beer plus a few more, lunch, good chat with staff and guests. Cheap. Definitely plans to return.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-08-22" data-date="2026-08-22" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from San Juan, Puerto Rico">
           <div class="gallery-track">
           <img src="assets/img-2e476f87fa70.jpg" alt="Journal photo from boarding Rhapsody of the Seas in San Juan" loading="lazy" />
@@ -896,11 +1032,11 @@
           </figure>
           <div class="memory-copy"><time datetime="2026-08-22">Sat · Aug 22, 2026</time><h3>San Juan, Puerto Rico</h3><p>San Juan. Boarding Rhapsody for a second week in the Caribbean.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-08-12" data-date="2026-08-12" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo"><img src="assets/img-408a6fb6cfbe.jpg" alt="Journal photo from Hideaway Beach at CocoCay" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-08-12">Wed · Aug 12, 2026</time><h3>CocoCay, Bahamas</h3><p>CocoCay. Hideaway Beach — normal seat and routine, lunch on the island before heading back aboard. Forecast shows possible storms during the Rhapsody cruises out of San Juan.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-08-11" data-date="2026-08-11" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Nassau, Bahamas">
           <div class="gallery-track">
           <img src="assets/img-b1934726b385.jpg" alt="Journal photo from Royal Beach Club in Nassau" loading="lazy" />
@@ -915,11 +1051,11 @@
           </figure>
           <div class="memory-copy"><time datetime="2026-08-11">Tue · Aug 11, 2026</time><h3>Nassau, Bahamas</h3><p>Nassau. Royal Beach Club — same chair as last time. Likes the food here; needs a lighter breakfast next visit.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-08-10" data-date="2026-08-10" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo"><img src="assets/img-742cb82dd582.jpg" alt="Journal photo from boarding day on Utopia of the Seas" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-08-10">Mon · Aug 10, 2026</time><h3>Utopia of the Seas</h3><p>Utopia of the Seas. Boarding day. Got put in a timeout after 26 drinks.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-08-09" data-date="2026-08-09" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Universal Studios, Orlando">
           <div class="gallery-track">
           <img src="assets/img-1eb3aea30230.jpg" alt="Journal photo from Universal Studios in Orlando" loading="lazy" />
@@ -935,19 +1071,19 @@
           </figure>
           <div class="memory-copy"><time datetime="2026-08-09">Sun · Aug 9, 2026</time><h3>Universal Studios, Orlando</h3><p>Universal Studios. Hotel shuttle got me to Islands of Adventure before the 9am opening — one of the first in. Spider-Man first, then the Dudley Do-Right flume, Skull Island, and Harry Potter and the Forbidden Journey. Took the Hogwarts Express to the original park; the walk into the Harry Potter area was impressive. Butterbeer and Escape from Gringotts. Done riding by ~1pm — lunch at the world's largest Hard Rock (good merch selection), then bar-hopped CityWalk. Voodoo Donuts: the berry one and the enormous apple fritter. No Universal merch appealed.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-08-08" data-date="2026-08-08" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo"><img src="assets/img-bb18e86c3910.jpg" alt="Journal photo from Patrick’s hotel stay in Orlando" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-08-08">Sat · Aug 8, 2026</time><h3>Orlando, Florida</h3><p>Orlando. Debark day — immigration was horrible: in the debark line at 8:30am, didn't make the car rental pickup until 11am. No facial scans, so everyone was processed manually. Hotel is decent: pleasant reception, upgraded to a top-floor lake view. Walked around the lake, stopping at a bar along the way. (Don't recall where I ate — writing this in mid-October.)</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-08-05" data-date="2026-08-05" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo"><img src="assets/img-3e63edb7672e.jpg" alt="Journal photo from the final sea days of the Atlantic crossing" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-08-05">Wed · Aug 5, 2026</time><h3>Sea day</h3><p>Sea day, still great weather — nearly the end of the crossing with one sea day left. Diverted to Bermuda (again!) to offload a medical emergency.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-08-03" data-date="2026-08-03" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo"><img src="assets/img-09bb3a6f2598.jpg" alt="Journal photo from the pool deck during the Atlantic crossing" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-08-03">Mon · Aug 3, 2026</time><h3>Sea day</h3><p>Sea day. Nice weather.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-08-02" data-date="2026-08-02" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Sea day">
           <div class="gallery-track">
           <img src="assets/img-bcced5e8c2f7.jpg" alt="Ship tracker during the Atlantic crossing" loading="lazy" />
@@ -961,15 +1097,15 @@
           </figure>
           <div class="memory-copy"><time datetime="2026-08-02">Sun · Aug 2, 2026</time><h3>Sea day</h3><p>Sea day, still crossing. Seas are calm.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-08-01" data-date="2026-08-01" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo"><img src="assets/img-78b8de8a2e45.jpg" alt="Journal photo from a sea day on the Atlantic crossing" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-08-01">Sat · Aug 1, 2026</time><h3>Sea day</h3><p>Sea day, still crossing. Fiddler was good.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-07-31" data-date="2026-07-31" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo"><img src="assets/img-e4557e030f5a.jpg" alt="The Biggest Family at Sea loyalty display during the Atlantic crossing" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-07-31">Fri · Jul 31, 2026</time><h3>Transatlantic crossing</h3><p>Sea day — first day of the crossing. Big loyalty numbers.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-07-30" data-date="2026-07-30" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Cádiz, Spain">
           <div class="gallery-track">
           <img src="assets/img-bb780619f5c3.jpg" alt="Cruise ship off the coast near Cádiz" loading="lazy" />
@@ -983,11 +1119,11 @@
           </figure>
           <div class="memory-copy"><time datetime="2026-07-30">Thu · Jul 30, 2026</time><h3>Cádiz, Spain</h3><p>I'd liked Cádiz on a short visit with Sean long ago, so I stayed in Cádiz instead of spending the day on a bus to Seville or Jerez. Started with a Viator walking tour that meandered through the city nicely — only a few hours, leaving plenty of time for wandering, beers, and lunch before heading back to the ship to begin the crossing.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-07-29" data-date="2026-07-29" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo"><img src="assets/img-01ee7dca7b35.jpg" alt="Friends sharing drinks at an outdoor table in Málaga" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-07-29">Wed · Jul 29, 2026</time><h3>Málaga, Spain</h3><p>Morning with Sean and Iza, afternoon with Sean after dropping Iza at work. Drove to Nerja and wandered, including the Balcony of Europe. Lunch up in the hill town of Frigiliana — after exploring the alleyways on foot all the way up, we settled at a restaurant in Plaza de las Tres Culturas. Back near the port after lunch for a smoothie and beers before the ship. The democracy debate that started in May continued.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-07-28" data-date="2026-07-28" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Cartagena, Spain">
           <div class="gallery-track">
           <img src="assets/img-c3da1e93e971.jpg" alt="Ornate church architecture in Cartagena" loading="lazy" />
@@ -1004,7 +1140,7 @@
           </figure>
           <div class="memory-copy"><time datetime="2026-07-28">Tue · Jul 28, 2026</time><h3>Cartagena, Spain</h3><p>Tour starting in Murcia — guided tour plus free time to explore, then a short walking tour back in Cartagena. I left the tour near its end in Plaza de San Francisco for tapas and beer outdoors.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-07-27" data-date="2026-07-27" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Palma de Mallorca, Spain">
           <div class="gallery-track">
           <img src="assets/img-da1258a62d38.jpg" alt="Mountain landscape seen on the trip to Valldemossa" loading="lazy" />
@@ -1019,7 +1155,7 @@
           </figure>
           <div class="memory-copy"><time datetime="2026-07-27">Mon · Jul 27, 2026</time><h3>Palma de Mallorca, Spain</h3><p>Did a Viator tour that was kind of interesting — except the guide was upset he wasn't allowed to give the tour he wanted, and spent a lot of time on the phone arguing with the tour company while we just stood around. Very odd. We did get to Valldemossa and saw a bit of Palma, but next time I'd rather walk from the ship into town and spend the day exploring, shopping, and eating. Long walk, but very doable.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-07-26" data-date="2026-07-26" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Barcelona, Spain">
           <div class="gallery-track">
           <img src="assets/img-1a65223b56be.jpg" alt="View through a coach window on Barcelona boarding day" loading="lazy" />
@@ -1033,10 +1169,10 @@
           </figure>
           <div class="memory-copy"><time datetime="2026-07-26">Sun · Jul 26, 2026</time><h3>Barcelona, Spain</h3><p>Boarding day. I'd planned to walk to the shuttle bus for the terminals at the World Trade Center, but traffic was at an absolute standstill so I ended up walking the entire way — not terrible, just warm. Boarding was a little slower than normal with additional customs for the transatlantic. I always drink a bit more than I should on boarding day with the drink package, and today was no exception.</p></div>
         </article>
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-07-25" data-date="2026-07-25" data-year="2026" data-trip="spain-transatlantic">
           <div class="memory-copy"><time datetime="2026-07-25">Sat · Jul 25, 2026</time><h3>Madrid → Barcelona, Spain</h3><p>Iryo fast train from Madrid to Barcelona — the station was an easy walk from the hotel, though it took me a bit to realize trains board from the upper level. Picked up a USB-to-USB-C charging cable after seeing someone else use one on the bus. Train is very fast — top speed shown was about 330kmh. Not much to see en route but pleasant enough. Metro to Plaça de Catalunya, walked to the H10 Madison. Burger at Craft Barcelona near the Catedral, then beers at La Cava Universal at the end of La Rambla.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-07-24" data-date="2026-07-24" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Madrid, Spain">
           <div class="gallery-track">
           <img src="assets/img-4de491c835bc.jpg" alt="Grand historic buildings beneath a blue Madrid sky" loading="lazy" />
@@ -1053,7 +1189,7 @@
           </figure>
           <div class="memory-copy"><time datetime="2026-07-24">Fri · Jul 24, 2026</time><h3>Madrid, Spain</h3><p>Early-entry guided tour at the Prado — we were the only people in it. Decent highlights tour, though I can't recall any of the details (adding this in October). I was the only one who'd also booked the palace tour, which essentially turned into a private walking tour from the Prado to the palace — the guide pointed out landmarks, lunch and dinner options, even an archaeological site behind my hotel's reception desk. Second time through the palace and I didn't recall much from the first. Drinks in an alley outside Plaza Mayor after, shopping on Gran Via — Primark had Patriots logo clothing on prominent display.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-07-23" data-date="2026-07-23" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Segovia, Ávila &amp; Toledo, Spain">
           <div class="gallery-track">
           <img src="assets/img-e3b25802069d.jpg" alt="Historic stone church façade on the three-town day trip" loading="lazy" />
@@ -1077,7 +1213,7 @@
           </figure>
           <div class="memory-copy"><time datetime="2026-07-23">Thu · Jul 23, 2026</time><h3>Segovia, Ávila &amp; Toledo, Spain</h3><p>Viator bus trip to three towns outside Madrid — Segovia, Ávila, Toledo. Great weather but still hot. Very long day with an early start and late return, a lot of time on the bus, but worth it. Decent burger for lunch in a plaza outside the castle in Ávila.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-07-22" data-date="2026-07-22" data-year="2026" data-trip="spain-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Madrid, Spain">
           <div class="gallery-track">
           <img src="assets/img-b3fb62ade8dc.jpg" alt="Puerta del Sol metro entrance in Madrid" loading="lazy" />
@@ -1102,40 +1238,40 @@
         <p>Sep 2 to Sep 28, 2026 · The Bayonne sailing — New England, Canada and Bermuda — followed by the Virgin Voyages sailing out of Miami.</p>
       </header>
       <div class="history-list">
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-09-28" data-date="2026-09-28" data-year="2026" data-trip="bayonne-miami">
           <div class="memory-copy"><time datetime="2026-09-28">Mon · Sep 28, 2026</time><h3>Miami → Boston</h3><p>Up at 5am, packed, showered, coffee at 6. Hung in the cabin, then the empty Sip Lounge — watched the SpaceX rocket launch. Off the ship about 9:30 to queue for the 10:30 bus; on board 9:45 but held till 10:30 for two missing passengers. Flight delay notice: about 2 hours, arriving 7:20pm — though FlightAware had us coming in after midnight. Curious if they plan to board and pull back, then hold in Miami without telling us till we're locked in. Delay stretched past 3 hours, blamed on Boston air traffic management. On board — 8:33pm arrival now. Overall, a decent vacation month. Gambled too much, didn't take enough pictures, bought too many clothes — but no major mistakes. Hard to believe this trip started weeks ago heading north to Boston and Canada, and I've spent the last dozen days in Florida and the Caribbean.</p></div>
         </article>
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-09-27" data-date="2026-09-27" data-year="2026" data-trip="bayonne-miami">
           <div class="memory-copy"><time datetime="2026-09-27">Sun · Sep 27, 2026</time><h3>Bimini</h3><p>Up early for coffee, first tram to the beach club. Party pool, planning to leave after lunch. Nicer day than last cruise — hot in direct sun. Good conversation with chair neighbors both sides. Lunch: ceviche, watermelon salad, rice &amp; beans (with sriracha, of course) — decent, definitely better without the fried things. Left about 1, stopped for a shirt at Fisherman's Village — expensive, nearly $50. Back to the pool; friendly bar staff, got to know a few over the two cruises. Grab &amp; go dinner — noodle place closes early, nothing else appealed; skipped Opa hour, didn't want to risk the crowd. Finished Unabomber, bed before 9. Extra afternoon coffee kept me tossing a bit.</p></div>
         </article>
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-09-26" data-date="2026-09-26" data-year="2026" data-trip="bayonne-miami">
           <div class="memory-copy"><time datetime="2026-09-26">Sat · Sep 26, 2026</time><h3>Sea day</h3><p>Didn't get out of bed till after 8 — up earlier, just didn't feel like it. Coffee in the Galley, several hours at the pool. Hot. The trio of women from the grog walk showed up, plus the strange guy. Not liking the flow of Accomplice to the Villain — might leave it behind unfinished. Afternoon in the hammock, some streaming. 5:30 dinner at Pink Agave: guacamole and ribeye, good not amazing — server Marvelous was very nice. Started Unabomber, lights out by 9.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-09-25" data-date="2026-09-25" data-year="2026" data-trip="bayonne-miami">
           <figure class="memory-photo"><img src="assets/img-5865496f249c.jpg" alt="Waterfront and marina in Key West" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-09-25">Fri · Sep 25, 2026</time><h3>Key West &amp; sail-away</h3><p>Sail away, then Key West. Wings and burger at Razzle Dazzle — quick, good. $300 in the casino, up to $400 on a $211 win, gave it all back. Debated the grog walk, went — not terrible, talked to people, but I'm poor at the card questions ("If you could go back in time, what year would you choose and why?" 1920?? No idea why that was my answer). Ended at the PJ party in my moose caboose jammies, up till midnight. One of the grog walkers recognized me by name in the morning — confused me. Key West: snorkeling canceled for low signups, so the day was wide open. Off at 9, Duval and the Truman Annex, some sciatic pain. The Bull for beers — good vibe. Irish Kevin's: crowded, live music, less pleasant. Sloppy Joe's: bar nearly full but found a seat; a brother-sister pair next to me, he was Sean Patrick — loud music made it an awkward conversation. Last stop Island Dogs, nice and chill. Back about 3, pool deck, some grog-walk faces. Probably too much to drink — 10 beers in town plus a few on the ship. Pizza dinner. Missed another Scarlet Night.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-09-24" data-date="2026-09-24" data-year="2026" data-trip="bayonne-miami">
           <figure class="memory-photo"><img src="assets/img-c8aad453408a.jpg" alt="Cruise ship in port during the Miami turnaround" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-09-24">Thu · Sep 24, 2026</time><h3>Miami turnaround</h3><p>Up at 5am, packed, coffee and fruit at 6, out before 7 to kill four hours — not sure Virgin offers a "get off for the day" option. Pool deck before noon, in the room and unpacked by 1:30, panini lunch. Several Ultras. Only reservations: Razzle Dazzle and Pink Agave. Got charged three times for the free WiFi — guest services visit later, they fixed it last cruise. Sad news: bad math on my part, I won't make Pinnacle before year end. One more cruise buying internet, potentially a double crystal for Odyssey, and it shifts one of the blocks off an Icon class.</p></div>
         </article>
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-09-23" data-date="2026-09-23" data-year="2026" data-trip="bayonne-miami">
           <div class="memory-copy"><time datetime="2026-09-23">Wed · Sep 23, 2026</time><h3>Bimini</h3><p>Bimini. 50/50 rain forecast, slight drizzle off the ship at 8:30. Tram to the club, seat by the loud pool — finished the book. Lunch: not as good as I remember, chose the wrong side (the crispy things weren't good; pretty sure it was a rice side last time). Jerk chicken thigh was good. Back on the tram about 1pm, before the pool gets really loud. New shop at Fisherman's Village — I'll get a shirt next cruise; five Bimini visits and not a single shirt. Room hadn't been serviced yet, odd. Pool deck with the next book. Coffee shop cookies are very different from Royal's but very good — chocolate chip and chocolate chip macadamia so far; need to try the chocolate one next cruise. Dinner at Extra Virgin: meatballs and pappardelle, good and quick — tables very close together, happy to leave as both sides filled. Lizzie Borden episode 2, bed at 9.</p></div>
         </article>
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-09-22" data-date="2026-09-22" data-year="2026" data-trip="bayonne-miami">
           <div class="memory-copy"><time datetime="2026-09-22">Tue · Sep 22, 2026</time><h3>Sea day</h3><p>Coffee and 7am breakfast, then the pool deck — the woman reading the same book series is directly in front again; we chat briefly when she finishes the first book. Pizza at noon: the truffle and egg I liked last time, still good — pepperoni next week if I do pizza again. Still so many galley spots untried. Afternoon reading in the hammock. Dinner at Pink Agave: guacamole, street corn, pescado — all good, though something disagreed with me later. Stopped at the manor food festival: free drinks but small and not great, one food item on a halved cucumber — not good. Left after 10–15 minutes. The Mind Mangler show was cancelled; watched Disclosure Day, asleep by 9.</p></div>
         </article>
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-09-21" data-date="2026-09-21" data-year="2026" data-trip="bayonne-miami">
           <div class="memory-copy"><time datetime="2026-09-21">Mon · Sep 21, 2026</time><h3>Grand Turk</h3><p>Thunderstorms early, cloudy skies. Off at 8:30 for exploring and shopping — Jack's Shack for a beer, looks like a decent day spot. Local beer $7.30. Dry fit and swim trunks from Piranha Joe's, trio of shirts from Ron Jon. Back aboard to drop the goods, grab towel and camera case. Margaritaville pool with a spicy margarita about 10:30. Snorkeling at 12:30: first spot had very clear water, lots of fish, nice variety — saw a small nurse shark. Second stop was only interesting for the huge abrupt depth change — coral reef, then just dark blue water. First stop better overall. Dinner at Razzle Dazzle: pork belly and fried chicken, long wait for the chicken but both good — an hour without dessert, pretty slow for Virgin. Scarlet Night tonight, but I'll just watch a movie.</p></div>
         </article>
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-09-20" data-date="2026-09-20" data-year="2026" data-trip="bayonne-miami">
           <div class="memory-copy"><time datetime="2026-09-20">Sun · Sep 20, 2026</time><h3>Sea day</h3><p>Sea day. Sometime Friday night I fell on the side table in my hotel room — not sure what happened, but I definitely bruised a rib. Painful to roll over in bed, coughing very uncomfortable. Coffee and fruit for breakfast, probably a poke bowl for lunch, no dinner. Pool deck finishing my first book — the woman in front of me is reading One Dark Window, which I finished last month. The Dock House was terrible: 15 minutes to take the order, 30 minutes with no food, had to flag a server who grabbed it after two tries. Glad it was free. Shrimp good as always; the swordfish was dry and tasteless in a small pita. Guest services fixed the WiFi charge. Early bed, before 8pm.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-09-19" data-date="2026-09-19" data-year="2026" data-trip="bayonne-miami">
           <figure class="memory-photo"><img src="assets/img-ca201548b005.jpg" alt="Brickell tower illuminated at night in Miami" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-09-19">Sat · Sep 19, 2026</time><h3>Miami → Virgin</h3><p>Miami at night, then boarding day. Rooftop pool bar was dead, so I headed to Brickell — the intersection where CitizenM sits. Ended up in One K for cocktails: $50 for two drinks, and I'm not sure why — probably should've checked whether a third got added. Boarding day: hotel till noon checkout, Uber at 12:30 (driver 15 early). Virgin's terminal is first so no port traffic; priority line 12:40, check-in exactly 1pm, Rock Star boarding 1:30. Coffee and a burger, unpacked — don't love the regular bathroom's lack of storage. Managed 5:30 tables at all 4 restaurants I wanted; hoping for the same next sailing. Not sure I have premium internet — only the basic package was showing.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-09-18" data-date="2026-09-18" data-year="2026" data-trip="bayonne-miami">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Miami">
           <div class="gallery-track">
           <img src="assets/img-cee1d6dca10f.jpg" alt="A stop on the Little Havana food and cultural tour in Miami" loading="lazy" />
@@ -1150,49 +1286,49 @@
           </figure>
           <div class="memory-copy"><time datetime="2026-09-18">Fri · Sep 18, 2026</time><h3>Miami</h3><p>Booked the Little Havana food &amp; cultural tour for 11:30 — start point about 2 miles out, so I walked over via a Starbucks. Very warm and humid. Tour was larger than expected for a weekday off-season — maybe it's always tourist season in Miami. Guide was a native Cuban, 13 years in Miami — easy to understand, entertaining, engaging. Good mix of food and history: empanadas, cafecito, mojito, Cuban sandwich, guava pastry, mango juice, churro. Some drizzle, no downpours. Trolley back to Brickell, beers at 305 Sports before the hotel.</p></div>
         </article>
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-09-17" data-date="2026-09-17" data-year="2026" data-trip="bayonne-miami">
           <div class="memory-copy"><time datetime="2026-09-17">Thu · Sep 17, 2026</time><h3>Bayonne → Miami</h3><p>Out of the room by 7, off the boat about 7:45. Bus to Newark left late — 8:45 — arriving 9:30 with lots of port congestion. Terminal A was quite nice: easy check-in, bag drop, security. The crystal block triggered a bag inspection, as expected. No lounge, decent seating; I'd booked an extra-legroom seat, which was ok. Flight on time but slow luggage. Metro rail to Brickell, walked to the hotel — decent room, no real view. Walked to CRAFT, extremely high Google ratings: beer and pizza, slow service, pizza just ok. Maybe the reviews are for breakfast? Grabbed beers for the room and watched Big Brother — double eviction.</p></div>
         </article>
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-09-16" data-date="2026-09-16" data-year="2026" data-trip="bayonne-miami">
           <div class="memory-copy"><time datetime="2026-09-16">Wed · Sep 16, 2026</time><h3>Sea day</h3><p>A bit of weather overnight — bags out on the upper floors this morning. Windy on deck, but I found a sheltered sunny seat at the rear of the top deck. Spent most of the time researching what a land tour ahead of a Seward cruise would entail — the southbound Alaska cruise is the best casino-award option, though I'd probably have to leave late August for the full Fairbanks-to-Seward train ride. Some HBO. Price is Right, then the 7pm comedy show — a comic I hadn't seen before, pretty good.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-09-15" data-date="2026-09-15" data-year="2026" data-trip="bayonne-miami">
           <figure class="memory-photo"><img src="assets/img-fd011dfc7842.jpg" alt="A traditional Bermuda moongate-style shelter on a Hamilton street" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-09-15">Tue · Sep 15, 2026</time><h3>Bermuda / Hamilton</h3><p>Let ChatGPT decide: beach or Hamilton — with iffy weather it chose Hamilton. 9am ferry ran 30 minutes late. Vineyard Vines first — expensive, noted things for a possible return; the shop just around the corner had a great selection at decent prices, bought 4 shirts. The AI-recommended pro sport shop sucked for tourist stuff. Church: ok. Meant to do Fort Hamilton but ended up below it — should've stayed on Church Street. Walked all of Front Street; the AI's bar picks weren't open at 11, so Flanagan's Irish — local Bermuda microbrew on tap, pretty good. Hog Penny for lunch: lively bartender Steven with the full history — apparently the inspiration for Cheers. Back to Vineyard Vines, 1pm ferry, no rain. Two more shirts at Davidsons before boarding about 2pm.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-09-14" data-date="2026-09-14" data-year="2026" data-trip="bayonne-miami">
           <figure class="memory-photo"><img src="assets/img-03f4a0465d94.jpg" alt="Striped fish swimming in Bermuda’s blue water" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-09-14">Mon · Sep 14, 2026</time><h3>Bermuda</h3><p>Not sure why I booked snorkeling at 1pm — killed half the day. 45-minute boat ride to the wrecks; tried to be first off for the clearest water. Found the Montana and swam around it, wooden wreck right next to it — the bags of cement that became bag-shaped blocks of cement was funny. Fish just ok, coral varied. Decent trip, not as amazing as Dominica, and pictures still sucked. Sushi at the Dockyard mall restaurant — good — then beers at the Frog &amp; Onion, very expensive. Headliner Jonathan Burns: unusual comedy-magic act, very entertaining. In bed by 9.</p></div>
         </article>
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-09-13" data-date="2026-09-13" data-year="2026" data-trip="bayonne-miami">
           <div class="memory-copy"><time datetime="2026-09-13">Sun · Sep 13, 2026</time><h3>Sea day</h3><p>Pool deck morning, top-tier event at 10am, chicken and chips for lunch. Belly flop competition, then Love and Marriage (men went off first). Too much casino time, waffling over whether the points are worth it to add the 3-day Wonder cruise in February — ended over 800 points, still undecided. Skipped the dancing show, in bed a little after 7pm. Snorkeling tomorrow.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-09-12" data-date="2026-09-12" data-year="2026" data-trip="bayonne-miami">
           <figure class="memory-photo"><img src="assets/img-27fa3a37a812.jpg" alt="The Tear Drop Memorial at Bayonne’s waterfront" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-09-12">Sat · Sep 12, 2026</time><h3>Bayonne, New Jersey</h3><p>Nothing nearby worth seeing in the 8am–2pm window, so I stayed on the ship — pool deck after customs, back on about 10am. Got some reading done. Gambled $500 down to $90 and back to $550. The welcome comedian was last cruise's farewell comedian with some new jokes mixed in. In bed a bit after 8pm old time. Never saw my room attendant after early morning — rough day for all of them.</p></div>
         </article>
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-09-11" data-date="2026-09-11" data-year="2026" data-trip="bayonne-miami">
           <div class="memory-copy"><time datetime="2026-09-11">Fri · Sep 11, 2026</time><h3>Sea day</h3><p>A rough one. Leaving Sydney the ship took a decent list from the wind; this morning the captain said winds were hurricane strength and they'd had to shift liquids to balance her. 10–12 foot seas as we turned into the wind, bags out on the stairwells. Ended up in the casino trying to be disciplined — was up about $150 on top of the $280 already banked, but kept playing. Ended down $500 for the night, $220 for the cruise, 825 points. Loyalty points for the two Rhapsody cruises still haven't posted; stopped by the C&amp;A desk since I was due a 560-point block — she sent the details shoreside. Boring otherwise, too cool and windy for the pool — some Netflix, then the ice show and farewell comedy.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-09-10" data-date="2026-09-10" data-year="2026" data-trip="bayonne-miami">
           <figure class="memory-photo"><img src="assets/img-5569a0ff8c32.jpg" alt="Sydney cruise terminal seen from beneath a ship’s lifeboat" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-09-10">Thu · Sep 10, 2026</time><h3>Sydney, Nova Scotia</h3><p>Short day — back on board by 1:30. Not Europe: couldn't find anything serving beer. Same walk as last visit — boardwalk to Wentworth Park, up Charlotte Street. Flea-market magnet for the steward, then killed time at Tim Hortons. Daniel's opened at 10am — two beers, engaging bartender, maybe a bit too much so. Governor's for lunch: huge line last time, no line today with the early hour and bad weather. Donair was good. Two beers, two ciders. Back on ship.</p></div>
         </article>
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-09-09" data-date="2026-09-09" data-year="2026" data-trip="bayonne-miami">
           <div class="memory-copy"><time datetime="2026-09-09">Wed · Sep 9, 2026</time><h3>Sea day</h3><p>Spent it listening in on other people's conversations — guy with the Buc-ee's shirt will be on Odyssey in October for 21 days. New drink menu at Boleros, the Jolopo was good; Captain's Corner good too. Casino: cashed out at $1,180 on $900 put in with 110 points, gave back $100. Got upgraded on Virgin — hammock all 9 days.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-09-08" data-date="2026-09-08" data-year="2026" data-trip="bayonne-miami">
           <figure class="memory-photo"><img src="assets/img-dc321b639e8e.jpg" alt="Saint John waterfront on the second day in port" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-09-08">Tue · Sep 8, 2026</time><h3>Saint John, New Brunswick · Day 2</h3><p>Lazy morning after a "real" breakfast — eggs, half English muffin, a little bacon. Off around 10:15 for Cask &amp; Kettle (closed yesterday for Labour Day). Several beers — Bumble was my favorite — then wings with habanero sauce, warned to get it on the side. Good heat. Back to Wasted Day after lunch, upper tier of their outdoor container, nice weather and good conversations with locals. Juggler/comedian Marcus Monroe was new to me — pretty good act. In bed by 8:30.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-09-07" data-date="2026-09-07" data-year="2026" data-trip="bayonne-miami">
           <figure class="memory-photo"><img src="assets/img-309e46230ec7.jpg" alt="Cruise ships docked along the Saint John waterfront" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-09-07">Mon · Sep 7, 2026</time><h3>Saint John, New Brunswick</h3><p>Macaroons from Sweet Vanilla — overrated for the price. Second Cup to kill time, cheap and average. Market walk felt smaller, mostly quick eats, like Faneuil Hall. Picaroons for a few beers at 11. Gahan House fish and chips for lunch — good. Wasted Day in the container for a few more. Picked up a magnet for the steward from 506 containers. Sun and pool in the afternoon.</p></div>
         </article>
-        <article class="memory no-photo">
+        <article class="memory no-photo" id="entry-2026-09-06" data-date="2026-09-06" data-year="2026" data-trip="bayonne-miami">
           <div class="memory-copy"><time datetime="2026-09-06">Sun · Sep 6, 2026</time><h3>Portland, Maine</h3><p>Decent weather, short sleeves. Morning walk to Bread &amp; Friends — the Everything Pull-Apart was very good; the maple rosemary latte turned odd and bitter at the end (rosemary syrup?). Shipyard when they opened, same seat as last time. Brickyard Hollow near the waterfront: slow service, average sour, probably not worth a return. Lunch at Kings Head instead of Flatbread — Thee Scotch Egg and chowder, average and a bit pricey, not worth a return either. Afternoon by the pool in the sunshine. In bed by 8pm, missed the 11pm adult comedy. Losing an hour overnight.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-09-05" data-date="2026-09-05" data-year="2026" data-trip="bayonne-miami">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Boston">
           <div class="gallery-track">
           <img src="assets/img-b9d10e279823.jpg" alt="Boston Seaport seen during a brewery crawl" loading="lazy" />
@@ -1206,11 +1342,11 @@
           </figure>
           <div class="memory-copy"><time datetime="2026-09-05">Sat · Sep 5, 2026</time><h3>Boston</h3><p>I'd planned to stay on the ship, but there's a lot near the seaport a block from the dock — so after coffee I drank my way back: Trillium, Cisco, Harpoon, Lord Hobo. Verdicts: Lord Hobo sucked (snooty vibe, high prices, not many guests). Cisco was weird — all outside, big astroturf ringed by food trucks and tent bars, dog friendly, very pricey merch. Trillium was on. Harpoon smaller than expected but glad to finally visit — cheap merch, $40 performance fleece.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-09-04" data-date="2026-09-04" data-year="2026" data-trip="bayonne-miami">
           <figure class="memory-photo"><img src="assets/img-63661ec3b6cc.jpg" alt="The Biggest Family at Sea loyalty display aboard the ship" loading="lazy" /></figure>
           <div class="memory-copy"><time datetime="2026-09-04">Fri · Sep 4, 2026</time><h3>Sea day</h3><p>Dolphins, whale spouts, and fog — low enough that the sun kept the pool deck warm. Lots of Crown &amp; Anchor members; I think it's the first sailing north out of Bayonne this season. Definitely an older Royal crowd — fewer than 80 under 18. Comedian Derrick Cameron was pretty good last night; I'll try to stay awake for his adult show Sunday.</p></div>
         </article>
-        <article class="memory">
+        <article class="memory" id="entry-2026-09-03" data-date="2026-09-03" data-year="2026" data-trip="bayonne-miami">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Bayonne → New York">
           <div class="gallery-track">
           <img src="assets/img-c28254ff7d88.jpg" alt="Cruise ship sailing past Manhattan on the Hudson River" loading="lazy" />
@@ -1228,6 +1364,351 @@
       <a class="back-link" href="#">← Back to Where's Patrick?</a>
     </div>
   </main>
+
+  <div class="trip-modal" id="trip-modal" hidden>
+    <div class="trip-modal-backdrop" data-trip-close></div>
+    <div class="trip-modal-card" role="dialog" aria-modal="true" aria-labelledby="trip-modal-title">
+      <button class="trip-modal-x" type="button" data-trip-close aria-label="Close trip details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+      <p class="trip-modal-dates" id="trip-modal-dates"></p>
+      <h3 id="trip-modal-title"></h3>
+      <h4>Headline bookings</h4>
+      <ul class="trip-modal-bookings" id="trip-modal-bookings"></ul>
+      <h4>Ports &amp; stops</h4>
+      <ul class="trip-modal-stops" id="trip-modal-stops"></ul>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ===== Dynamic hero photo =====
+    // The hero photo follows the "What's next" day-cards below: it is chosen
+    // from the cards, never from a hard-coded date. On a PORT day the hero
+    // shows that port's photo — unless the day's plan text names an attraction
+    // in PLAN_HEROES, whose photo wins (a Naples day planned around the
+    // Herculaneum excursion shows Herculaneum, not Naples). On a SEA day the
+    // hero shows the NEXT port's photo with a "Next stop: …" caption. A port
+    // with no photo falls back to HERO_FALLBACK, a generic ship at sea.
+    //
+    // PORT_HEROES maps a day-card title (port name) to its hero photo.
+    // PLAN_HEROES maps an attraction keyword in the day's plan text to its
+    // hero photo. When the daily refresh adds ports for a future trip, add
+    // the new photos to these two objects (plus a HERO_CREDITS line) and the
+    // day-cards do the rest. Keys are matched case-insensitively; a key that
+    // appears inside a longer card title still matches (e.g. "Civitavecchia"
+    // matches "Rome (Civitavecchia), Italy").
+    const PORT_HEROES = {
+      "Mykonos": "assets/img-3c9df831552c.jpg",
+      "Naples": "assets/img-96ba6f23e353.jpg",
+      "Rome (Civitavecchia)": "assets/img-e0c69cf6d0c8.jpg",
+      "Civitavecchia": "assets/img-e0c69cf6d0c8.jpg",
+      "Rome": "assets/img-e0c69cf6d0c8.jpg",
+      "La Spezia": "assets/img-2d9e44d8e95a.jpg",
+      "Barcelona": "assets/img-9623ffbd1ccc.jpg",
+      "Cartagena": "assets/img-35108218479a.jpg",
+      "Lisbon": "assets/img-3f11d8998473.jpg",
+      "Ponta Delgada": "assets/img-c7bf84673473.jpg"
+    };
+    const PLAN_HEROES = {
+      "Herculaneum": "assets/img-7e438a4f42d4.jpg",
+      "Cinque Terre": "assets/img-0d6aeb9c2346.jpg",
+      "Manarola": "assets/img-0d6aeb9c2346.jpg"
+    };
+    // Generic fallback: a cruise ship at sea, used when a port has no photo.
+    const HERO_FALLBACK = "assets/img-666542a14bb3.jpg";
+    // Photo credits for the hero images above — every hero photo is freely
+    // licensed via Wikimedia Commons; "url" is its Commons file page. The
+    // credit line is rendered unobtrusively in the hero's corner.
+    const HERO_CREDITS = {
+      "assets/img-3c9df831552c.jpg": { text: "Photo: dronepicr, CC BY 2.0", url: "https://commons.wikimedia.org/wiki/File:The_windmills_in_Mykonos,_Greece_-_50661524068.jpg" },
+      "assets/img-96ba6f23e353.jpg": { text: "Photo: Wolfgang Moroder, CC BY-SA 3.0", url: "https://commons.wikimedia.org/wiki/File:Naples_from_the_Castello_Sant_Elmo_with_Abbazia_San_Martino_the_port_and_the_Vesuv.jpg" },
+      "assets/img-7e438a4f42d4.jpg": { text: "Photo: Michael Karavanov, CC BY-SA 3.0", url: "https://commons.wikimedia.org/wiki/File:Herculaneum%27s_ruins_-_panoramio.jpg" },
+      "assets/img-e0c69cf6d0c8.jpg": { text: "Photo: Diliff, CC BY-SA 2.5", url: "https://commons.wikimedia.org/wiki/File:Colosseum_in_Rome,_Italy_-_April_2007.jpg" },
+      "assets/img-2d9e44d8e95a.jpg": { text: "Photo: Aconcagua, CC BY-SA 3.0 (Porto Venere, on the Gulf of La Spezia)", url: "https://commons.wikimedia.org/wiki/File:Porto_Venere_from_Lerici.jpg" },
+      "assets/img-0d6aeb9c2346.jpg": { text: "Photo: Timothy A. Gonsalves, CC BY-SA 4.0 (Manarola)", url: "https://commons.wikimedia.org/wiki/File:Manarola_NW_Cinque_Terre_Sep23_A7C_07233.jpg" },
+      "assets/img-9623ffbd1ccc.jpg": { text: "Photo: Bernard Gagnon, CC BY-SA 3.0", url: "https://commons.wikimedia.org/wiki/File:Sagrada_Familia_01.jpg" },
+      "assets/img-35108218479a.jpg": { text: "Photo: Diego Delso, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Teatro_romano_de_Cartagena,_Espa%C3%B1a,_2022-07-16,_DD_02.jpg" },
+      "assets/img-3f11d8998473.jpg": { text: "Photo: Rodrigo Tetsuo Argenton, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Torre_de_Bel%C3%A9m_por_Rodrigo_Tetsuo_Argenton_(2).jpg" },
+      "assets/img-c7bf84673473.jpg": { text: "Photo: Diego Delso, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Portas_da_Cidade,_Ponta_Delgada,_isla_de_San_Miguel,_Azores,_Portugal,_2020-07-29,_DD_123-125_HDR.jpg" },
+      "assets/img-666542a14bb3.jpg": { text: "Photo: Richard Mc Neil, CC BY 3.0", url: "https://commons.wikimedia.org/wiki/File:Oasis_of_the_seas_sailing_out_of_Port_Everglades_inlet._Le_plus_gros_paquebot_du_monde_sortant_du_port..._-_panoramio.jpg" }
+    };
+
+    (function () {
+      var img = document.getElementById("hero-img");
+      if (!img) { return; }
+      var caption = document.getElementById("hero-next");
+      var kicker = document.getElementById("hero-label-kicker");
+      var placeEl = document.getElementById("hero-label-place");
+      var coords = document.getElementById("hero-label-coords");
+      var creditEl = document.getElementById("hero-credit");
+
+      function norm(s) { return (s || "").toLowerCase().replace(/\s+/g, " ").trim(); }
+      // Port photo for a day-card title: exact PORT_HEROES key first, then the
+      // longest key contained in (or containing) the title.
+      function portFile(title) {
+        var t = norm(title), best = null, bestLen = -1;
+        for (var key in PORT_HEROES) {
+          var k = norm(key);
+          if (t === k) { return PORT_HEROES[key]; }
+          if ((t.indexOf(k) !== -1 || k.indexOf(t) !== -1) && k.length > bestLen) { best = PORT_HEROES[key]; bestLen = k.length; }
+        }
+        return best;
+      }
+      // Attraction photo for plan text: returns { key, file } or null.
+      function planMatch(text) {
+        var hay = norm(text);
+        for (var key in PLAN_HEROES) {
+          if (hay.indexOf(norm(key)) !== -1) { return { key: key, file: PLAN_HEROES[key] }; }
+        }
+        return null;
+      }
+      function isSea(title) { return /\b(at sea|cruising|sea day)\b/.test(norm(title)); }
+
+      var MONTHS = { jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11 };
+      // Day-cards carry dates like "Thu · Oct 22" (no year): read them as
+      // this year's date so today can be matched without hard-coding it.
+      function cardDate(card) {
+        var el = card.querySelector(".date");
+        var m = norm(el ? el.textContent : "").match(/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+(\d{1,2})/);
+        if (!m) { return null; }
+        return new Date(new Date().getFullYear(), MONTHS[m[1]], +m[2]);
+      }
+      function titleOf(card) { var h = card.querySelector("h3"); return h ? h.textContent.trim() : ""; }
+      function planOf(card) { var p = card.querySelector("p"); return p ? p.textContent : ""; }
+
+      function show(file, place, kickerText, alt, nextCaption) {
+        img.src = file;
+        img.alt = alt;
+        if (placeEl) { placeEl.textContent = place; }
+        if (kicker) { kicker.textContent = kickerText; }
+        if (coords) { coords.textContent = ""; }
+        if (caption) {
+          if (nextCaption) { caption.textContent = nextCaption; caption.hidden = false; }
+          else { caption.textContent = ""; caption.hidden = true; }
+        }
+        if (creditEl) {
+          creditEl.textContent = "";
+          var c = HERO_CREDITS[file];
+          if (c) {
+            creditEl.appendChild(document.createTextNode(c.text + " · "));
+            var a = document.createElement("a");
+            a.href = c.url;
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+            a.textContent = "Wikimedia Commons";
+            creditEl.appendChild(a);
+          }
+        }
+      }
+
+      var cards = Array.prototype.slice.call(document.querySelectorAll(".days .day"));
+      if (!cards.length) { return; }
+      var today = new Date();
+      today.setHours(0, 0, 0, 0);
+      var idx = -1;
+      cards.forEach(function (card, i) {
+        var d = cardDate(card);
+        if (d && d.getTime() === today.getTime()) { idx = i; }
+      });
+      // The "What's next" strip always leads with today; if no card date
+      // matches the viewer's clock, treat the first card as today's.
+      if (idx === -1) { idx = 0; }
+
+      var card = cards[idx];
+      var title = titleOf(card);
+      if (!isSea(title)) {
+        // Port day: the fuller plan text in the hero copy counts too — it
+        // names the day's sights (e.g. Herculaneum) the card only abbreviates.
+        var heroPlan = document.querySelector(".hero-copy > div > p");
+        var planText = planOf(card) + " " + (heroPlan ? heroPlan.textContent : "");
+        var pm = planMatch(planText);
+        if (pm) { show(pm.file, title, "Today in", "Iconic view of " + pm.key + ", the day's plan from " + title, null); }
+        else {
+          var pf = portFile(title);
+          if (pf) { show(pf, title, "Today in", "Iconic view of " + title, null); }
+          else { show(HERO_FALLBACK, title, "Today in", "A cruise ship at sea", null); }
+        }
+        return;
+      }
+      // Sea day: the next port card down the strip is the hero, captioned
+      // with how far away it is.
+      for (var j = idx + 1; j < cards.length; j++) {
+        if (isSea(titleOf(cards[j]))) { continue; }
+        var nextTitle = titleOf(cards[j]);
+        var d0 = cardDate(card), d1 = cardDate(cards[j]);
+        var away = (d0 && d1) ? Math.round((d1 - d0) / 86400000) : (j - idx);
+        var when = away <= 1 ? "tomorrow" : away + " days away";
+        var nf = portFile(nextTitle);
+        show(nf || HERO_FALLBACK, nextTitle, "Next stop",
+          nf ? "Iconic view of " + nextTitle + ", the next port" : "A cruise ship at sea",
+          "Next stop: " + nextTitle + " · " + when);
+        return;
+      }
+      // Sea day with no later port in the cards: stay with the ship at sea.
+      show(HERO_FALLBACK, title, "Today", "A cruise ship at sea", null);
+    })();
+
+    // ===== Current-trip map data =====
+    // TRIP_PORTS lists the ports of the sailing currently underway, in sailing
+    // order, each with its port date and coordinates. The daily page refresh
+    // updates this array (and the hero element's data-tz) when the trip changes.
+    const TRIP_PORTS = [
+      { port: "Civitavecchia (Rome), Italy", date: "Sun · Oct 18", lat: 42.0969, lng: 11.7898 },
+      { port: "Messina, Sicily, Italy", date: "Mon · Oct 19", lat: 38.1969, lng: 15.5567 },
+      { port: "Santorini, Greece", date: "Wed · Oct 21", lat: 36.4157, lng: 25.4320 },
+      { port: "Mykonos, Greece", date: "Thu · Oct 22", lat: 37.4427, lng: 25.3296 },
+      { port: "Naples, Italy", date: "Sat · Oct 24", lat: 40.8436, lng: 14.2543 },
+      { port: "Civitavecchia (Rome), Italy", date: "Sun · Oct 25", lat: 42.0969, lng: 11.7898 }
+    ];
+
+    // ----- Feature 1: live countdowns on the upcoming trips -----
+    (function () {
+      var today = new Date();
+      today.setHours(0, 0, 0, 0);
+      Array.prototype.forEach.call(document.querySelectorAll("[data-start]"), function (el) {
+        var parts = el.getAttribute("data-start").split("-");
+        var start = new Date(+parts[0], +parts[1] - 1, +parts[2]);
+        var days = Math.round((start - today) / 86400000);
+        var label;
+        if (days > 1) { label = days + " days to go"; }
+        else if (days === 1) { label = "1 day to go"; }
+        else { label = "underway now"; }
+        var slot = el.querySelector("[data-cd-slot]") || el;
+        var span = document.createElement("span");
+        span.className = "countdown";
+        span.textContent = label;
+        slot.appendChild(span);
+      });
+    })();
+
+    // ----- Feature 2: local time where Patrick is (timezone from the hero's data-tz) -----
+    (function () {
+      var hero = document.getElementById("hero");
+      var line = document.getElementById("local-time");
+      if (!hero || !line) { return; }
+      var tz = hero.getAttribute("data-tz");
+      var place = document.getElementById("current-place").textContent.trim();
+      function update() {
+        try {
+          var fmt = new Intl.DateTimeFormat("en-US", { timeZone: tz, hour: "numeric", minute: "2-digit" });
+          line.innerHTML = "It&rsquo;s currently <strong>" + fmt.format(new Date()) + "</strong> in " + place + ".";
+        } catch (e) { line.textContent = ""; }
+      }
+      update();
+      setInterval(update, 30000);
+    })();
+
+    // ----- Feature 3: interactive map of the current sailing -----
+    (function () {
+      if (!window.L) { return; }
+      var el = document.getElementById("trip-map");
+      if (!el) { return; }
+      var map = L.map(el, { scrollWheelZoom: false });
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 18,
+        attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+      }).addTo(map);
+      var pts = [];
+      TRIP_PORTS.forEach(function (p) {
+        L.marker([p.lat, p.lng]).addTo(map).bindPopup("<strong>" + p.port + "</strong><br>" + p.date);
+        pts.push([p.lat, p.lng]);
+      });
+      L.polyline(pts, { color: "#1d585a", weight: 2, dashArray: "5 6" }).addTo(map);
+      map.fitBounds(L.latLngBounds(pts).pad(0.12));
+    })();
+
+    // ----- Feature 5: journal search & filters (main journal history) -----
+    (function () {
+      var list = document.querySelector("#view-main .history-list");
+      var tripSel = document.getElementById("filter-trip");
+      var yearSel = document.getElementById("filter-year");
+      var q = document.getElementById("filter-q");
+      var empty = document.getElementById("filter-empty");
+      if (!list || !tripSel || !yearSel || !q || !empty) { return; }
+      var entries = Array.prototype.slice.call(list.querySelectorAll(".memory"));
+      var labels = {
+        "venice-transatlantic": "Venice & Transatlantic",
+        "spain-transatlantic": "Spain & Transatlantic",
+        "bayonne-miami": "New England, Bermuda & Virgin Voyages"
+      };
+      var trips = {}, years = {};
+      entries.forEach(function (e) {
+        var t = e.getAttribute("data-trip"), y = e.getAttribute("data-year");
+        if (t) { trips[t] = true; }
+        if (y) { years[y] = true; }
+      });
+      Object.keys(trips).sort().forEach(function (t) {
+        var o = document.createElement("option");
+        o.value = t;
+        o.textContent = labels[t] || t;
+        tripSel.appendChild(o);
+      });
+      Object.keys(years).sort().reverse().forEach(function (y) {
+        var o = document.createElement("option");
+        o.value = y;
+        o.textContent = y;
+        yearSel.appendChild(o);
+      });
+      function apply() {
+        var t = tripSel.value, y = yearSel.value, needle = q.value.trim().toLowerCase();
+        var shown = 0;
+        entries.forEach(function (e) {
+          var ok = (!t || e.getAttribute("data-trip") === t)
+            && (!y || e.getAttribute("data-year") === y)
+            && (!needle || e.textContent.toLowerCase().indexOf(needle) !== -1);
+          e.style.display = ok ? "" : "none";
+          if (ok) { shown++; }
+        });
+        empty.hidden = shown !== 0;
+      }
+      tripSel.addEventListener("change", apply);
+      yearSel.addEventListener("change", apply);
+      q.addEventListener("input", apply);
+    })();
+
+    // ----- Feature 6: a year ago today (renders only when a prior-year entry matches today's month & day) -----
+    (function () {
+      var host = document.getElementById("throwback");
+      if (!host) { return; }
+      var now = new Date();
+      var mm = now.getMonth() + 1, dd = now.getDate(), yy = now.getFullYear();
+      var match = null, matchYear = 0;
+      Array.prototype.forEach.call(document.querySelectorAll(".memory[data-date]"), function (e) {
+        var p = e.getAttribute("data-date").split("-");
+        if (+p[1] === mm && +p[2] === dd && +p[0] < yy && +p[0] > matchYear) { match = e; matchYear = +p[0]; }
+      });
+      if (!match) { return; }
+      var copy = match.querySelector(".memory-copy");
+      var card = document.createElement("section");
+      card.className = "throwback";
+      card.setAttribute("aria-label", "Journal entry from a year ago today");
+      var kicker = document.createElement("span");
+      kicker.className = "date";
+      kicker.textContent = "A year ago today";
+      var h = document.createElement("h3");
+      h.textContent = copy.querySelector("h3").textContent;
+      var para = document.createElement("p");
+      para.textContent = copy.querySelector("p").textContent;
+      var link = document.createElement("a");
+      link.href = "#" + match.id;
+      link.textContent = "Read the " + copy.querySelector("time").textContent + " entry \u2192";
+      link.addEventListener("click", function (ev) {
+        ev.preventDefault();
+        var view = match.closest(".view");
+        if (view && view.id !== "view-main") { window.location.hash = view.id; }
+        else if (window.location.hash) { window.location.hash = ""; }
+        setTimeout(function () {
+          match.scrollIntoView({ behavior: "smooth", block: "start" });
+          match.classList.add("flash");
+          setTimeout(function () { match.classList.remove("flash"); }, 2400);
+        }, 60);
+      });
+      card.appendChild(kicker);
+      card.appendChild(h);
+      card.appendChild(para);
+      card.appendChild(link);
+      host.appendChild(card);
+    })();
+  </script>
 
   <script>
     (function () {
@@ -1281,6 +1762,311 @@
           x0 = null;
           if (Math.abs(dx) > 40) { go(i + (dx < 0 ? 1 : -1)); }
         }, { passive: true });
+      });
+    })();
+  </script>
+
+  <script>
+    // ===== Trip detail popups (upcoming trips longer than 7 days) =====
+    // Detail content below was built at build time from the trip itineraries
+    // in ~/workspace/goals/*/files/itinerary.md — specifically:
+    //   goals/december-caribbean/files/itinerary.md
+    //   goals/january-caribbean/files/itinerary.md
+    //   goals/february-caribbean/files/itinerary.md
+    //   goals/australia/files/itinerary.md
+    //   goals/legend/files/itinerary.md
+    //   goals/alaska-land-trip-and-cruise/files/itinerary.md
+    //   goals/panama-canal/files/itinerary.md
+    //   goals/2028-03-japan/files/itinerary.md
+    // (goals/venice-transatlantic-trip/files/itinerary.md covers the current
+    // sailing, which is not part of the upcoming-trips list.) When an
+    // itinerary changes, refresh the matching entry here from that file.
+    (function () {
+      var TRIP_DETAILS = {
+        "december-caribbean": {
+          title: "Caribbean",
+          range: "November 28 – December 19, 2026 · 21 days",
+          bookings: [
+            "JetBlue Boston → Ft Lauderdale (Nov 28), home Dec 19",
+            "Bahia Mar, Ft Lauderdale — 1 night before the first sailing",
+            "Adventure of the Seas — stateroom 4N 7506 Ocean View, three back-to-back sailings (6 + 8 + 6 nights), same cabin throughout",
+            "Royal Beach Club day passes booked for all three Nassau stops"
+          ],
+          stops: [
+            ["Nov 28", "Ft Lauderdale", "Fly in; night at Bahia Mar"],
+            ["Nov 30", "Nassau, Bahamas", "Royal Beach Club day pass"],
+            ["Dec 2", "Samaná, Dominican Republic", "Frontón Beach & snorkeling adventure"],
+            ["Dec 3", "Puerto Plata, Dominican Republic", "Amber Beach Club getaway"],
+            ["Dec 6", "Nassau, Bahamas", "Royal Beach Club day pass"],
+            ["Dec 9", "Oranjestad, Aruba", "Sailaway snorkel cruise — in port until 11:00 PM"],
+            ["Dec 10", "Willemstad, Curaçao", "Snorkel the Treasures of Caracas Bay"],
+            ["Dec 15", "Cozumel, Mexico", "KUZA Beach day pass"],
+            ["Dec 16", "Puerto Costa Maya, Mexico", "Tubing on Bacalar's Seven Color Lagoon"],
+            ["Dec 18", "Nassau, Bahamas", "Royal Beach Club day pass"],
+            ["Dec 19", "Ft Lauderdale", "Disembark; fly home to Boston"]
+          ]
+        },
+        "january-caribbean": {
+          title: "Eastern & Southern Caribbean",
+          range: "January 2 – 25, 2027 · 23 days",
+          bookings: [
+            "Delta Boston → Newark (Jan 2); Fairfield Inn Newark Airport, 1 night",
+            "Odyssey of the Seas, 11nt Eastern Caribbean — Studio Ocean View Balcony 2F 7650",
+            "Odyssey of the Seas, 11nt Southern Caribbean — Studio Ocean View Balcony 2F 7250",
+            "Delta home from Newark on Jan 25"
+          ],
+          stops: [
+            ["Jan 3", "Cape Liberty, New Jersey", "Board Odyssey of the Seas"],
+            ["Jan 7", "St Maarten", "Self-guided Philipsburg day — lunch at Marley's"],
+            ["Jan 8", "Antigua", "Beach transfer by boat"],
+            ["Jan 9", "St Kitts", "Snorkel St. Kitts excursion"],
+            ["Jan 10", "St Thomas", "Double Dip snorkeling by fast cat"],
+            ["Jan 14", "Cape Liberty", "Turn-around day — second sailing boards the same ship"],
+            ["Jan 18", "St Maarten", "Walk-in day — Marley's, then Fort Amsterdam"],
+            ["Jan 19", "St Lucia", "Open Fun Bus scenes & beach time"],
+            ["Jan 20", "Barbados", "Turtle & shipwreck snorkel adventure"],
+            ["Jan 21", "St Kitts", "Self-guided Basseterre walking loop"],
+            ["Jan 25", "Cape Liberty", "Disembark; fly home to Boston"]
+          ]
+        },
+        "february-caribbean": {
+          title: "Florida & the Bahamas",
+          range: "February 5 – 19, 2027 · 14 days",
+          bookings: [
+            "Delta Boston → Miami (Feb 5); citizenM Miami Brickell, 1 night",
+            "Freedom of the Seas, 5nt Caribbean Getaway — Ocean View Balcony 2D 7544",
+            "Avis Mustang Mach-E rental, Feb 11–15; staying with a friend in Estero Feb 13–14",
+            "Wonder of the Seas, 4nt Bahamas & Perfect Day — Interior 4V 10103",
+            "Delta home via Atlanta on Feb 19"
+          ],
+          stops: [
+            ["Feb 5", "Miami", "Featured dinner at Joe's Stone Crab"],
+            ["Feb 7", "Nassau, Bahamas", "Royal Beach Club day pass"],
+            ["Feb 9", "Puerto Plata, Dominican Republic", "Port day — excursion still being decided"],
+            ["Feb 11", "Miami", "Off the ship; featured lunch at Versailles, Little Havana"],
+            ["Feb 13–14", "Estero, Florida", "Weekend with a friend — Super Bowl Sunday"],
+            ["Feb 16", "Nassau, Bahamas", "Royal Beach Club day pass"],
+            ["Feb 18", "Perfect Day at CocoCay", "Hideaway Beach (adults-only) day pass"],
+            ["Feb 19", "Miami", "Disembark; fly home to Boston"]
+          ]
+        },
+        "australia": {
+          title: "Pacific crossing",
+          range: "February 26 – May 5, 2027 · 68 days",
+          bookings: [
+            "Alaska Airlines Boston → Honolulu via Seattle, First (Feb 26); Prince Waikiki, 2 nights",
+            "Qantas Honolulu → Sydney (Feb 28, crossing the date line); Shangri-La Sydney, 1 night",
+            "Celebrity Edge, three back-to-back sailings from Sydney — Great Barrier Reef (11nt), New Zealand (11nt), Fiji & Vanuatu (14nt)",
+            "InterContinental Sydney (Apr 7–9), then The Alva, Brisbane (Apr 9–11)",
+            "Quantum of the Seas, 23nt transpacific Brisbane → Seattle — Ocean View Balcony",
+            "Hotel Theodore, Seattle (May 3–5); Delta home May 5"
+          ],
+          stops: [
+            ["Feb 26–27", "Honolulu, Hawaii", "Oahu Circle Island tour"],
+            ["Mar 5", "Airlie Beach", "Viper trip to the Great Barrier Reef & Whitehaven"],
+            ["Mar 6–7", "Cairns (Yorkeys Knob)", "Overnight in port — Kuranda jungle train & Skyrail, then the Reef"],
+            ["Mar 8", "Port Douglas", "Mossman Gorge & Rainforest Habitat"],
+            ["Mar 12", "Newcastle", "Self-guided east-end walking day"],
+            ["Mar 16", "Milford, Doubtful & Dusky Sounds", "Scenic cruising the fiords"],
+            ["Mar 17", "Dunedin", "Larnach Castle tour"],
+            ["Mar 18", "Christchurch", "Lyttelton excursion with the Antarctic Center"],
+            ["Mar 20", "Tauranga", "Hobbiton Tour Experience"],
+            ["Mar 21", "Auckland", "Self-guided waterfront & CBD walk"],
+            ["Mar 27", "Noumea, New Caledonia", "Self-guided downtown walk"],
+            ["Mar 29", "Suva, Fiji", "Colo-i-Suva Forest Park & waterfalls"],
+            ["Mar 30", "Lautoka, Fiji", "Snorkeling the Mamanuca waters"],
+            ["Apr 1", "Mystery Island, Vanuatu", "Beach day"],
+            ["Apr 2", "Lifou, New Caledonia", "Jinek Bay snorkel & Easo stalls"],
+            ["Apr 3", "Port Vila, Vanuatu", "Glassbottom boat & snorkel safari (by tender)"],
+            ["Apr 7–9", "Sydney", "InterContinental Sydney; the Rocks"],
+            ["Apr 10", "Brisbane", "Lone Pine Koala Sanctuary"],
+            ["Apr 18", "Papeete, Tahiti", "Waterfront walk; dinner at Les Roulottes food trucks"],
+            ["Apr 19", "Moorea", "Snorkel Safari (by tender)"],
+            ["Apr 20", "Raiatea", "Uturoa & the Taputapuātea marae (by tender)"],
+            ["Apr 26–27", "Honolulu, Hawaii", "Overnight in port — Waikiki & Diamond Head, then Pearl Harbor"],
+            ["May 3–5", "Seattle", "Hotel Theodore; Pike Place & the waterfront, then home"]
+          ]
+        },
+        "legend": {
+          title: "Spain & the Mediterranean",
+          range: "May 12 – 29, 2027 · 17 days",
+          bookings: [
+            "Iberia Boston → Barcelona via Madrid (overnight May 12–13); H10 Port Vell, 3 nights",
+            "Legend of the Seas, 7nt Western Mediterranean — Ocean View N4 9504",
+            "Flight Barcelona → Málaga (May 23); staying at Sean's place in Málaga",
+            "H10 Corregidor, Seville (May 25–27); H10 Palacio Colomera, Córdoba (May 27–29)",
+            "iryo trains Seville → Córdoba and Córdoba → Madrid; Iberia home May 29"
+          ],
+          stops: [
+            ["May 13–15", "Barcelona", "Palau de la Música & Modernisme; Girona & Dalí Museum day trip (May 15)"],
+            ["May 17", "Palma de Mallorca", "Self-guided old-town walk — lunch at Celler Sa Premsa"],
+            ["May 18", "Marseille, France", "Old Port & Le Panier — bouillabaisse at Le Miramar"],
+            ["May 19", "La Spezia, Italy", "Pisa & Lucca by train"],
+            ["May 20", "Civitavecchia, Italy", "Port-town day — Forte Michelangelo & the old harbor"],
+            ["May 21", "Naples, Italy", "City day — Sansevero Chapel & pizza at L'Antica Pizzeria da Michele"],
+            ["May 23–24", "Málaga", "Alcazaba, Atarazanas market & the Picasso Museum"],
+            ["May 25–27", "Seville", "Cathedral, Real Alcázar & Plaza de España"],
+            ["May 27–29", "Córdoba", "The Mezquita; train to Madrid and home on May 29"]
+          ]
+        },
+        "alaska": {
+          title: "Alaska",
+          range: "August 20 – September 3, 2027 · 14 days",
+          bookings: [
+            "Alaska Airlines Boston → Fairbanks via Seattle (Aug 20); Enterprise rental SUV",
+            "Sophie Station Suites, Fairbanks (2n); Denali Cabins (2n); Denali Fireside Cabin, Talkeetna (1n)",
+            "Alaska Railroad Coastal Classic, Anchorage → Seward (Aug 27) — GoldStar Service",
+            "Anthem of the Seas, 7nt Southbound Alaska & Hubbard Glacier — Ocean View Balcony Guarantee"
+          ],
+          stops: [
+            ["Aug 20–21", "Fairbanks", "Chena Hot Springs self-drive day trip (Aug 21)"],
+            ["Aug 22–23", "Denali", "Tundra Wilderness Tour (Aug 23)"],
+            ["Aug 24", "Talkeetna", "Mahay's Devil's Canyon jet boat, then a K2 glacier-landing flight"],
+            ["Aug 25–26", "Anchorage", "Anchorage Museum, Alaska Native Heritage Center & the Coastal Trail"],
+            ["Aug 27", "Seward", "Train in by late morning; board Anthem of the Seas"],
+            ["Aug 28", "Hubbard Glacier", "Scenic cruising, 1:00–5:00 PM"],
+            ["Aug 29", "Juneau", "Self-guided downtown walk — Mount Roberts Tramway & Deckhand Dave's"],
+            ["Aug 30", "Skagway", "Self-guided gold-rush town walk"],
+            ["Aug 31", "Icy Strait Point", "Port day — excursion still being decided"],
+            ["Sep 1", "Ketchikan", "Self-guided waterfront walk"],
+            ["Sep 3", "Vancouver", "Disembark"]
+          ]
+        },
+        "panama-canal": {
+          title: "Panama Canal",
+          range: "September 26 – October 30, 2027 · 34 days",
+          bookings: [
+            "Serenade of the Seas, 7nt Pacific Coastal Vancouver → San Diego — Ocean View Balcony Guarantee",
+            "San Diego, 4 nights between sailings (Oct 3–7)",
+            "Serenade of the Seas, 15nt Panama Canal eastward — Spacious Ocean View Balcony 2B 9570, Deluxe Beverage Package booked",
+            "Amtrak Tampa → Miami (Oct 22); 1 night in Miami",
+            "Hero of the Seas, 7nt Perfect Day CocoCay & East Caribbean — Ocean View N4 10120"
+          ],
+          stops: [
+            ["Sep 28", "Astoria, Oregon", "Port day on the Columbia River"],
+            ["Sep 30–Oct 1", "San Francisco", "Overnight in port"],
+            ["Oct 3–6", "San Diego", "Old Town, Coronado & the Hotel del Coronado"],
+            ["Oct 10", "Puerto Vallarta, Mexico", "Self-guided Malecón & Zona Romántica day"],
+            ["Oct 13", "Puerto Quetzal, Guatemala", "Port day — excursion still being decided"],
+            ["Oct 15", "Puntarenas, Costa Rica", "Forest Skywalks & Tarcoles River eco-cruise"],
+            ["Oct 17", "Panama Canal", "Full-day transit through the locks"],
+            ["Oct 18", "Cartagena, Colombia", "Self-guided walled-city day"],
+            ["Oct 20", "George Town, Grand Cayman", "Self-guided day in George Town"],
+            ["Oct 22", "Tampa → Miami", "Disembark; Amtrak down to Miami"],
+            ["Oct 26", "Philipsburg, St Maarten", "Boardwalk & Great Bay Beach day"],
+            ["Oct 27", "Charlotte Amalie, St Thomas", "Blackbeard's Castle, the 99 Steps & Magens Bay"],
+            ["Oct 29", "Perfect Day at CocoCay", "Beach & waterpark day"],
+            ["Oct 30", "Miami", "Disembark; fly home to Boston"]
+          ]
+        },
+        "japan": {
+          title: "Japan",
+          range: "March 8 – May 3, 2028 · 56 days",
+          bookings: [
+            "Positioning: Boston → San Francisco → Shanghai, arriving Mar 12 (flights still to book)",
+            "Spectrum of the Seas, 8nt Shanghai → Yokohama — Ocean View with Large Balcony 4C 10728",
+            "Tokyo, 5 nights (Mar 23–28) and Kyoto, 4 nights (Mar 28–Apr 1) — peak cherry-blossom season",
+            "Voyager of the Seas, 12nt Japan Cherry Blossoms roundtrip — Sunset Balcony SB 9690",
+            "Voyager of the Seas, 16nt Yokohama → Seattle — Junior Suite J4 9318"
+          ],
+          stops: [
+            ["Mar 12–14", "Shanghai", "Yu Garden, the Bund & Shanghai Tower"],
+            ["Mar 17", "Kumamoto (Yatsushiro)", "Port day"],
+            ["Mar 18", "Kagoshima", "Port day"],
+            ["Mar 20–21", "Kobe", "Overnight in port"],
+            ["Mar 23–28", "Tokyo", "Five nights — teamLab Planets, Shibuya Sky & Shinjuku Gyoen on the list"],
+            ["Mar 28–Apr 1", "Kyoto", "Four nights among the temples at peak blossom"],
+            ["Apr 3", "Osaka", "Port day"],
+            ["Apr 5", "Jeju (Seogwipo), South Korea", "Port day"],
+            ["Apr 6", "Fukuoka", "Port day"],
+            ["Apr 8–9", "Okinawa", "Overnight in port"],
+            ["Apr 10", "Kagoshima", "Second call, on the evening run north"],
+            ["Apr 12", "Shimizu (Mt Fuji)", "Port day with Fuji views, weather permitting"],
+            ["Apr 17–18", "Sapporo (Muroran)", "Overnight in port"],
+            ["Apr 24", "International Date Line", "Eastbound crossing — the day happens twice"],
+            ["Apr 28–May 1", "Seattle", "Arrive Apr 28 with a night aboard, then two nights in the city; home May 1"]
+          ]
+        }
+      };
+
+      var modal = document.getElementById("trip-modal");
+      var titleEl = document.getElementById("trip-modal-title");
+      var datesEl = document.getElementById("trip-modal-dates");
+      var bookingsEl = document.getElementById("trip-modal-bookings");
+      var stopsEl = document.getElementById("trip-modal-stops");
+      var lastTrigger = null;
+
+      function fillList(ul, items, isStops) {
+        ul.textContent = "";
+        items.forEach(function (item) {
+          var li = document.createElement("li");
+          if (isStops) {
+            var t = document.createElement("time");
+            t.textContent = item[0];
+            var span = document.createElement("span");
+            var strong = document.createElement("strong");
+            strong.textContent = item[1];
+            span.appendChild(strong);
+            if (item[2]) { span.appendChild(document.createTextNode(" — " + item[2])); }
+            li.appendChild(t);
+            li.appendChild(span);
+          } else {
+            li.textContent = item;
+          }
+          ul.appendChild(li);
+        });
+      }
+
+      function openTrip(key, trigger) {
+        var d = TRIP_DETAILS[key];
+        if (!d) { return; }
+        lastTrigger = trigger || null;
+        titleEl.textContent = d.title;
+        datesEl.textContent = d.range;
+        fillList(bookingsEl, d.bookings, false);
+        fillList(stopsEl, d.stops, true);
+        modal.hidden = false;
+        document.body.style.overflow = "hidden";
+        modal.querySelector(".trip-modal-card").scrollTop = 0;
+        modal.querySelector(".trip-modal-x").focus();
+      }
+
+      function closeTrip() {
+        if (modal.hidden) { return; }
+        modal.hidden = true;
+        document.body.style.overflow = "";
+        if (lastTrigger) { lastTrigger.focus(); lastTrigger = null; }
+      }
+
+      Array.prototype.forEach.call(modal.querySelectorAll("[data-trip-close]"), function (el) {
+        el.addEventListener("click", closeTrip);
+      });
+      document.addEventListener("keydown", function (e) {
+        if ((e.key === "Escape" || e.key === "Esc") && !modal.hidden) { closeTrip(); }
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll(".trip-row[data-start][data-end][data-trip]"), function (row) {
+        var start = new Date(row.getAttribute("data-start") + "T00:00:00");
+        var end = new Date(row.getAttribute("data-end") + "T00:00:00");
+        var days = Math.round((end - start) / 86400000);
+        var key = row.getAttribute("data-trip");
+        if (!(days > 7) || !TRIP_DETAILS[key]) { return; }
+        row.classList.add("clickable");
+        row.setAttribute("tabindex", "0");
+        row.setAttribute("role", "button");
+        row.setAttribute("aria-haspopup", "dialog");
+        var slot = row.querySelector("[data-cd-slot]") || row;
+        var hint = document.createElement("span");
+        hint.className = "trip-hint";
+        hint.innerHTML = "Details <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M9 5l7 7-7 7\"/></svg>";
+        slot.appendChild(hint);
+        row.addEventListener("click", function () { openTrip(key, row); });
+        row.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            openTrip(key, row);
+          }
+        });
       });
     })();
   </script>
