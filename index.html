@@ -528,6 +528,21 @@
     .archive-head { margin-top: 30px; }
     .archive-view .history-list + .back-link { margin-top: 34px; }
     .archive-note { max-width: 640px; margin: 4px 0 34px; padding: 26px 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; color: var(--muted); line-height: 1.6; }
+    .framework-list { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .framework-day { display: grid; grid-template-columns: 148px 1fr; gap: 4px 26px; padding: 20px 4px; }
+    .framework-day + .framework-day { border-top: 1px solid var(--line); }
+    .framework-day time { padding-top: 4px; color: var(--orange); font-size: .8rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+    .framework-day h3 { margin: 0 0 6px; font: 650 1.32rem/1.2 "Newsreader", serif; letter-spacing: -.01em; }
+    .framework-day p { margin: 0; max-width: 780px; color: var(--muted); line-height: 1.62; }
+    .framework-day .framework-source { margin-top: 7px; font-size: .82rem; }
+    .framework-unknowns { max-width: 780px; margin: 36px 0 0; }
+    .framework-unknowns h3 { margin: 0 0 8px; font: 650 1.32rem/1.2 "Newsreader", serif; letter-spacing: -.01em; }
+    .framework-unknowns p { margin: 0 0 10px; color: var(--muted); line-height: 1.62; }
+    .framework-unknowns ul { margin: 0; padding-left: 20px; color: var(--muted); line-height: 1.62; }
+    .framework-unknowns li + li { margin-top: 7px; }
+    .framework-unknowns strong { color: var(--ink); font-weight: 600; }
+    .archive-view .framework-unknowns + .back-link { margin-top: 34px; }
+    @media (max-width: 580px) { .framework-day { grid-template-columns: 1fr; gap: 3px; padding: 18px 2px; } .framework-day time { padding-top: 0; } }
     @media (max-width: 860px) { .archive-list { grid-template-columns: 1fr; } }
 
     .local-time { margin: 16px 0 0; color: #b9d1ca; font-size: .92rem; }
@@ -1070,39 +1085,39 @@
           <span class="go">Read the trip journal →</span>
         </a>
         <a class="archive-card" href="#alaska-may-jun-2026">
-          <time>Approx. May 29 to Jun 27, 2026</time>
+          <time>May 27 to Jun 27, 2026</time>
           <strong>Alaska 2026</strong>
-          <span class="desc">A placeholder for now — the details of this trip will be added over time.</span>
+          <span class="desc">Four back-to-back Ovation of the Seas sailings between Vancouver and Seward. Day by day from the receipts.</span>
           <span class="go">View the trip →</span>
         </a>
         <a class="archive-card" href="#san-juan-rome-apr-may-2026">
-          <time>Approx. Apr 12 to May 25, 2026</time>
+          <time>Apr 11 to May 25, 2026</time>
           <strong>San Juan to Rome 2026</strong>
-          <span class="desc">A placeholder for now — the details of this trip will be added over time.</span>
+          <span class="desc">Five back-to-back Brilliance of the Seas sailings from San Juan to Rome. Day by day from the receipts.</span>
           <span class="go">View the trip →</span>
         </a>
         <a class="archive-card" href="#miami-jan-feb-2026">
-          <time>Approx. Jan 3 to Feb 3, 2026</time>
+          <time>Jan 2 to Feb 4, 2026</time>
           <strong>Miami 2026</strong>
-          <span class="desc">A placeholder for now — the details of this trip will be added over time.</span>
+          <span class="desc">Five back-to-back sailings out of Miami on Virgin Voyages and Celebrity. Day by day from the receipts.</span>
           <span class="go">View the trip →</span>
         </a>
         <a class="archive-card" href="#december-caribbean-nov-dec-2025">
-          <time>Approx. Nov 30 to Dec 21, 2025</time>
+          <time>Nov 29 to Dec 20, 2025</time>
           <strong>December Caribbean 2025</strong>
-          <span class="desc">A placeholder for now — the details of this trip will be added over time.</span>
+          <span class="desc">Symphony, Independence and Allure, back to back out of Miami and Ft Lauderdale. Day by day from the receipts.</span>
           <span class="go">View the trip →</span>
         </a>
         <a class="archive-card" href="#fall-transatlantic-oct-nov-2025">
-          <time>Approx. Oct 11 to Nov 21, 2025</time>
+          <time>Oct 8 to Nov 21, 2025</time>
           <strong>Fall Transatlantic 2025</strong>
-          <span class="desc">A placeholder for now — the details of this trip will be added over time.</span>
+          <span class="desc">Southampton, a transatlantic crossing, and three Florida sailings. Day by day from the receipts.</span>
           <span class="go">View the trip →</span>
         </a>
         <a class="archive-card" href="#eastern-canada-sep-oct-2025">
-          <time>Approx. Sep 21 to Oct 5, 2025</time>
+          <time>Sep 21 to Oct 5, 2025</time>
           <strong>Eastern Canada 2025</strong>
-          <span class="desc">A placeholder for now — the details of this trip will be added over time.</span>
+          <span class="desc">Two back-to-back Brilliance of the Seas sailings from Boston. Day by day from the receipts.</span>
           <span class="go">View the trip →</span>
         </a>
       </div>
@@ -1478,64 +1493,1684 @@
       <a class="back-link" href="#">← Back to Where's Patrick?</a>
     </div>
 
-    <div class="view archive-view" id="alaska-may-jun-2026" data-title="Alaska 2026 — approx. May 29 to Jun 27, 2026" hidden>
-      <a class="back-link" href="#">← Back to Where's Patrick?</a>
+    <div class="view archive-view" id="alaska-may-jun-2026" data-title="Alaska 2026 — May 27 to Jun 27, 2026" hidden>
+      <a class="back-link" href="#">&larr; Back to Where's Patrick?</a>
       <header class="section-head archive-head">
         <h2>Alaska 2026</h2>
-        <p>Approx. May 29 to Jun 27, 2026</p>
+        <p>May 27 to Jun 27, 2026 &middot; 32 days &middot; Four back-to-back Ovation of the Seas sailings &mdash; Vancouver to Seward and back, twice &mdash; flying out of Manchester, NH and home to Boston.</p>
       </header>
-      <p class="archive-note">This trip is a placeholder for now — its dates are approximate, and the details will be added over time.</p>
-      <a class="back-link" href="#">← Back to Where's Patrick?</a>
+      <p class="archive-note">This trip&rsquo;s day-by-day whereabouts were reconstructed from airline, hotel, and cruise receipts &mdash; Guest Invoice PDFs and booking confirmations. These are receipt records, not journal entries.</p>
+      <div class="framework-list">
+        <article class="framework-day">
+          <time datetime="2026-06-27">Sat · Jun 27, 2026</time>
+          <div>
+            <h3>Arrive Boston</h3>
+            <p>JetBlue 50 arrives BOS 6:03 AM (seat 11A, conf NJABEN). Trip end.</p>
+            <p class="framework-source">Source: JetBlue NJABEN schedule-change email Feb 9, 2026.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-26">Fri · Jun 26, 2026</time>
+          <div>
+            <h3>DISEMBARK, Vancouver + fly home (evening)</h3>
+            <p>Cruise 4 arrives Vancouver 12:01 AM; disembark Jun 26. JetBlue 50 departs Vancouver 9:40 PM → Boston (overnight).</p>
+            <p class="framework-source">Sources: Cruise 4 receipt PDF; JetBlue NJABEN schedule-change email Feb 9, 2026.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-25">Thu · Jun 25, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 4.</p>
+            <p class="framework-source">Source: Cruise 4 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-24">Wed · Jun 24, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 4.</p>
+            <p class="framework-source">Source: Cruise 4 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-23">Tue · Jun 23, 2026</time>
+          <div>
+            <h3>Icy Strait Point, Alaska</h3>
+            <p>Cruise 4: arrive 7:00 AM, depart 4:30 PM.</p>
+            <p class="framework-source">Source: Cruise 4 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-22">Mon · Jun 22, 2026</time>
+          <div>
+            <h3>Skagway, Alaska</h3>
+            <p>Cruise 4: arrive 7:00 AM, depart 8:00 PM.</p>
+            <p class="framework-source">Source: Cruise 4 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-21">Sun · Jun 21, 2026</time>
+          <div>
+            <h3>Juneau, Alaska</h3>
+            <p>Cruise 4: arrive 9:00 AM, depart 10:00 PM.</p>
+            <p class="framework-source">Source: Cruise 4 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-20">Sat · Jun 20, 2026</time>
+          <div>
+            <h3>Hubbard Glacier (cruising)</h3>
+            <p>Cruise 4: 2:00 PM – 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 4 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-19">Fri · Jun 19, 2026</time>
+          <div>
+            <h3>TURNAROUND, Seward</h3>
+            <p>Cruise 3 arrives Seward 5:00 AM; Cruise 4 (res 6883513) departs Seward 8:00 PM.</p>
+            <p class="framework-source">Sources: Cruise 3 + Cruise 4 receipt PDFs.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-18">Thu · Jun 18, 2026</time>
+          <div>
+            <h3>Hubbard Glacier (cruising)</h3>
+            <p>Cruise 3: 8:00 AM – 11:00 AM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-17">Wed · Jun 17, 2026</time>
+          <div>
+            <h3>Skagway, Alaska</h3>
+            <p>Cruise 3: arrive 7:00 AM, depart 4:00 PM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-16">Tue · Jun 16, 2026</time>
+          <div>
+            <h3>Juneau, Alaska</h3>
+            <p>Cruise 3: arrive 8:00 AM, depart 10:00 PM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-15">Mon · Jun 15, 2026</time>
+          <div>
+            <h3>Sitka, Alaska</h3>
+            <p>Cruise 3: arrive 7:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-14">Sun · Jun 14, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 3.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-13">Sat · Jun 13, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 3.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-12">Fri · Jun 12, 2026</time>
+          <div>
+            <h3>TURNAROUND, Vancouver</h3>
+            <p>Cruise 2 disembarks (statement dated Jun 12); Cruise 3 (res 6934112) departs Vancouver 8:00 PM.</p>
+            <p class="framework-source">Sources: Cruise 2 + Cruise 3 receipt PDFs; Cruise 2 statement email Jun 12, 2026 (folder 2026-06a).</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-11">Thu · Jun 11, 2026</time>
+          <div>
+            <h3>Vancouver, BC (overnight aboard)</h3>
+            <p>Cruise 2 arrives Vancouver 9:30 PM; disembarkation is the next morning.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-10">Wed · Jun 10, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 2.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-09">Tue · Jun 9, 2026</time>
+          <div>
+            <h3>Icy Strait Point, Alaska</h3>
+            <p>Cruise 2: arrive 7:00 AM, depart 4:30 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-08">Mon · Jun 8, 2026</time>
+          <div>
+            <h3>Skagway, Alaska</h3>
+            <p>Cruise 2: arrive 7:00 AM, depart 8:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-07">Sun · Jun 7, 2026</time>
+          <div>
+            <h3>Juneau, Alaska</h3>
+            <p>Cruise 2: arrive 9:00 AM, depart 10:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-06">Sat · Jun 6, 2026</time>
+          <div>
+            <h3>Hubbard Glacier (cruising)</h3>
+            <p>Cruise 2: 2:00 PM – 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-05">Fri · Jun 5, 2026</time>
+          <div>
+            <h3>TURNAROUND, Seward</h3>
+            <p>Cruise 1 arrives Seward 5:00 AM; Cruise 2 (res 1745156) departs Seward 8:00 PM.</p>
+            <p class="framework-source">Sources: Cruise 1 + Cruise 2 receipt PDFs.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-04">Thu · Jun 4, 2026</time>
+          <div>
+            <h3>Hubbard Glacier (cruising)</h3>
+            <p>Cruise 1: 8:00 AM – 11:00 AM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-03">Wed · Jun 3, 2026</time>
+          <div>
+            <h3>Skagway, Alaska</h3>
+            <p>Cruise 1: arrive 7:00 AM, depart 4:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-02">Tue · Jun 2, 2026</time>
+          <div>
+            <h3>Sitka, Alaska</h3>
+            <p>Cruise 1: arrive 8:00 AM, depart 4:00 PM. (Sitka shuttle confirmation Z61SQ94I in folder 2026-05c corroborates the Sitka call; the PDF gives the date.)</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-06-01">Mon · Jun 1, 2026</time>
+          <div>
+            <h3>Icy Strait Point, Alaska</h3>
+            <p>Cruise 1: arrive 3:30 PM, depart 11:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-31">Sun · May 31, 2026</time>
+          <div>
+            <h3>Ketchikan (Ward Cove), Alaska</h3>
+            <p>Cruise 1: arrive 7:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-30">Sat · May 30, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 1.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-29">Fri · May 29, 2026</time>
+          <div>
+            <h3>EMBARK Cruise 1, Vancouver</h3>
+            <p>Ovation of the Seas (res 3984657) departs Vancouver 9:45 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-28">Thu · May 28, 2026</time>
+          <div>
+            <h3>Train Seattle → Vancouver + hotel night Vancouver</h3>
+            <p>Amtrak Cascades 516, Seattle King Street 8:30 AM → Vancouver, BC 12:30 PM (res 624049, one-way). Night: Fairmont Waterfront, Vancouver (check-in May 28, check-out May 29; hotel conf WFCfU80AG3; Amex Travel booking 7156-0755).</p>
+            <p class="framework-source">Sources: Amtrak eTicket PDF (res 624049); Amex Travel booking 7156-0755 (Fairmont Waterfront).</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-27">Wed · May 27, 2026</time>
+          <div>
+            <h3>Fly MHT → SEA + hotel night Seattle</h3>
+            <p>AA 4150 MHT 7:00 AM → Chicago O'Hare 8:55 AM; AA 2524 ORD 11:44 AM → SEA 2:19 PM (conf YGNDPO). Night: citizenM Seattle Pioneer Square, 60 Yesler Way (check-in May 27, 2:00 PM; conf #99238492; original booking XOUWXNID cancelled and rebooked Apr 10, 2026).</p>
+            <p class="framework-source">Sources: AA trip confirmation (conf YGNDPO); citizenM Seattle Pioneer Square confirmation #99238492.</p>
+          </div>
+        </article>
+      </div>
+      <div class="framework-unknowns">
+        <h3>Still unknown &mdash; details only</h3>
+        <p>Every day of the trip is accounted for above. What the receipts leave open:</p>
+        <ul>
+          <li><strong>Shore excursions.</strong> The &ldquo;My Royal Cruise &ndash; Order confirmation&rdquo; emails weren&rsquo;t read, so excursion details are unknown &mdash; they don&rsquo;t change any port or sea day.</li>
+          <li><strong>Folder 2026-06a tail.</strong> 20 messages were never triaged by subject; a sender search of the folder found no airline or hotel messages among them.</li>
+          <li><strong>Itinerary changes.</strong> Receipts state itineraries are subject to change; port days are as invoiced (Apr 6&ndash;7, 2026), and no later itinerary-update message was found in any of the four folders.</li>
+          <li><strong>Guest Vacation Documents.</strong> The Apr 29, 2026 documents for Cruise 1 weren&rsquo;t read &mdash; the Apr 6, 2026 invoice PDF is the authoritative itinerary.</li>
+        </ul>
+      </div>
+      <a class="back-link" href="#">&larr; Back to Where's Patrick?</a>
     </div>
 
-    <div class="view archive-view" id="san-juan-rome-apr-may-2026" data-title="San Juan to Rome 2026 — approx. Apr 12 to May 25, 2026" hidden>
-      <a class="back-link" href="#">← Back to Where's Patrick?</a>
+    <div class="view archive-view" id="san-juan-rome-apr-may-2026" data-title="San Juan to Rome 2026 — Apr 11 to May 25, 2026" hidden>
+      <a class="back-link" href="#">&larr; Back to Where's Patrick?</a>
       <header class="section-head archive-head">
         <h2>San Juan to Rome 2026</h2>
-        <p>Approx. Apr 12 to May 25, 2026</p>
+        <p>Apr 11 to May 25, 2026 &middot; 45 days &middot; Five back-to-back Brilliance of the Seas sailings &mdash; San Juan and the Caribbean, a transatlantic crossing to Barcelona, then Italy, France and Croatia, ending in Rome.</p>
       </header>
-      <p class="archive-note">This trip is a placeholder for now — its dates are approximate, and the details will be added over time.</p>
-      <a class="back-link" href="#">← Back to Where's Patrick?</a>
+      <p class="archive-note">This trip&rsquo;s day-by-day whereabouts were reconstructed from airline, hotel, and cruise receipts &mdash; Guest Invoice PDFs and booking confirmations. These are receipt records, not journal entries.</p>
+      <div class="framework-list">
+        <article class="framework-day">
+          <time datetime="2026-05-25">Mon · May 25, 2026</time>
+          <div>
+            <h3>DISEMBARK + fly home</h3>
+            <p>Cruise 5 arrives Rome (Civitavecchia) 5:00 AM. AA 719 FCO 12:15 PM → PHL 3:40 PM; AA 5942 PHL 5:30 PM → MHT 7:05 PM (conf OEMXEQ).</p>
+            <p class="framework-source">Sources: Cruise 5 receipt PDF; AA updated confirmation Jan 1, 2026.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-24">Sun · May 24, 2026</time>
+          <div>
+            <h3>Amalfi Coast (Salerno), Italy</h3>
+            <p>Cruise 5: arrive 7:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 5 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-23">Sat · May 23, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 5.</p>
+            <p class="framework-source">Source: Cruise 5 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-22">Fri · May 22, 2026</time>
+          <div>
+            <h3>Sarandë, Albania</h3>
+            <p>Cruise 5: arrive 7:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 5 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-21">Thu · May 21, 2026</time>
+          <div>
+            <h3>Dubrovnik, Croatia</h3>
+            <p>Cruise 5: arrive 8:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 5 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-20">Wed · May 20, 2026</time>
+          <div>
+            <h3>Split, Croatia</h3>
+            <p>Cruise 5: arrive 9:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 5 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-19">Tue · May 19, 2026</time>
+          <div>
+            <h3>Trieste, Italy</h3>
+            <p>Cruise 5: arrive 7:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 5 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-18">Mon · May 18, 2026</time>
+          <div>
+            <h3>TURNAROUND, Ravenna</h3>
+            <p>Cruise 4 arrives Ravenna 6:00 AM; Cruise 5 (res 8475611) departs Ravenna 5:00 PM.</p>
+            <p class="framework-source">Sources: Cruise 4 + Cruise 5 receipt PDFs.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-17">Sun · May 17, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 4.</p>
+            <p class="framework-source">Source: Cruise 4 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-16">Sat · May 16, 2026</time>
+          <div>
+            <h3>Sicily (Messina), Italy</h3>
+            <p>Cruise 4: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 4 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-15">Fri · May 15, 2026</time>
+          <div>
+            <h3>Naples, Italy</h3>
+            <p>Cruise 4: arrive 7:00 AM, depart 7:00 PM.</p>
+            <p class="framework-source">Source: Cruise 4 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-14">Thu · May 14, 2026</time>
+          <div>
+            <h3>Rome (Civitavecchia), Italy</h3>
+            <p>Cruise 4: arrive 7:00 AM, depart 7:00 PM.</p>
+            <p class="framework-source">Source: Cruise 4 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-13">Wed · May 13, 2026</time>
+          <div>
+            <h3>Ajaccio, Corsica, France</h3>
+            <p>Cruise 4: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 4 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-12">Tue · May 12, 2026</time>
+          <div>
+            <h3>Provence (Toulon), France</h3>
+            <p>Cruise 4: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 4 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-11">Mon · May 11, 2026</time>
+          <div>
+            <h3>TURNAROUND, Barcelona</h3>
+            <p>Cruise 3 arrives Barcelona 5:00 AM; Cruise 4 (res 8471216) departs Barcelona 5:00 PM.</p>
+            <p class="framework-source">Sources: Cruise 3 + Cruise 4 receipt PDFs.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-10">Sun · May 10, 2026</time>
+          <div>
+            <h3>Valencia, Spain</h3>
+            <p>Cruise 3: arrive 7:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-09">Sat · May 9, 2026</time>
+          <div>
+            <h3>Alicante, Spain</h3>
+            <p>Cruise 3: arrive 10:00 AM, depart 7:00 PM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-08">Fri · May 8, 2026</time>
+          <div>
+            <h3>Málaga, Spain</h3>
+            <p>Cruise 3: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-07">Thu · May 7, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 3.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-06">Wed · May 6, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 3.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-05">Tue · May 5, 2026</time>
+          <div>
+            <h3>Ponta Delgada, Azores</h3>
+            <p>Cruise 3: arrive 9:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-04">Mon · May 4, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 3.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-03">Sun · May 3, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 3.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-02">Sat · May 2, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 3.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-05-01">Fri · May 1, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 3.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-30">Thu · Apr 30, 2026</time>
+          <div>
+            <h3>Royal Naval Dockyard, Bermuda</h3>
+            <p>Cruise 3: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-29">Wed · Apr 29, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 3.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-28">Tue · Apr 28, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 3.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-27">Mon · Apr 27, 2026</time>
+          <div>
+            <h3>Perfect Day CocoCay, Bahamas</h3>
+            <p>Cruise 3: arrive 7:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-26">Sun · Apr 26, 2026</time>
+          <div>
+            <h3>TURNAROUND, Ft Lauderdale</h3>
+            <p>Cruise 2 arrives Ft Lauderdale 6:00 AM; Cruise 3 (res 369242) departs Ft Lauderdale 5:00 PM.</p>
+            <p class="framework-source">Sources: Cruise 2 + Cruise 3 receipt PDFs.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-25">Sat · Apr 25, 2026</time>
+          <div>
+            <h3>Nassau, Bahamas</h3>
+            <p>Cruise 2: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-24">Fri · Apr 24, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 2.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-23">Thu · Apr 23, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 2.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-22">Wed · Apr 22, 2026</time>
+          <div>
+            <h3>Basseterre, St Kitts &amp; Nevis</h3>
+            <p>Cruise 2: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-21">Tue · Apr 21, 2026</time>
+          <div>
+            <h3>Charlotte Amalie, St. Thomas</h3>
+            <p>Cruise 2: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-20">Mon · Apr 20, 2026</time>
+          <div>
+            <h3>Philipsburg, St. Maarten</h3>
+            <p>Cruise 2: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-19">Sun · Apr 19, 2026</time>
+          <div>
+            <h3>TURNAROUND, San Juan</h3>
+            <p>Cruise 1 arrives San Juan 6:00 AM; Cruise 2 (res 5877710) departs San Juan 8:00 PM.</p>
+            <p class="framework-source">Sources: Cruise 1 + Cruise 2 receipt PDFs.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-18">Sat · Apr 18, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 1. (The Delta BOS→SJU flight dated this day was refunded and never flown — see above.)</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-17">Fri · Apr 17, 2026</time>
+          <div>
+            <h3>Kralendijk, Bonaire</h3>
+            <p>Cruise 1: arrive 8:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-16">Thu · Apr 16, 2026</time>
+          <div>
+            <h3>Willemstad, Curaçao</h3>
+            <p>Cruise 1: arrive 8:00 AM, depart 8:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-15">Wed · Apr 15, 2026</time>
+          <div>
+            <h3>Oranjestad, Aruba</h3>
+            <p>Cruise 1: arrive 8:00 AM, depart 11:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-14">Tue · Apr 14, 2026</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 1.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-13">Mon · Apr 13, 2026</time>
+          <div>
+            <h3>Tortola, B.V.I</h3>
+            <p>Cruise 1: arrive 8:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-12">Sun · Apr 12, 2026</time>
+          <div>
+            <h3>EMBARK Cruise 1, San Juan</h3>
+            <p>Brilliance of the Seas (res 2303088) departs San Juan 8:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-04-11">Sat · Apr 11, 2026</time>
+          <div>
+            <h3>Travel day: Nashua → Boston → San Juan + hotel night</h3>
+            <p>Boston Express 12:01 PM Nashua (Exit 8, Rt 3) → 1:25 PM Boston Logan. JetBlue 1161 BOS 5:59 PM → SJU 10:01 PM, seat 17F. Night: San Juan Airport Hotel (arrive Apr 11, depart Apr 12).</p>
+            <p class="framework-source">Sources: Concord Coach T9V2F4LL; JetBlue LWBPIG; hotel conf 1032789787 + PDF.</p>
+          </div>
+        </article>
+      </div>
+      <div class="framework-unknowns">
+        <h3>Still unknown &mdash; details only</h3>
+        <p>Every day of the trip is accounted for above. What the receipts leave open:</p>
+        <ul>
+          <li><strong>Shore excursions.</strong> The &ldquo;My Royal Cruise &ndash; Order confirmation&rdquo; emails weren&rsquo;t read; excursion details are unknown and don&rsquo;t change any port or sea day.</li>
+          <li><strong>Civitavecchia &rarr; FCO transfer (May 25).</strong> No transfer receipt was found, so the mode of travel from the port to the airport that morning is unknown &mdash; the day itself is fully accounted for.</li>
+          <li><strong>Itinerary changes.</strong> Port days are as invoiced (Mar&ndash;Apr 2026); no later itinerary-update email changing these sailings was found in the folder checks.</li>
+          <li><strong>Folder 2026-04c tail.</strong> 9 messages&rsquo; subjects were never retrieved; a sender search of the folder found no airline or hotel messages in it.</li>
+        </ul>
+      </div>
+      <a class="back-link" href="#">&larr; Back to Where's Patrick?</a>
     </div>
 
-    <div class="view archive-view" id="miami-jan-feb-2026" data-title="Miami 2026 — approx. Jan 3 to Feb 3, 2026" hidden>
-      <a class="back-link" href="#">← Back to Where's Patrick?</a>
+    <div class="view archive-view" id="miami-jan-feb-2026" data-title="Miami 2026 — Jan 2 to Feb 4, 2026" hidden>
+      <a class="back-link" href="#">&larr; Back to Where's Patrick?</a>
       <header class="section-head archive-head">
         <h2>Miami 2026</h2>
-        <p>Approx. Jan 3 to Feb 3, 2026</p>
+        <p>Jan 2 to Feb 4, 2026 &middot; 34 days &middot; Five back-to-back sailings out of Miami &mdash; Resilient Lady twice, Celebrity Beyond, then Scarlet Lady twice &mdash; with one land night in Brickell between them.</p>
       </header>
-      <p class="archive-note">This trip is a placeholder for now — its dates are approximate, and the details will be added over time.</p>
-      <a class="back-link" href="#">← Back to Where's Patrick?</a>
+      <p class="archive-note">This trip&rsquo;s day-by-day whereabouts were reconstructed from airline, hotel, and cruise receipts &mdash; Guest Invoice PDFs and booking confirmations. These are receipt records, not journal entries.</p>
+      <div class="framework-list">
+        <article class="framework-day">
+          <time datetime="2026-02-04">Wed · Feb 4, 2026</time>
+          <div>
+            <h3>DISEMBARK, Miami. Trip end (this framework)</h3>
+            <p>Cruise 5 arrives Miami 6:30 AM.</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2061261. (He remained in the Miami area for the subsequent February trip; his return flight on file is Feb 9, 2026 — see header note.)</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-02-03">Tue · Feb 3, 2026</time>
+          <div>
+            <h3>The Beach Club at Bimini, Bahamas</h3>
+            <p>Cruise 5: arrives 9:00 AM.</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2061261.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-02-02">Mon · Feb 2, 2026</time>
+          <div>
+            <h3>At sea</h3>
+            <p>Cruise 5 (Day 4, "At Sea").</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2061261.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-02-01">Sun · Feb 1, 2026</time>
+          <div>
+            <h3>Puerto Plata, Dominican Republic</h3>
+            <p>Cruise 5: arrives 10:00 AM.</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2061261.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-31">Sat · Jan 31, 2026</time>
+          <div>
+            <h3>At sea</h3>
+            <p>Cruise 5 (Day 2, "At Sea").</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2061261.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-30">Fri · Jan 30, 2026</time>
+          <div>
+            <h3>TURNAROUND, Miami</h3>
+            <p>Cruise 4 arrives Miami 6:30 AM; Cruise 5 (booking #2061261) departs Miami 5:00 PM.</p>
+            <p class="framework-source">Sources: Virgin booking confirmations #2061259 / #2061261.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-29">Thu · Jan 29, 2026</time>
+          <div>
+            <h3>The Beach Club at Bimini, Bahamas</h3>
+            <p>Cruise 4: arrives 9:00 AM.</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2061259.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-28">Wed · Jan 28, 2026</time>
+          <div>
+            <h3>At sea</h3>
+            <p>Cruise 4 (Day 4, "At Sea").</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2061259.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-27">Tue · Jan 27, 2026</time>
+          <div>
+            <h3>Cozumel, Mexico</h3>
+            <p>Cruise 4: arrives 8:00 AM.</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2061259.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-26">Mon · Jan 26, 2026</time>
+          <div>
+            <h3>At sea</h3>
+            <p>Cruise 4 (Day 2, "At Sea").</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2061259.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-25">Sun · Jan 25, 2026</time>
+          <div>
+            <h3>TURNAROUND, Miami</h3>
+            <p>Cruise 3 arrives Miami 7:00 AM; Cruise 4 (booking #2061259) departs Miami 5:00 PM. (The originally-booked Delta return this day was superseded — see header note.)</p>
+            <p class="framework-source">Sources: Celebrity Guest Invoice PDF; Virgin booking confirmation #2061259.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-24">Sat · Jan 24, 2026</time>
+          <div>
+            <h3>At sea</h3>
+            <p>Cruise 3 (Day 7).</p>
+            <p class="framework-source">Sources: Celebrity Guest Invoice PDF; order confirmation Oct 15, 2025.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-23">Fri · Jan 23, 2026</time>
+          <div>
+            <h3>At sea</h3>
+            <p>Cruise 3 (Day 6).</p>
+            <p class="framework-source">Sources: Celebrity Guest Invoice PDF; order confirmation Oct 15, 2025.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-22">Thu · Jan 22, 2026</time>
+          <div>
+            <h3>Basseterre, St Kitts &amp; Nevis</h3>
+            <p>Cruise 3: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Sources: Celebrity Guest Invoice PDF; order confirmations Sep 7 / Sep 17, 2025.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-21">Wed · Jan 21, 2026</time>
+          <div>
+            <h3>Charlotte Amalie, St. Thomas</h3>
+            <p>Cruise 3: arrive 11:00 AM, depart 7:00 PM.</p>
+            <p class="framework-source">Sources: Celebrity Guest Invoice PDF; order confirmations Sep 7 / Sep 17, 2025.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-20">Tue · Jan 20, 2026</time>
+          <div>
+            <h3>Puerto Plata, Dominican Republic</h3>
+            <p>Cruise 3: arrive 7:00 AM, depart 2:30 PM.</p>
+            <p class="framework-source">Sources: Celebrity Guest Invoice PDF; order confirmations Sep 7 / Sep 17, 2025.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-19">Mon · Jan 19, 2026</time>
+          <div>
+            <h3>At sea</h3>
+            <p>Cruise 3 (Day 2).</p>
+            <p class="framework-source">Sources: Celebrity Guest Invoice PDF; order confirmation Oct 15, 2025.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-18">Sun · Jan 18, 2026</time>
+          <div>
+            <h3>EMBARK Cruise 3, Miami</h3>
+            <p>Celebrity Beyond (res 325424) departs Miami 4:00 PM (check-in 11:00 AM – 2:30 PM).</p>
+            <p class="framework-source">Source: Celebrity Guest Invoice PDF (Sep 6, 2025).</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-17">Sat · Jan 17, 2026</time>
+          <div>
+            <h3>DISEMBARK, Miami + land night</h3>
+            <p>Cruise 2 arrives Miami 6:30 AM. Night: Fortune House Hotel, Brickell, Miami — booked via Amex Platinum Travel (first time he used it), Amex upgrade on arrival.</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2050665; his own email to Nina Lee, Jan 18, 2026 ("I booked last nights hotel through Amex Platinum travel… Stayed at Fortune House Hotel in Brickell"); Fortune House receipt Jan 20, 2026 (−$120.05 adjustment, not a cancellation).</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-16">Fri · Jan 16, 2026</time>
+          <div>
+            <h3>The Beach Club at Bimini, Bahamas</h3>
+            <p>Cruise 2: arrives 9:00 AM.</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2050665.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-15">Thu · Jan 15, 2026</time>
+          <div>
+            <h3>At sea</h3>
+            <p>Cruise 2 (Day 6, "At Sea").</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2050665.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-14">Wed · Jan 14, 2026</time>
+          <div>
+            <h3>At sea</h3>
+            <p>Cruise 2 (Day 5, "At Sea").</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2050665.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-13">Tue · Jan 13, 2026</time>
+          <div>
+            <h3>Ocho Rios, Jamaica</h3>
+            <p>Cruise 2: arrives 9:00 AM.</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2050665.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-12">Mon · Jan 12, 2026</time>
+          <div>
+            <h3>George Town, Grand Cayman</h3>
+            <p>Cruise 2: arrives 8:00 AM.</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2050665.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-11">Sun · Jan 11, 2026</time>
+          <div>
+            <h3>At sea</h3>
+            <p>Cruise 2 (Day 2, "At Sea").</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2050665.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-10">Sat · Jan 10, 2026</time>
+          <div>
+            <h3>TURNAROUND, Miami</h3>
+            <p>Cruise 1 arrives Miami 6:30 AM; Cruise 2 (booking #2050665) departs Miami 5:00 PM.</p>
+            <p class="framework-source">Sources: Virgin booking confirmations #2050664 / #2050665.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-09">Fri · Jan 9, 2026</time>
+          <div>
+            <h3>The Beach Club at Bimini, Bahamas</h3>
+            <p>Cruise 1: arrives 9:00 AM.</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2050664.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-08">Thu · Jan 8, 2026</time>
+          <div>
+            <h3>At sea</h3>
+            <p>Cruise 1 (Day 6, no port in the itinerary).</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2050664.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-07">Wed · Jan 7, 2026</time>
+          <div>
+            <h3>Cozumel, Mexico</h3>
+            <p>Cruise 1: arrives 8:00 AM.</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2050664.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-06">Tue · Jan 6, 2026</time>
+          <div>
+            <h3>At sea</h3>
+            <p>Cruise 1 (Day 4, no port in the itinerary).</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2050664.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-05">Mon · Jan 5, 2026</time>
+          <div>
+            <h3>George Town, Grand Cayman</h3>
+            <p>Cruise 1: arrives 8:00 AM.</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2050664.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-04">Sun · Jan 4, 2026</time>
+          <div>
+            <h3>At sea</h3>
+            <p>Cruise 1 (Day 2, no port in the itinerary).</p>
+            <p class="framework-source">Source: Virgin booking confirmation #2050664.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-03">Sat · Jan 3, 2026</time>
+          <div>
+            <h3>EMBARK Cruise 1, Miami</h3>
+            <p>Holiday Inn check-out. Resilient Lady (booking #2050664) departs Miami 5:00 PM.</p>
+            <p class="framework-source">Source: Virgin booking confirmation Sep 6, 2025.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2026-01-02">Fri · Jan 2, 2026</time>
+          <div>
+            <h3>Travel day: Nashua → Boston → Miami + hotel night</h3>
+            <p>DL 776 BOS 3:22 PM → MIA 7:04 PM (reissued receipt Oct 2, 2025; originally 3:20 PM → 7:02 PM). Night: Holiday Inn Port of Miami-Downtown (conf #41192237).</p>
+            <p class="framework-source">Sources: Delta receipts Sep 6 / Oct 2, 2025; Holiday Inn confirmation Sep 7, 2025.</p>
+          </div>
+        </article>
+      </div>
+      <div class="framework-unknowns">
+        <h3>Still unknown &mdash; details only</h3>
+        <p>Every day of the trip is accounted for above. What the receipts leave open:</p>
+        <ul>
+          <li><strong>Virgin sailing fares.</strong> The four Virgin booking confirmations don&rsquo;t state fares, and the Virgin &ldquo;Invoice Check&rdquo; emails weren&rsquo;t read.</li>
+          <li><strong>Excursion details.</strong> The Jan 9, 2026 shark-dive liability waiver and the Celebrity order-confirmation tour names weren&rsquo;t read in full; all port days are known from the sailing confirmations and invoice.</li>
+          <li><strong>Virgin refund item.</strong> The $237.05 refund submitted Jan 20, 2026 doesn&rsquo;t state its item; it postdates the completed Jan 10&ndash;17 sailing and is not a sailing cancellation.</li>
+          <li><strong>Fortune House adjustment.</strong> The &minus;$120.05 receipt (Jan 20, 2026) is a post-stay adjustment; the original booking email wasn&rsquo;t read beyond the Jan 18 email confirming the stay.</li>
+          <li><strong>Folder remainders.</strong> The folders were worked by targeted searches rather than full message-by-message triage; cancellation-subject searches are clean for all five folders.</li>
+          <li><strong>Itinerary changes.</strong> Virgin confirmations and the Celebrity invoice state itineraries are subject to change; no itinerary-change message for these sailings was found.</li>
+        </ul>
+      </div>
+      <a class="back-link" href="#">&larr; Back to Where's Patrick?</a>
     </div>
 
-    <div class="view archive-view" id="december-caribbean-nov-dec-2025" data-title="December Caribbean 2025 — approx. Nov 30 to Dec 21, 2025" hidden>
-      <a class="back-link" href="#">← Back to Where's Patrick?</a>
+    <div class="view archive-view" id="december-caribbean-nov-dec-2025" data-title="December Caribbean 2025 — Nov 29 to Dec 20, 2025" hidden>
+      <a class="back-link" href="#">&larr; Back to Where's Patrick?</a>
       <header class="section-head archive-head">
         <h2>December Caribbean 2025</h2>
-        <p>Approx. Nov 30 to Dec 21, 2025</p>
+        <p>Nov 29 to Dec 20, 2025 &middot; 22 days &middot; Three back-to-back sailings &mdash; Symphony and Independence out of Miami, then Allure out of Ft Lauderdale.</p>
       </header>
-      <p class="archive-note">This trip is a placeholder for now — its dates are approximate, and the details will be added over time.</p>
-      <a class="back-link" href="#">← Back to Where's Patrick?</a>
+      <p class="archive-note">This trip&rsquo;s day-by-day whereabouts were reconstructed from airline, hotel, and cruise receipts &mdash; Guest Invoice PDFs and booking confirmations. These are receipt records, not journal entries.</p>
+      <div class="framework-list">
+        <article class="framework-day">
+          <time datetime="2025-12-20">Sat · Dec 20, 2025</time>
+          <div>
+            <h3>DISEMBARK + fly home. Trip end</h3>
+            <p>Cruise 3 arrives Ft Lauderdale 6:00 AM. Transfer Ft Lauderdale → Miami airport unknown (day accounted for: disembark FLL morning, fly MIA midday). AA 4677 MIA 11:25 AM → BOS 3:12 PM (conf NORFRA). Concord Coach Boston Logan 4:55 PM → Nashua 6:30 PM.</p>
+            <p class="framework-source">Sources: Cruise 3 receipt PDF; AA schedule-change email Aug 29, 2025; Concord MF29WJHC.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-19">Fri · Dec 19, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 3.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-18">Thu · Dec 18, 2025</time>
+          <div>
+            <h3>Cozumel, Mexico</h3>
+            <p>Cruise 3: arrive 7:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-17">Wed · Dec 17, 2025</time>
+          <div>
+            <h3>Puerto Costa Maya, Mexico</h3>
+            <p>Cruise 3: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-16">Tue · Dec 16, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 3.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-15">Mon · Dec 15, 2025</time>
+          <div>
+            <h3>Nassau, Bahamas</h3>
+            <p>Cruise 3: arrive 7:00 AM, depart 3:00 PM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-14">Sun · Dec 14, 2025</time>
+          <div>
+            <h3>TURNAROUND: Miami → Ft Lauderdale</h3>
+            <p>Cruise 2 arrives Miami 6:00 AM; Cruise 3 (res 7723388) departs Ft Lauderdale 4:00 PM. Transfer mode Miami → Ft Lauderdale unknown (day accounted for: disembark Miami morning, embark Ft Lauderdale afternoon).</p>
+            <p class="framework-source">Sources: Cruise 2 receipt PDF; Cruise 2 statement Dec 14, 2025; Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-13">Sat · Dec 13, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 2.</p>
+            <p class="framework-source">Sources: Cruise 2 receipt PDF; itinerary update Nov 7, 2025.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-12">Fri · Dec 12, 2025</time>
+          <div>
+            <h3>Cozumel, Mexico</h3>
+            <p>Cruise 2 — REPLACEMENT port: the Nov 7, 2025 itinerary update added Cozumel in place of one of the invoiced sea days. Port times not stated in the update.</p>
+            <p class="framework-source">Sources: itinerary update Nov 7, 2025 (port order: Miami, CocoCay, Cruising, Grand Cayman, Cruising, Cozumel, Cruising, Miami).</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-11">Thu · Dec 11, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 2 — REPLACEMENT day: the Nov 7, 2025 itinerary update removed the invoiced Falmouth, Jamaica stop (Hurricane Melissa impact on the community) and substituted a sea day here.</p>
+            <p class="framework-source">Sources: Cruise 2 receipt PDF (original Falmouth); itinerary update Nov 7, 2025.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-10">Wed · Dec 10, 2025</time>
+          <div>
+            <h3>George Town, Grand Cayman</h3>
+            <p>Cruise 2: arrive 10:30 AM, depart 6:00 PM (tender port, per the Nov 7 update).</p>
+            <p class="framework-source">Sources: Cruise 2 receipt PDF; itinerary update Nov 7, 2025.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-09">Tue · Dec 9, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 2.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-08">Mon · Dec 8, 2025</time>
+          <div>
+            <h3>Perfect Day CocoCay, Bahamas</h3>
+            <p>Cruise 2: arrive 7:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-07">Sun · Dec 7, 2025</time>
+          <div>
+            <h3>TURNAROUND, Miami</h3>
+            <p>Cruise 1 arrives Miami 6:00 AM; Cruise 2 (res 5110371) departs Miami 4:00 PM.</p>
+            <p class="framework-source">Sources: Cruise 1 receipt PDF; Cruise 1 statement Dec 7, 2025; Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-06">Sat · Dec 6, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 1.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-05">Fri · Dec 5, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 1.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-04">Thu · Dec 4, 2025</time>
+          <div>
+            <h3>Puerto Plata, Dominican Republic</h3>
+            <p>Cruise 1, Day 5 — REPLACEMENT port: the Nov 5, 2025 itinerary update replaced the invoiced Falmouth, Jamaica stop with Puerto Plata. Port times not stated in the update (the invoiced Falmouth times, 8:00 AM – 5:00 PM, do NOT transfer).</p>
+            <p class="framework-source">Sources: Cruise 1 receipt PDF (original Falmouth); itinerary update Nov 5, 2025 (Puerto Plata replacement; Falmouth shore excursions auto-refunded).</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-03">Wed · Dec 3, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 1.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-02">Tue · Dec 2, 2025</time>
+          <div>
+            <h3>Perfect Day CocoCay, Bahamas</h3>
+            <p>Cruise 1: arrive 7:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-12-01">Mon · Dec 1, 2025</time>
+          <div>
+            <h3>Nassau, Bahamas</h3>
+            <p>Cruise 1: arrive 7:00 AM, depart 3:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-30">Sun · Nov 30, 2025</time>
+          <div>
+            <h3>EMBARK Cruise 1, Miami</h3>
+            <p>citizenM check-out. Symphony of the Seas (res 4368356) departs Miami 4:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-29">Sat · Nov 29, 2025</time>
+          <div>
+            <h3>Travel day: Nashua → Boston → Miami + hotel night</h3>
+            <p>Concord Coach Boston Express 9:00 AM Nashua (Exit 8, Rt 3) → 10:25 AM Boston Logan. AA 2199 BOS 12:25 PM → MIA 4:02 PM (conf NORFRA). Night: citizenM Miami Brickell, 11 SE 10th Street (check-in Nov 29).</p>
+            <p class="framework-source">Sources: Concord MF29WJHC; AA updated confirmation Jul 24, 2025; citizenM stay email Nov 24, 2025.</p>
+          </div>
+        </article>
+      </div>
+      <div class="framework-unknowns">
+        <h3>Still unknown &mdash; details only</h3>
+        <p>Every day of the trip is accounted for above. What the receipts leave open:</p>
+        <ul>
+          <li><strong>Transfers.</strong> Miami &rarr; Ft Lauderdale (Dec 14) and Ft Lauderdale &rarr; Miami airport (Dec 20) &mdash; modes unknown; both days are fully accounted for (disembark + embark / disembark + flight).</li>
+          <li><strong>Replacement-port times.</strong> Puerto Plata (Dec 4) and Cozumel (Dec 12) &mdash; the itinerary-update emails don&rsquo;t state arrival/departure times.</li>
+          <li><strong>Excursion details.</strong> The &ldquo;My Royal Cruise &ndash; Order confirmation&rdquo; add-ons weren&rsquo;t read in full; all port days are known from the invoices and updates.</li>
+          <li><strong>Folder remainders.</strong> Folders 12a/12b were worked by targeted searches rather than full triage; cancellation-subject searches are clean, and the Dec 7 and Dec 14 Cruise Statements corroborate both sailings&rsquo; completion.</li>
+          <li><strong>Itinerary changes.</strong> Port days reflect the latest document per sailing &mdash; the invoices as updated Nov 5 / Nov 7, 2025 for Cruises 1&ndash;2, and the May 25, 2025 invoice for Cruise 3, with no later update found.</li>
+        </ul>
+      </div>
+      <a class="back-link" href="#">&larr; Back to Where's Patrick?</a>
     </div>
 
-    <div class="view archive-view" id="fall-transatlantic-oct-nov-2025" data-title="Fall Transatlantic 2025 — approx. Oct 11 to Nov 21, 2025" hidden>
-      <a class="back-link" href="#">← Back to Where's Patrick?</a>
+    <div class="view archive-view" id="fall-transatlantic-oct-nov-2025" data-title="Fall Transatlantic 2025 — Oct 8 to Nov 21, 2025" hidden>
+      <a class="back-link" href="#">&larr; Back to Where's Patrick?</a>
       <header class="section-head archive-head">
         <h2>Fall Transatlantic 2025</h2>
-        <p>Approx. Oct 11 to Nov 21, 2025</p>
+        <p>Oct 8 to Nov 21, 2025 &middot; 45 days &middot; Southampton first &mdash; Hamburg and Rotterdam on Independence, a 14-night crossing to Miami &mdash; then Icon, Allure and Radiance in Florida.</p>
       </header>
-      <p class="archive-note">This trip is a placeholder for now — its dates are approximate, and the details will be added over time.</p>
-      <a class="back-link" href="#">← Back to Where's Patrick?</a>
+      <p class="archive-note">This trip&rsquo;s day-by-day whereabouts were reconstructed from airline, hotel, and cruise receipts &mdash; Guest Invoice PDFs and booking confirmations. These are receipt records, not journal entries.</p>
+      <div class="framework-list">
+        <article class="framework-day">
+          <time datetime="2025-11-21">Fri · Nov 21, 2025</time>
+          <div>
+            <h3>DISEMBARK + fly home</h3>
+            <p>Cruise 5 arrives Ft Lauderdale 7:00 AM. DL 1401 FLL 11:40 AM → BOS 2:54 PM. Concord Coach Boston Logan 3:25 PM → Nashua 5:45 PM. Trip end.</p>
+            <p class="framework-source">Sources: Cruise 5 receipt PDF; Delta trip-details email Nov 18, 2025; Concord Coach ZL7A3MPW.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-20">Thu · Nov 20, 2025</time>
+          <div>
+            <h3>Perfect Day CocoCay, Bahamas</h3>
+            <p>Cruise 5: arrive 7:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 5 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-19">Wed · Nov 19, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 5.</p>
+            <p class="framework-source">Source: Cruise 5 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-18">Tue · Nov 18, 2025</time>
+          <div>
+            <h3>Bimini, Bahamas</h3>
+            <p>Cruise 5: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 5 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-17">Mon · Nov 17, 2025</time>
+          <div>
+            <h3>EMBARK Cruise 5, Ft Lauderdale</h3>
+            <p>Radiance of the Seas (res 1290341) departs Ft Lauderdale 4:00 PM.</p>
+            <p class="framework-source">Source: Cruise 5 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-16">Sun · Nov 16, 2025</time>
+          <div>
+            <h3>DISEMBARK, Ft Lauderdale + land day/night</h3>
+            <p>Cruise 4 arrives Ft Lauderdale 6:00 AM. Ft Lauderdale area day and night; hotel property unknown (the planned Avis Ft Lauderdale rental Nov 16–17 was cancelled Nov 8).</p>
+            <p class="framework-source">Sources: Cruise 4 vacation documents PDF; Avis #42119402US3 confirmation Sep 3, 2025 + cancellation Nov 8, 2025.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-15">Sat · Nov 15, 2025</time>
+          <div>
+            <h3>Perfect Day CocoCay, Bahamas</h3>
+            <p>Cruise 4: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 4 vacation documents PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-14">Fri · Nov 14, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 4.</p>
+            <p class="framework-source">Source: Cruise 4 vacation documents PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-13">Thu · Nov 13, 2025</time>
+          <div>
+            <h3>San Juan, Puerto Rico</h3>
+            <p>Cruise 4: arrive 7:00 AM, depart 3:00 PM.</p>
+            <p class="framework-source">Source: Cruise 4 vacation documents PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-12">Wed · Nov 12, 2025</time>
+          <div>
+            <h3>Philipsburg, St. Maarten</h3>
+            <p>Cruise 4: arrive 8:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 4 vacation documents PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-11">Tue · Nov 11, 2025</time>
+          <div>
+            <h3>Charlotte Amalie, St. Thomas</h3>
+            <p>Cruise 4: arrive 8:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 4 vacation documents PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-10">Mon · Nov 10, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 4.</p>
+            <p class="framework-source">Source: Cruise 4 vacation documents PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-09">Sun · Nov 9, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 4.</p>
+            <p class="framework-source">Source: Cruise 4 vacation documents PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-08">Sat · Nov 8, 2025</time>
+          <div>
+            <h3>TURNAROUND: Miami → Ft Lauderdale</h3>
+            <p>Cruise 3 arrives Miami 6:00 AM; Cruise 4 (res 8494914) departs Ft Lauderdale 5:30 PM. Transfer mode Miami → Ft Lauderdale unknown (the planned Avis Ft Lauderdale rental #42119402US3 was cancelled this morning). The Delta MIA→BOS flight booked for this day was not flown (see above).</p>
+            <p class="framework-source">Sources: Cruise 3 receipt PDF; Cruise 4 vacation documents PDF; Avis cancellation Nov 8, 2025.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-07">Fri · Nov 7, 2025</time>
+          <div>
+            <h3>Perfect Day CocoCay, Bahamas</h3>
+            <p>Cruise 3: arrive 7:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-06">Thu · Nov 6, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 3.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-05">Wed · Nov 5, 2025</time>
+          <div>
+            <h3>Cozumel, Mexico</h3>
+            <p>Cruise 3: arrive 8:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-04">Tue · Nov 4, 2025</time>
+          <div>
+            <h3>Roatán, Honduras</h3>
+            <p>Cruise 3: arrive 7:00 AM, depart 4:00 PM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-03">Mon · Nov 3, 2025</time>
+          <div>
+            <h3>Puerto Costa Maya, Mexico</h3>
+            <p>Cruise 3: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-02">Sun · Nov 2, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 3.</p>
+            <p class="framework-source">Source: Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-11-01">Sat · Nov 1, 2025</time>
+          <div>
+            <h3>EMBARK Cruise 3, Miami</h3>
+            <p>Avis #41053268US4 return, Port Miami Cruiseship Shuttle. Icon of the Seas (res 3704427) departs Miami 4:30 PM.</p>
+            <p class="framework-source">Sources: Avis reminder Oct 2, 2025; Cruise 3 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-31">Fri · Oct 31, 2025</time>
+          <div>
+            <h3>Miami land day (rental car)</h3>
+            <p>Hotel property unknown.</p>
+            <p class="framework-source">Source: Avis #41053268US4 (Oct 30 – Nov 1).</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-30">Thu · Oct 30, 2025</time>
+          <div>
+            <h3>DISEMBARK, Miami + rental car</h3>
+            <p>Cruise 2 arrives Miami 5:00 AM. Avis #41053268US4 pickup, Port Miami Cruiseship Shuttle (return Nov 1). Miami land day; hotel property unknown.</p>
+            <p class="framework-source">Sources: Cruise 2 receipt PDF; Avis reminder Oct 2, 2025.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-29">Wed · Oct 29, 2025</time>
+          <div>
+            <h3>Nassau, Bahamas</h3>
+            <p>Cruise 2: arrive 7:00 AM, depart 4:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-28">Tue · Oct 28, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 2.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-27">Mon · Oct 27, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 2.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-26">Sun · Oct 26, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 2.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-25">Sat · Oct 25, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 2.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-24">Fri · Oct 24, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 2.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-23">Thu · Oct 23, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 2.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-22">Wed · Oct 22, 2025</time>
+          <div>
+            <h3>Ponta Delgada, Azores</h3>
+            <p>Cruise 2: arrive 10:00 AM, depart 7:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-21">Tue · Oct 21, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 2.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-20">Mon · Oct 20, 2025</time>
+          <div>
+            <h3>Lisbon, Portugal</h3>
+            <p>Cruise 2: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-19">Sun · Oct 19, 2025</time>
+          <div>
+            <h3>Vigo, Spain</h3>
+            <p>Cruise 2: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-18">Sat · Oct 18, 2025</time>
+          <div>
+            <h3>La Coruña, Spain</h3>
+            <p>Cruise 2: arrive 8:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-17">Fri · Oct 17, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 2.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-16">Thu · Oct 16, 2025</time>
+          <div>
+            <h3>TURNAROUND, Southampton</h3>
+            <p>Cruise 1 arrives Southampton 6:00 AM; Cruise 2 (res 391402) departs Southampton 5:00 PM.</p>
+            <p class="framework-source">Sources: Cruise 1 + Cruise 2 receipt PDFs; Cruise 1 statement email Oct 16, 2025 (folder 2025-10a).</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-15">Wed · Oct 15, 2025</time>
+          <div>
+            <h3>Rotterdam, Netherlands</h3>
+            <p>Cruise 1: arrive 7:00 AM, depart 3:30 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-14">Tue · Oct 14, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 1.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-13">Mon · Oct 13, 2025</time>
+          <div>
+            <h3>Hamburg, Germany</h3>
+            <p>Cruise 1: arrive 8:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-12">Sun · Oct 12, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 1.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-11">Sat · Oct 11, 2025</time>
+          <div>
+            <h3>EMBARK Cruise 1, Southampton</h3>
+            <p>Moxy check-out 12:00 PM. Independence of the Seas (res 5335983) departs Southampton 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-10">Fri · Oct 10, 2025</time>
+          <div>
+            <h3>Southampton, hotel night 2</h3>
+            <p>Moxy Southampton (check-out Oct 11, 12:00 PM).</p>
+            <p class="framework-source">Source: Moxy confirmation #99618534.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-09">Thu · Oct 9, 2025</time>
+          <div>
+            <h3>Arrive London + coach to Southampton + hotel night 1</h3>
+            <p>AA 108 arrives LHR 7:50 AM. National Express NX 032, Heathrow T2&amp;T3 11:00 AM → Southampton Coach Station 12:50 PM. Night: Moxy Southampton, Harbour Parade (check-in 3:00 PM; conf #99618534).</p>
+            <p class="framework-source">Sources: AA HJYGLE; National Express confirmation Oct 4, 2025; Moxy confirmation Apr 25, 2025.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-08">Wed · Oct 8, 2025</time>
+          <div>
+            <h3>Travel day: Nashua → Boston → London (overnight)</h3>
+            <p>Boston Express 3:00 PM Nashua (Exit 8, Rt 3) → 4:15 PM Boston Logan. AA 108 BOS 8:15 PM → London Heathrow (overnight).</p>
+            <p class="framework-source">Sources: Concord Coach ZL7A3MPW; AA HJYGLE.</p>
+          </div>
+        </article>
+      </div>
+      <div class="framework-unknowns">
+        <h3>Still unknown &mdash; details only</h3>
+        <p>Every day of the trip is accounted for above. What the receipts leave open:</p>
+        <ul>
+          <li><strong>Hotel properties.</strong> The Miami nights Oct 30&ndash;31, 2025 and the Ft Lauderdale night Nov 16, 2025 &mdash; no hotel receipt was found; the cities are known, only the properties are unknown.</li>
+          <li><strong>Miami &rarr; Ft Lauderdale transfer (Nov 8).</strong> Mode unknown; the planned Avis Ft Lauderdale rental was cancelled that morning.</li>
+          <li><strong>Cruise 4 fare.</strong> Folder 2025-11b contains no Guest Invoice email, so no fare is recorded for the Allure sailing.</li>
+          <li><strong>Viator booking.</strong> The Sep 7, 2025 booking wasn&rsquo;t read &mdash; tour detail only; all port days are known from the PDFs.</li>
+          <li><strong>Folder 2025-10b tail.</strong> About 33 older messages were never triaged by subject; sender searches of the folder found all airline, hotel and Avis items.</li>
+          <li><strong>Itinerary changes.</strong> Port days are as invoiced/documented (Jun 2024 &ndash; Jun 2025 documents); the one itinerary update found (Apr 17, 2024) predates the Cruise 2 invoice.</li>
+        </ul>
+      </div>
+      <a class="back-link" href="#">&larr; Back to Where's Patrick?</a>
     </div>
 
-    <div class="view archive-view" id="eastern-canada-sep-oct-2025" data-title="Eastern Canada 2025 — approx. Sep 21 to Oct 5, 2025" hidden>
-      <a class="back-link" href="#">← Back to Where's Patrick?</a>
+    <div class="view archive-view" id="eastern-canada-sep-oct-2025" data-title="Eastern Canada 2025 — Sep 21 to Oct 5, 2025" hidden>
+      <a class="back-link" href="#">&larr; Back to Where's Patrick?</a>
       <header class="section-head archive-head">
         <h2>Eastern Canada 2025</h2>
-        <p>Approx. Sep 21 to Oct 5, 2025</p>
+        <p>Sep 21 to Oct 5, 2025 &middot; 15 days &middot; Two back-to-back Brilliance of the Seas sailings from Boston to Canada and New England, with the bus to and from the pier.</p>
       </header>
-      <p class="archive-note">This trip is a placeholder for now — its dates are approximate, and the details will be added over time.</p>
-      <a class="back-link" href="#">← Back to Where's Patrick?</a>
+      <p class="archive-note">This trip&rsquo;s day-by-day whereabouts were reconstructed from airline, hotel, and cruise receipts &mdash; Guest Invoice PDFs and booking confirmations. These are receipt records, not journal entries.</p>
+      <div class="framework-list">
+        <article class="framework-day">
+          <time datetime="2025-10-05">Sun · Oct 5, 2025</time>
+          <div>
+            <h3>DISEMBARK, Boston + bus home</h3>
+            <p>Cruise 2 arrives Boston 7:00 AM. Boston Express 10:15 AM Boston South Station → 11:15 AM Nashua (ticket LRJ9HN).</p>
+            <p class="framework-source">Sources: Cruise 2 receipt PDF; Concord Coach confirmation Jun 25, 2025.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-04">Sat · Oct 4, 2025</time>
+          <div>
+            <h3>Portland, Maine</h3>
+            <p>Cruise 2: arrive 8:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-03">Fri · Oct 3, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 2.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-02">Thu · Oct 2, 2025</time>
+          <div>
+            <h3>Sydney, Nova Scotia</h3>
+            <p>Cruise 2: arrive 8:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-10-01">Wed · Oct 1, 2025</time>
+          <div>
+            <h3>Halifax, Nova Scotia</h3>
+            <p>Cruise 2: arrive 7:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-09-30">Tue · Sep 30, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 2.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-09-29">Mon · Sep 29, 2025</time>
+          <div>
+            <h3>Saint John, NB (Bay of Fundy)</h3>
+            <p>Cruise 2: arrive 10:00 AM, depart 8:00 PM.</p>
+            <p class="framework-source">Source: Cruise 2 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-09-28">Sun · Sep 28, 2025</time>
+          <div>
+            <h3>TURNAROUND, Boston</h3>
+            <p>Cruise 1 arrives Boston 7:00 AM; Cruise 2 (res 5006761) departs Boston 5:00 PM.</p>
+            <p class="framework-source">Sources: Cruise 1 receipt PDF; Cruise 2 receipt PDF (Feb 27, 2025); "Your Cruise Statement" emails Sep 28, 2025 (folder 2025-09a) and Oct 5, 2025 (folder 2025-09b).</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-09-27">Sat · Sep 27, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 1.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-09-26">Fri · Sep 26, 2025</time>
+          <div>
+            <h3>Sydney, Nova Scotia</h3>
+            <p>Cruise 1: arrive 8:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-09-25">Thu · Sep 25, 2025</time>
+          <div>
+            <h3>Charlottetown, P.E.I</h3>
+            <p>Cruise 1: arrive 8:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-09-24">Wed · Sep 24, 2025</time>
+          <div>
+            <h3>Cruising (sea day)</h3>
+            <p>Cruise 1.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-09-23">Tue · Sep 23, 2025</time>
+          <div>
+            <h3>Saint John, NB (Bay of Fundy)</h3>
+            <p>Cruise 1: arrive 8:00 AM, depart 6:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-09-22">Mon · Sep 22, 2025</time>
+          <div>
+            <h3>Portland, Maine</h3>
+            <p>Brilliance of the Seas, Cruise 1: arrive 7:00 AM, depart 5:00 PM.</p>
+            <p class="framework-source">Source: Cruise 1 receipt PDF.</p>
+          </div>
+        </article>
+        <article class="framework-day">
+          <time datetime="2025-09-21">Sun · Sep 21, 2025</time>
+          <div>
+            <h3>Bus + EMBARK, Boston</h3>
+            <p>Boston Express 9:00 AM Nashua → 10:05 AM Boston South Station (ticket FU8T49). Brilliance of the Seas, Cruise 1 (res 8933196), departs Boston 5:00 PM.</p>
+            <p class="framework-source">Sources: Concord Coach confirmation Jun 25, 2025; Cruise 1 receipt PDF (Mar 1, 2025).</p>
+          </div>
+        </article>
+      </div>
+      <div class="framework-unknowns">
+        <h3>Still unknown &mdash; details only</h3>
+        <p>Every day of the trip is accounted for above. What the receipts leave open:</p>
+        <ul>
+          <li><strong>Shore excursions.</strong> The cruise-planner order-confirmation emails in both folders weren&rsquo;t read, so excursion details are unknown &mdash; they don&rsquo;t change any port or sea day.</li>
+          <li><strong>Cruise 2 stateroom.</strong> The Feb 27, 2025 invoice lists YO GTY (Ocean View Guarantee); the assigned cabin number isn&rsquo;t stated in that invoice.</li>
+          <li><strong>Itinerary changes.</strong> Port days are as invoiced (Mar 1 / Feb 27, 2025); no later itinerary-update email for these sailings was found in the folder triage.</li>
+        </ul>
+      </div>
+      <a class="back-link" href="#">&larr; Back to Where's Patrick?</a>
     </div>
   </main>
 
