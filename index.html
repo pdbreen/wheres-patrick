@@ -602,6 +602,34 @@
     .note-pop-btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
     .note-pop-panel .entry-note { margin-top: 10px; }
     @media (prefers-reduced-motion: reduce) { .note-pop-btn .chev { transition: none; } }
+    .place-counts { margin: 4px 2px 0; }
+    .place-counts-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; color: var(--muted); font-size: .86rem; }
+    .place-counts-label { font-weight: 600; }
+    .place-count-btn strong { color: var(--ink); font-weight: 600; }
+    .place-counts-note { font-size: .8rem; }
+    .place-panel { margin-top: 12px; }
+    .place-panel-hint { margin: 0 0 10px; color: var(--muted); font-size: .84rem; max-width: 720px; }
+    .place-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 6px; }
+    .place-item { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; width: 100%; padding: 7px 11px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); font: inherit; font-size: .86rem; text-align: left; cursor: pointer; }
+    .place-item:hover { border-color: var(--deep-2); }
+    .place-item:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+    .place-n { color: var(--muted); font-size: .78rem; white-space: nowrap; }
+    .place-results { margin-top: 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 16px 18px 12px; }
+    .place-results-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 14px; }
+    .place-results-head h3 { margin: 0; font: 650 1.25rem/1.2 "Newsreader", serif; }
+    .place-clear-btn { padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-alt); color: var(--muted); font: inherit; font-size: .8rem; font-weight: 600; cursor: pointer; }
+    .place-clear-btn:hover { color: var(--ink); }
+    .place-clear-btn:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+    .place-results-sub { margin: 6px 0 10px; color: var(--muted); font-size: .84rem; }
+    .place-results-list { list-style: none; margin: 0; padding: 0; }
+    .place-results-list li + li { border-top: 1px solid var(--line); }
+    .place-day { display: grid; grid-template-columns: 148px 1fr; gap: 2px 18px; width: 100%; padding: 9px 4px; border: 0; background: none; color: var(--ink); font: inherit; font-size: .9rem; text-align: left; cursor: pointer; }
+    .place-day:hover .place-day-title { text-decoration: underline; }
+    .place-day:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+    .place-day-date { color: var(--orange); font-size: .78rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding-top: 2px; }
+    .place-day-trip { grid-column: 2; color: var(--muted); font-size: .8rem; }
+    .framework-day.flash, #hero.flash { outline: 3px solid var(--orange); outline-offset: 6px; }
+    @media (max-width: 580px) { .place-day { grid-template-columns: 1fr; } .place-day-trip { grid-column: 1; } }
 
     @media (max-width: 580px) {
       .stats-strip { gap: 10px; }
@@ -687,6 +715,147 @@
       <span class="pin" aria-hidden="true">◎</span>
       <div><strong>Follow the Venice &amp; Transatlantic trip live.</strong><span>Polarsteps shows Patrick’s route and new stops as the journey unfolds.</span></div>
       <a class="tracking-link" href="https://www.polarsteps.com/PatrickBreen/29451508-venice-transatlantic?s=89e3c43b-e084-4336-ac7e-72de4a92837b" target="_blank" rel="noopener noreferrer">Open Polarsteps ↗</a>
+    </aside>
+
+    <aside class="place-counts" aria-label="Countries and cities on this page">
+      <div class="place-counts-row">
+        <span class="place-counts-label">Counted from this page:</span>
+        <button class="note-pop-btn place-count-btn" type="button" aria-expanded="false" aria-controls="place-countries"><strong>30 countries</strong><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <button class="note-pop-btn place-count-btn" type="button" aria-expanded="false" aria-controls="place-cities"><strong>84 cities</strong><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <span class="place-counts-note">Counts cover page content through Oct 25, 2026.</span>
+      </div>
+      <div class="note-pop-panel place-panel" id="place-countries" hidden>
+        <p class="place-panel-hint">Every country and territory on this page, most visited first. Tap one to find its days in the journal and the trip archives.</p>
+        <ul class="place-list">
+            <li><button type="button" class="place-item" data-kind="country" data-key="united-states"><span class="place-name">United States</span><span class="place-n">45 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="bahamas"><span class="place-name">Bahamas</span><span class="place-n">19 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="italy"><span class="place-name">Italy</span><span class="place-n">12 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="canada"><span class="place-name">Canada</span><span class="place-n">11 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="spain"><span class="place-name">Spain</span><span class="place-n">11 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="mexico"><span class="place-name">Mexico</span><span class="place-n">7 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="greece"><span class="place-name">Greece</span><span class="place-n">4 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="puerto-rico"><span class="place-name">Puerto Rico</span><span class="place-n">4 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="cayman-islands"><span class="place-name">Cayman Islands</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="croatia"><span class="place-name">Croatia</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="dominican-republic"><span class="place-name">Dominican Republic</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="portugal"><span class="place-name">Portugal</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="st-maarten"><span class="place-name">St. Maarten</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="us-virgin-islands"><span class="place-name">US Virgin Islands</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="bermuda"><span class="place-name">Bermuda</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="france"><span class="place-name">France</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="st-kitts-and-nevis"><span class="place-name">St. Kitts &amp; Nevis</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="united-kingdom"><span class="place-name">United Kingdom</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="albania"><span class="place-name">Albania</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="aruba"><span class="place-name">Aruba</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="bonaire"><span class="place-name">Bonaire</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="british-virgin-islands"><span class="place-name">British Virgin Islands</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="curacao"><span class="place-name">Curaçao</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="dominica"><span class="place-name">Dominica</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="germany"><span class="place-name">Germany</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="honduras"><span class="place-name">Honduras</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="jamaica"><span class="place-name">Jamaica</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="montenegro"><span class="place-name">Montenegro</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="netherlands"><span class="place-name">Netherlands</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="country" data-key="turks-and-caicos"><span class="place-name">Turks &amp; Caicos</span><span class="place-n">1 visit</span></button></li>
+        </ul>
+      </div>
+      <div class="note-pop-panel place-panel" id="place-cities" hidden>
+        <p class="place-panel-hint">Every city, port and excursion stop on this page, most visited first. Tap one to find its days in the journal and the trip archives.</p>
+        <ul class="place-list">
+            <li><button type="button" class="place-item" data-kind="city" data-key="miami"><span class="place-name">Miami</span><span class="place-n">14 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="bimini"><span class="place-name">Bimini</span><span class="place-n">7 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="cococay"><span class="place-name">CocoCay</span><span class="place-n">7 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="ft-lauderdale"><span class="place-name">Ft Lauderdale</span><span class="place-n">6 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="cozumel"><span class="place-name">Cozumel</span><span class="place-n">5 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="nassau"><span class="place-name">Nassau</span><span class="place-n">5 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="boston"><span class="place-name">Boston</span><span class="place-n">4 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="civitavecchia-rome"><span class="place-name">Civitavecchia (Rome)</span><span class="place-n">4 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="san-juan"><span class="place-name">San Juan</span><span class="place-n">4 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="skagway"><span class="place-name">Skagway</span><span class="place-n">4 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="bayonne"><span class="place-name">Bayonne</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="charlotte-amalie-st-thomas"><span class="place-name">Charlotte Amalie (St. Thomas)</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="george-town"><span class="place-name">George Town</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="icy-strait-point"><span class="place-name">Icy Strait Point</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="juneau"><span class="place-name">Juneau</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="philipsburg-st-maarten"><span class="place-name">Philipsburg (St. Maarten)</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="portland"><span class="place-name">Portland</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="puerto-plata"><span class="place-name">Puerto Plata</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="ravenna"><span class="place-name">Ravenna</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="saint-john"><span class="place-name">Saint John</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="sydney"><span class="place-name">Sydney</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="vancouver"><span class="place-name">Vancouver</span><span class="place-n">3 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="barcelona"><span class="place-name">Barcelona</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="basseterre-st-kitts"><span class="place-name">Basseterre (St. Kitts)</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="bermuda-royal-naval-dockyard"><span class="place-name">Bermuda (Royal Naval Dockyard)</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="malaga"><span class="place-name">Málaga</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="messina"><span class="place-name">Messina</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="naples"><span class="place-name">Naples</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="ponta-delgada"><span class="place-name">Ponta Delgada</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="puerto-costa-maya"><span class="place-name">Puerto Costa Maya</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="santorini"><span class="place-name">Santorini</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="seward"><span class="place-name">Seward</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="sitka"><span class="place-name">Sitka</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="southampton"><span class="place-name">Southampton</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="split"><span class="place-name">Split</span><span class="place-n">2 visits</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="ajaccio"><span class="place-name">Ajaccio</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="alicante"><span class="place-name">Alicante</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="athens"><span class="place-name">Athens</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="avila"><span class="place-name">Ávila</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="burano"><span class="place-name">Burano</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="cadiz"><span class="place-name">Cádiz</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="cartagena"><span class="place-name">Cartagena</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="charlottetown"><span class="place-name">Charlottetown</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="dominica"><span class="place-name">Dominica</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="dubrovnik"><span class="place-name">Dubrovnik</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="frigiliana"><span class="place-name">Frigiliana</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="grand-turk"><span class="place-name">Grand Turk</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="halifax"><span class="place-name">Halifax</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="hamburg"><span class="place-name">Hamburg</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="hamilton"><span class="place-name">Hamilton</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="ketchikan"><span class="place-name">Ketchikan</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="key-west"><span class="place-name">Key West</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="kotor"><span class="place-name">Kotor</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="kralendijk-bonaire"><span class="place-name">Kralendijk (Bonaire)</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="la-coruna"><span class="place-name">La Coruña</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="lisbon"><span class="place-name">Lisbon</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="madrid"><span class="place-name">Madrid</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="murano"><span class="place-name">Murano</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="murcia"><span class="place-name">Murcia</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="mykonos"><span class="place-name">Mykonos</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="nerja"><span class="place-name">Nerja</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="ocho-rios"><span class="place-name">Ocho Rios</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="oranjestad-aruba"><span class="place-name">Oranjestad (Aruba)</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="orlando"><span class="place-name">Orlando</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="palma-de-mallorca"><span class="place-name">Palma de Mallorca</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="perast"><span class="place-name">Perast</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="roatan"><span class="place-name">Roatán</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="rome"><span class="place-name">Rome</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="rotterdam"><span class="place-name">Rotterdam</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="salerno"><span class="place-name">Salerno</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="sarande"><span class="place-name">Sarandë</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="seattle"><span class="place-name">Seattle</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="segovia"><span class="place-name">Segovia</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="taormina"><span class="place-name">Taormina</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="toledo"><span class="place-name">Toledo</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="tortola"><span class="place-name">Tortola</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="toulon"><span class="place-name">Toulon</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="trieste"><span class="place-name">Trieste</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="trogir"><span class="place-name">Trogir</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="valencia"><span class="place-name">Valencia</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="valldemossa"><span class="place-name">Valldemossa</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="venice"><span class="place-name">Venice</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="vigo"><span class="place-name">Vigo</span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item" data-kind="city" data-key="willemstad-curacao"><span class="place-name">Willemstad (Curaçao)</span><span class="place-n">1 visit</span></button></li>
+        </ul>
+      </div>
+      <div class="place-results" id="place-results" hidden>
+        <div class="place-results-head">
+          <h3 id="place-results-title"></h3>
+          <button class="place-clear-btn" id="place-results-clear" type="button">Clear search — back to full history</button>
+        </div>
+        <p class="place-results-sub" id="place-results-sub"></p>
+        <ul class="place-results-list" id="place-results-list"></ul>
+      </div>
     </aside>
 
     <div class="loyalty" aria-label="Crown and Anchor loyalty progress">
@@ -3953,6 +4122,142 @@
       });
       document.addEventListener("keydown", function (e) {
         if (e.key === "Escape") { closeAll(null); }
+      });
+    })();
+  </script>
+  <script>
+    // ----- Place counters: tapping a country or city in the counters runs
+    // the journal search for that place and lists every matching day on the
+    // page — main journal, Spain and Bayonne archive journals, and the six
+    // receipt-framework trips — each row jumping to the day itself.
+    (function () {
+      var INDEX =
+{"city:venice": {"name": "Venice", "visits": 1, "days": [{"v": "view-main", "d": "2026-10-10"}, {"v": "view-main", "d": "2026-10-09"}, {"v": "view-main", "d": "2026-10-08"}, {"v": "view-main", "d": "2026-10-07"}]}, "city:murano": {"name": "Murano", "visits": 1, "days": [{"v": "view-main", "d": "2026-10-09"}]}, "city:burano": {"name": "Burano", "visits": 1, "days": [{"v": "view-main", "d": "2026-10-09"}]}, "city:ravenna": {"name": "Ravenna", "visits": 3, "days": [{"v": "view-main", "d": "2026-10-17"}, {"v": "view-main", "d": "2026-10-10"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-18"}]}, "city:rome": {"name": "Rome", "visits": 1, "days": [{"v": "view-main", "d": "2026-10-18"}, {"v": "view-main", "d": "2026-10-17"}]}, "city:civitavecchia-rome": {"name": "Civitavecchia (Rome)", "visits": 4, "days": [{"v": "view-main", "d": "2026-10-25", "hero": 1}, {"v": "view-main", "d": "2026-10-18"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-25"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-14"}]}, "city:messina": {"name": "Messina", "visits": 2, "days": [{"v": "view-main", "d": "2026-10-19"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-16"}]}, "city:taormina": {"name": "Taormina", "visits": 1, "days": [{"v": "view-main", "d": "2026-10-19"}]}, "city:naples": {"name": "Naples", "visits": 2, "days": [{"v": "view-main", "d": "2026-10-24"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-15"}]}, "city:trieste": {"name": "Trieste", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-05-19"}]}, "city:salerno": {"name": "Salerno", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-05-24"}]}, "city:kotor": {"name": "Kotor", "visits": 1, "days": [{"v": "view-main", "d": "2026-10-11"}]}, "city:perast": {"name": "Perast", "visits": 1, "days": [{"v": "view-main", "d": "2026-10-11"}]}, "city:santorini": {"name": "Santorini", "visits": 2, "days": [{"v": "view-main", "d": "2026-10-21"}, {"v": "view-main", "d": "2026-10-13"}]}, "city:athens": {"name": "Athens", "visits": 1, "days": [{"v": "view-main", "d": "2026-10-14"}]}, "city:mykonos": {"name": "Mykonos", "visits": 1, "days": [{"v": "view-main", "d": "2026-10-22"}]}, "city:split": {"name": "Split", "visits": 2, "days": [{"v": "view-main", "d": "2026-10-16"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-20"}]}, "city:trogir": {"name": "Trogir", "visits": 1, "days": [{"v": "view-main", "d": "2026-10-16"}]}, "city:dubrovnik": {"name": "Dubrovnik", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-05-21"}]}, "city:madrid": {"name": "Madrid", "visits": 1, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-25"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-24"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-23"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-22"}]}, "city:segovia": {"name": "Segovia", "visits": 1, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-23"}]}, "city:avila": {"name": "Ávila", "visits": 1, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-23"}]}, "city:toledo": {"name": "Toledo", "visits": 1, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-23"}]}, "city:barcelona": {"name": "Barcelona", "visits": 2, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-26"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-25"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-11"}]}, "city:palma-de-mallorca": {"name": "Palma de Mallorca", "visits": 1, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-27"}]}, "city:valldemossa": {"name": "Valldemossa", "visits": 1, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-27"}]}, "city:cartagena": {"name": "Cartagena", "visits": 1, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-28"}]}, "city:murcia": {"name": "Murcia", "visits": 1, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-28"}]}, "city:malaga": {"name": "Málaga", "visits": 2, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-29"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-08"}]}, "city:nerja": {"name": "Nerja", "visits": 1, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-29"}]}, "city:frigiliana": {"name": "Frigiliana", "visits": 1, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-29"}]}, "city:cadiz": {"name": "Cádiz", "visits": 1, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-30"}]}, "city:alicante": {"name": "Alicante", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-05-09"}]}, "city:valencia": {"name": "Valencia", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-05-10"}]}, "city:la-coruna": {"name": "La Coruña", "visits": 1, "days": [{"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-18"}]}, "city:vigo": {"name": "Vigo", "visits": 1, "days": [{"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-19"}]}, "city:orlando": {"name": "Orlando", "visits": 1, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-08-09"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-08-08"}]}, "city:nassau": {"name": "Nassau", "visits": 5, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-08-11"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-04-25"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-15"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-01"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-29"}]}, "city:cococay": {"name": "CocoCay", "visits": 7, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-08-12"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-04-27"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-08"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-02"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-20"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-15"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-07"}]}, "city:san-juan": {"name": "San Juan", "visits": 4, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-08-29"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-08-22"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-04-19"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-04-12"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-04-11"}]}, "city:philipsburg-st-maarten": {"name": "Philipsburg (St. Maarten)", "visits": 3, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-08-25"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-04-20"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-12"}]}, "city:dominica": {"name": "Dominica", "visits": 1, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-08-27"}]}, "city:bayonne": {"name": "Bayonne", "visits": 3, "days": [{"v": "bayonne-miami-sep-2026", "d": "2026-09-17"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-12"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-03"}]}, "city:boston": {"name": "Boston", "visits": 4, "days": [{"v": "bayonne-miami-sep-2026", "d": "2026-09-05"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-10-05"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-09-28"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-09-21"}]}, "city:portland": {"name": "Portland", "visits": 3, "days": [{"v": "bayonne-miami-sep-2026", "d": "2026-09-06"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-10-04"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-09-22"}]}, "city:saint-john": {"name": "Saint John", "visits": 3, "days": [{"v": "bayonne-miami-sep-2026", "d": "2026-09-08"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-07"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-09-29"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-09-23"}]}, "city:sydney": {"name": "Sydney", "visits": 3, "days": [{"v": "bayonne-miami-sep-2026", "d": "2026-09-10"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-10-02"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-09-26"}]}, "city:charlottetown": {"name": "Charlottetown", "visits": 1, "days": [{"v": "eastern-canada-sep-oct-2025", "d": "2025-09-25"}]}, "city:halifax": {"name": "Halifax", "visits": 1, "days": [{"v": "eastern-canada-sep-oct-2025", "d": "2025-10-01"}]}, "city:bermuda-royal-naval-dockyard": {"name": "Bermuda (Royal Naval Dockyard)", "visits": 2, "days": [{"v": "bayonne-miami-sep-2026", "d": "2026-09-15"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-14"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-04-30"}]}, "city:hamilton": {"name": "Hamilton", "visits": 1, "days": [{"v": "bayonne-miami-sep-2026", "d": "2026-09-15"}]}, "city:miami": {"name": "Miami", "visits": 14, "days": [{"v": "bayonne-miami-sep-2026", "d": "2026-09-28"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-24"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-19"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-18"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-17"}, {"v": "miami-jan-feb-2026", "d": "2026-02-04"}, {"v": "miami-jan-feb-2026", "d": "2026-01-30"}, {"v": "miami-jan-feb-2026", "d": "2026-01-25"}, {"v": "miami-jan-feb-2026", "d": "2026-01-18"}, {"v": "miami-jan-feb-2026", "d": "2026-01-17"}, {"v": "miami-jan-feb-2026", "d": "2026-01-10"}, {"v": "miami-jan-feb-2026", "d": "2026-01-03"}, {"v": "miami-jan-feb-2026", "d": "2026-01-02"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-14"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-07"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-11-30"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-11-29"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-08"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-01"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-31"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-30"}]}, "city:ft-lauderdale": {"name": "Ft Lauderdale", "visits": 6, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-04-26"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-20"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-14"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-21"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-17"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-16"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-08"}]}, "city:grand-turk": {"name": "Grand Turk", "visits": 1, "days": [{"v": "bayonne-miami-sep-2026", "d": "2026-09-21"}]}, "city:bimini": {"name": "Bimini", "visits": 7, "days": [{"v": "bayonne-miami-sep-2026", "d": "2026-09-27"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-23"}, {"v": "miami-jan-feb-2026", "d": "2026-02-03"}, {"v": "miami-jan-feb-2026", "d": "2026-01-29"}, {"v": "miami-jan-feb-2026", "d": "2026-01-16"}, {"v": "miami-jan-feb-2026", "d": "2026-01-09"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-18"}]}, "city:key-west": {"name": "Key West", "visits": 1, "days": [{"v": "bayonne-miami-sep-2026", "d": "2026-09-25"}]}, "city:seattle": {"name": "Seattle", "visits": 1, "days": [{"v": "alaska-may-jun-2026", "d": "2026-05-28"}, {"v": "alaska-may-jun-2026", "d": "2026-05-27"}]}, "city:vancouver": {"name": "Vancouver", "visits": 3, "days": [{"v": "alaska-may-jun-2026", "d": "2026-06-26"}, {"v": "alaska-may-jun-2026", "d": "2026-06-12"}, {"v": "alaska-may-jun-2026", "d": "2026-06-11"}, {"v": "alaska-may-jun-2026", "d": "2026-05-29"}, {"v": "alaska-may-jun-2026", "d": "2026-05-28"}]}, "city:ketchikan": {"name": "Ketchikan", "visits": 1, "days": [{"v": "alaska-may-jun-2026", "d": "2026-05-31"}]}, "city:icy-strait-point": {"name": "Icy Strait Point", "visits": 3, "days": [{"v": "alaska-may-jun-2026", "d": "2026-06-23"}, {"v": "alaska-may-jun-2026", "d": "2026-06-09"}, {"v": "alaska-may-jun-2026", "d": "2026-06-01"}]}, "city:sitka": {"name": "Sitka", "visits": 2, "days": [{"v": "alaska-may-jun-2026", "d": "2026-06-15"}, {"v": "alaska-may-jun-2026", "d": "2026-06-02"}]}, "city:skagway": {"name": "Skagway", "visits": 4, "days": [{"v": "alaska-may-jun-2026", "d": "2026-06-22"}, {"v": "alaska-may-jun-2026", "d": "2026-06-17"}, {"v": "alaska-may-jun-2026", "d": "2026-06-08"}, {"v": "alaska-may-jun-2026", "d": "2026-06-03"}]}, "city:juneau": {"name": "Juneau", "visits": 3, "days": [{"v": "alaska-may-jun-2026", "d": "2026-06-21"}, {"v": "alaska-may-jun-2026", "d": "2026-06-16"}, {"v": "alaska-may-jun-2026", "d": "2026-06-07"}]}, "city:seward": {"name": "Seward", "visits": 2, "days": [{"v": "alaska-may-jun-2026", "d": "2026-06-19"}, {"v": "alaska-may-jun-2026", "d": "2026-06-05"}]}, "city:tortola": {"name": "Tortola", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-04-13"}]}, "city:oranjestad-aruba": {"name": "Oranjestad (Aruba)", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-04-15"}]}, "city:willemstad-curacao": {"name": "Willemstad (Curaçao)", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-04-16"}]}, "city:kralendijk-bonaire": {"name": "Kralendijk (Bonaire)", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-04-17"}]}, "city:charlotte-amalie-st-thomas": {"name": "Charlotte Amalie (St. Thomas)", "visits": 3, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-04-21"}, {"v": "miami-jan-feb-2026", "d": "2026-01-21"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-13"}]}, "city:basseterre-st-kitts": {"name": "Basseterre (St. Kitts)", "visits": 2, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-04-22"}, {"v": "miami-jan-feb-2026", "d": "2026-01-22"}]}, "city:ponta-delgada": {"name": "Ponta Delgada", "visits": 2, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-05-05"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-22"}]}, "city:lisbon": {"name": "Lisbon", "visits": 1, "days": [{"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-20"}]}, "city:toulon": {"name": "Toulon", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-05-12"}]}, "city:ajaccio": {"name": "Ajaccio", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-05-13"}]}, "city:sarande": {"name": "Sarandë", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-05-22"}]}, "city:george-town": {"name": "George Town", "visits": 3, "days": [{"v": "miami-jan-feb-2026", "d": "2026-01-12"}, {"v": "miami-jan-feb-2026", "d": "2026-01-05"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-10"}]}, "city:cozumel": {"name": "Cozumel", "visits": 5, "days": [{"v": "miami-jan-feb-2026", "d": "2026-01-27"}, {"v": "miami-jan-feb-2026", "d": "2026-01-07"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-18"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-12"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-05"}]}, "city:puerto-costa-maya": {"name": "Puerto Costa Maya", "visits": 2, "days": [{"v": "december-caribbean-nov-dec-2025", "d": "2025-12-17"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-03"}]}, "city:ocho-rios": {"name": "Ocho Rios", "visits": 1, "days": [{"v": "miami-jan-feb-2026", "d": "2026-01-13"}]}, "city:puerto-plata": {"name": "Puerto Plata", "visits": 3, "days": [{"v": "miami-jan-feb-2026", "d": "2026-02-01"}, {"v": "miami-jan-feb-2026", "d": "2026-01-20"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-04"}]}, "city:southampton": {"name": "Southampton", "visits": 2, "days": [{"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-16"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-11"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-10"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-09"}]}, "city:hamburg": {"name": "Hamburg", "visits": 1, "days": [{"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-13"}]}, "city:rotterdam": {"name": "Rotterdam", "visits": 1, "days": [{"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-15"}]}, "city:roatan": {"name": "Roatán", "visits": 1, "days": [{"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-04"}]}, "country:italy": {"name": "Italy", "visits": 12, "days": [{"v": "view-main", "d": "2026-10-25", "hero": 1}, {"v": "view-main", "d": "2026-10-24"}, {"v": "view-main", "d": "2026-10-19"}, {"v": "view-main", "d": "2026-10-18"}, {"v": "view-main", "d": "2026-10-17"}, {"v": "view-main", "d": "2026-10-10"}, {"v": "view-main", "d": "2026-10-09"}, {"v": "view-main", "d": "2026-10-08"}, {"v": "view-main", "d": "2026-10-07"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-25"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-24"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-19"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-18"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-16"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-15"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-14"}]}, "country:montenegro": {"name": "Montenegro", "visits": 1, "days": [{"v": "view-main", "d": "2026-10-11"}]}, "country:greece": {"name": "Greece", "visits": 4, "days": [{"v": "view-main", "d": "2026-10-22"}, {"v": "view-main", "d": "2026-10-21"}, {"v": "view-main", "d": "2026-10-14"}, {"v": "view-main", "d": "2026-10-13"}]}, "country:croatia": {"name": "Croatia", "visits": 3, "days": [{"v": "view-main", "d": "2026-10-16"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-21"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-20"}]}, "country:spain": {"name": "Spain", "visits": 11, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-30"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-29"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-28"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-27"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-26"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-25"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-24"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-23"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-07-22"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-11"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-10"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-09"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-08"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-19"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-18"}]}, "country:united-states": {"name": "United States", "visits": 45, "days": [{"v": "bayonne-miami-sep-2026", "d": "2026-09-28"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-25"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-24"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-19"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-18"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-17"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-12"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-06"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-05"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-03"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-08-09"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-08-08"}, {"v": "alaska-may-jun-2026", "d": "2026-06-23"}, {"v": "alaska-may-jun-2026", "d": "2026-06-22"}, {"v": "alaska-may-jun-2026", "d": "2026-06-21"}, {"v": "alaska-may-jun-2026", "d": "2026-06-19"}, {"v": "alaska-may-jun-2026", "d": "2026-06-17"}, {"v": "alaska-may-jun-2026", "d": "2026-06-16"}, {"v": "alaska-may-jun-2026", "d": "2026-06-15"}, {"v": "alaska-may-jun-2026", "d": "2026-06-09"}, {"v": "alaska-may-jun-2026", "d": "2026-06-08"}, {"v": "alaska-may-jun-2026", "d": "2026-06-07"}, {"v": "alaska-may-jun-2026", "d": "2026-06-05"}, {"v": "alaska-may-jun-2026", "d": "2026-06-03"}, {"v": "alaska-may-jun-2026", "d": "2026-06-02"}, {"v": "alaska-may-jun-2026", "d": "2026-06-01"}, {"v": "alaska-may-jun-2026", "d": "2026-05-31"}, {"v": "alaska-may-jun-2026", "d": "2026-05-28"}, {"v": "alaska-may-jun-2026", "d": "2026-05-27"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-04-26"}, {"v": "miami-jan-feb-2026", "d": "2026-02-04"}, {"v": "miami-jan-feb-2026", "d": "2026-01-30"}, {"v": "miami-jan-feb-2026", "d": "2026-01-25"}, {"v": "miami-jan-feb-2026", "d": "2026-01-18"}, {"v": "miami-jan-feb-2026", "d": "2026-01-17"}, {"v": "miami-jan-feb-2026", "d": "2026-01-10"}, {"v": "miami-jan-feb-2026", "d": "2026-01-03"}, {"v": "miami-jan-feb-2026", "d": "2026-01-02"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-20"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-14"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-07"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-11-30"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-11-29"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-21"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-17"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-16"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-08"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-01"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-31"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-30"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-10-05"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-10-04"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-09-28"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-09-22"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-09-21"}]}, "country:bahamas": {"name": "Bahamas", "visits": 19, "days": [{"v": "bayonne-miami-sep-2026", "d": "2026-09-27"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-23"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-08-12"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-08-11"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-04-27"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-04-25"}, {"v": "miami-jan-feb-2026", "d": "2026-02-03"}, {"v": "miami-jan-feb-2026", "d": "2026-01-29"}, {"v": "miami-jan-feb-2026", "d": "2026-01-16"}, {"v": "miami-jan-feb-2026", "d": "2026-01-09"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-15"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-08"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-02"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-01"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-20"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-18"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-15"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-07"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-29"}]}, "country:puerto-rico": {"name": "Puerto Rico", "visits": 4, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-08-29"}, {"v": "spain-transatlantic-jul-aug-2026", "d": "2026-08-22"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-04-19"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-04-12"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-04-11"}]}, "country:st-maarten": {"name": "St. Maarten", "visits": 3, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-08-25"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-04-20"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-12"}]}, "country:dominica": {"name": "Dominica", "visits": 1, "days": [{"v": "spain-transatlantic-jul-aug-2026", "d": "2026-08-27"}]}, "country:canada": {"name": "Canada", "visits": 11, "days": [{"v": "bayonne-miami-sep-2026", "d": "2026-09-10"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-08"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-07"}, {"v": "alaska-may-jun-2026", "d": "2026-06-26"}, {"v": "alaska-may-jun-2026", "d": "2026-06-12"}, {"v": "alaska-may-jun-2026", "d": "2026-06-11"}, {"v": "alaska-may-jun-2026", "d": "2026-05-29"}, {"v": "alaska-may-jun-2026", "d": "2026-05-28"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-10-02"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-10-01"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-09-29"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-09-26"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-09-25"}, {"v": "eastern-canada-sep-oct-2025", "d": "2025-09-23"}]}, "country:bermuda": {"name": "Bermuda", "visits": 2, "days": [{"v": "bayonne-miami-sep-2026", "d": "2026-09-15"}, {"v": "bayonne-miami-sep-2026", "d": "2026-09-14"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-04-30"}]}, "country:turks-and-caicos": {"name": "Turks & Caicos", "visits": 1, "days": [{"v": "bayonne-miami-sep-2026", "d": "2026-09-21"}]}, "country:british-virgin-islands": {"name": "British Virgin Islands", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-04-13"}]}, "country:aruba": {"name": "Aruba", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-04-15"}]}, "country:curacao": {"name": "Curaçao", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-04-16"}]}, "country:bonaire": {"name": "Bonaire", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-04-17"}]}, "country:us-virgin-islands": {"name": "US Virgin Islands", "visits": 3, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-04-21"}, {"v": "miami-jan-feb-2026", "d": "2026-01-21"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-13"}]}, "country:st-kitts-and-nevis": {"name": "St. Kitts & Nevis", "visits": 2, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-04-22"}, {"v": "miami-jan-feb-2026", "d": "2026-01-22"}]}, "country:portugal": {"name": "Portugal", "visits": 3, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-05-05"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-22"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-20"}]}, "country:france": {"name": "France", "visits": 2, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-05-13"}, {"v": "san-juan-rome-apr-may-2026", "d": "2026-05-12"}]}, "country:albania": {"name": "Albania", "visits": 1, "days": [{"v": "san-juan-rome-apr-may-2026", "d": "2026-05-22"}]}, "country:cayman-islands": {"name": "Cayman Islands", "visits": 3, "days": [{"v": "miami-jan-feb-2026", "d": "2026-01-12"}, {"v": "miami-jan-feb-2026", "d": "2026-01-05"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-10"}]}, "country:mexico": {"name": "Mexico", "visits": 7, "days": [{"v": "miami-jan-feb-2026", "d": "2026-01-27"}, {"v": "miami-jan-feb-2026", "d": "2026-01-07"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-18"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-17"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-12"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-05"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-03"}]}, "country:jamaica": {"name": "Jamaica", "visits": 1, "days": [{"v": "miami-jan-feb-2026", "d": "2026-01-13"}]}, "country:dominican-republic": {"name": "Dominican Republic", "visits": 3, "days": [{"v": "miami-jan-feb-2026", "d": "2026-02-01"}, {"v": "miami-jan-feb-2026", "d": "2026-01-20"}, {"v": "december-caribbean-nov-dec-2025", "d": "2025-12-04"}]}, "country:united-kingdom": {"name": "United Kingdom", "visits": 2, "days": [{"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-16"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-11"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-10"}, {"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-09"}]}, "country:germany": {"name": "Germany", "visits": 1, "days": [{"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-13"}]}, "country:netherlands": {"name": "Netherlands", "visits": 1, "days": [{"v": "fall-transatlantic-oct-nov-2025", "d": "2025-10-15"}]}, "country:honduras": {"name": "Honduras", "visits": 1, "days": [{"v": "fall-transatlantic-oct-nov-2025", "d": "2025-11-04"}]}}
+;
+      var TRIPS = {
+        "view-main": "Venice & Transatlantic — current trip",
+        "spain-transatlantic-jul-aug-2026": "Spain & Transatlantic",
+        "bayonne-miami-sep-2026": "New England, Bermuda & Virgin Voyages",
+        "alaska-may-jun-2026": "Alaska 2026",
+        "san-juan-rome-apr-may-2026": "San Juan to Rome 2026",
+        "miami-jan-feb-2026": "Miami 2026",
+        "december-caribbean-nov-dec-2025": "December Caribbean 2025",
+        "fall-transatlantic-oct-nov-2025": "Fall Transatlantic 2025",
+        "eastern-canada-sep-oct-2025": "Eastern Canada 2025"
+      };
+      var ARCHIVES = ["spain-transatlantic-jul-aug-2026", "bayonne-miami-sep-2026", "alaska-may-jun-2026", "san-juan-rome-apr-may-2026", "miami-jan-feb-2026", "december-caribbean-nov-dec-2025", "fall-transatlantic-oct-nov-2025", "eastern-canada-sep-oct-2025"];
+      var panel = document.getElementById("place-results");
+      var titleEl = document.getElementById("place-results-title");
+      var subEl = document.getElementById("place-results-sub");
+      var listEl = document.getElementById("place-results-list");
+      var clearBtn = document.getElementById("place-results-clear");
+      var q = document.getElementById("filter-q");
+      var main = document.getElementById("view-main");
+      if (!panel || !titleEl || !listEl || !clearBtn || !main) { return; }
+      var programmatic = false;
+
+      function findDay(ref) {
+        if (ref.hero) { return { el: document.getElementById("hero"), date: "Sun · Oct 25, 2026", title: "Rome (Civitavecchia), Italy — turn-around day" }; }
+        var view = document.getElementById(ref.v);
+        if (!view) { return null; }
+        var entry = view.querySelector("#entry-" + ref.d);
+        if (entry) {
+          var t = entry.querySelector("time"), h = entry.querySelector("h3");
+          return { el: entry, date: t ? t.textContent : ref.d, title: h ? h.textContent : "" };
+        }
+        var days = view.querySelectorAll(".framework-day");
+        for (var i = 0; i < days.length; i++) {
+          var tm = days[i].querySelector("time");
+          if (tm && tm.getAttribute("datetime") === ref.d) {
+            var hh = days[i].querySelector("h3");
+            return { el: days[i], date: tm.textContent, title: hh ? hh.textContent : "" };
+          }
+        }
+        return null;
+      }
+      function showView(view) {
+        ARCHIVES.forEach(function (id) {
+          var v = document.getElementById(id);
+          if (v) { v.hidden = v !== view; }
+        });
+        if (main) { main.hidden = view !== main; }
+        document.title = (view && view !== main)
+          ? view.getAttribute("data-title") + " · Where's Patrick?"
+          : "Where's Patrick?";
+      }
+      function goToDay(ref) {
+        var found = findDay(ref);
+        if (!found || !found.el) { return; }
+        var view = ref.hero ? main : (found.el.closest ? found.el.closest(".view") : null);
+        if (view) { showView(view); }
+        try { history.pushState(null, "", ref.hero ? "#hero" : (ref.v === "view-main" ? "#entry-" + ref.d : "#" + ref.v)); } catch (e) { /* in-page only */ }
+        setTimeout(function () {
+          found.el.scrollIntoView({ behavior: "smooth", block: "start" });
+          found.el.classList.add("flash");
+          setTimeout(function () { found.el.classList.remove("flash"); }, 2400);
+        }, 60);
+      }
+      function clearSearch() {
+        panel.hidden = true;
+        if (q && q.value) {
+          programmatic = true;
+          q.value = "";
+          q.dispatchEvent(new Event("input", { bubbles: true }));
+          programmatic = false;
+        }
+      }
+      function runSearch(kind, key) {
+        var rec = INDEX[kind + ":" + key];
+        if (!rec) { return; }
+        titleEl.textContent = "Days in " + rec.name;
+        subEl.textContent = rec.days.length + (rec.days.length === 1 ? " day" : " days") + " on this page · " + rec.visits + (rec.visits === 1 ? " visit" : " visits") + " counted. Tap a day to jump to it.";
+        listEl.innerHTML = "";
+        rec.days.forEach(function (ref) {
+          var found = findDay(ref);
+          var li = document.createElement("li");
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className = "place-day";
+          var dEl = document.createElement("span"); dEl.className = "place-day-date"; dEl.textContent = found ? found.date : ref.d;
+          var tEl = document.createElement("span"); tEl.className = "place-day-title"; tEl.textContent = found ? found.title : rec.name;
+          var trEl = document.createElement("span"); trEl.className = "place-day-trip"; trEl.textContent = TRIPS[ref.v] || "";
+          b.appendChild(dEl); b.appendChild(tEl); b.appendChild(trEl);
+          b.addEventListener("click", function () { goToDay(ref); });
+          li.appendChild(b);
+          listEl.appendChild(li);
+        });
+        panel.hidden = false;
+        // Run the page's own journal search too, then align the main
+        // journal list with this place's counted days (its text search
+        // alone would miss days that never name the place in prose).
+        if (q) {
+          programmatic = true;
+          q.value = rec.name;
+          q.dispatchEvent(new Event("input", { bubbles: true }));
+          programmatic = false;
+          var keep = {};
+          rec.days.forEach(function (r) { if (r.v === "view-main" && !r.hero) { keep[r.d] = true; } });
+          Array.prototype.forEach.call(main.querySelectorAll(".history-list .memory"), function (e) {
+            e.style.display = keep[e.getAttribute("data-date")] ? "" : "none";
+          });
+          var empty = document.getElementById("filter-empty");
+          if (empty) { empty.hidden = Object.keys(keep).length !== 0; }
+        }
+        panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+      document.addEventListener("click", function (e) {
+        var b = e.target && e.target.closest ? e.target.closest(".place-item") : null;
+        if (!b) { return; }
+        runSearch(b.getAttribute("data-kind"), b.getAttribute("data-key"));
+      });
+      clearBtn.addEventListener("click", clearSearch);
+      if (q) {
+        q.addEventListener("input", function () {
+          if (!programmatic && !panel.hidden) { panel.hidden = true; }
+        });
+      }
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && !panel.hidden) { clearSearch(); }
       });
     })();
   </script>
