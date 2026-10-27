@@ -713,7 +713,7 @@
         <button class="note-pop-btn place-count-btn" type="button" aria-expanded="false" aria-controls="place-ships"><strong>20 ships</strong><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
         <span class="place-counts-note">Counts cover page content through Oct 26, 2026.</span>
       </div>
-      <p class="year-tracker" id="year-tracker"><strong>2026:</strong> 198 travel days of 365 days in the year · <strong>54.2%</strong> of the year traveling · 27 countries · 85 cities · 11 ships <span class="year-tracker-note">(counted from this page, through Oct 26, 2026)</span></p>
+      <p class="year-tracker" id="year-tracker"><strong>2026:</strong> 198 travel days of 299 days so far this year · <strong>66.2%</strong> of the year traveling · 27 countries · 85 cities · 11 ships <span class="year-tracker-note">(counted from this page, through Oct 26, 2026)</span></p>
       <div class="note-pop-panel place-panel" id="place-countries" hidden>
         <p class="place-panel-hint">Every country and territory on this page, most visited first. Tap one to find its days in the journal and the trip archives.</p>
         <ul class="place-list">
@@ -5331,8 +5331,9 @@
         });
       })();
       // ----- Year tracker: for the current year (the year of the newest
-      // dated day on the page), distinct travel days versus the days in
-      // the year, plus the unique countries, cities and ships counted
+      // dated day on the page), distinct travel days versus the days
+      // elapsed so far this year (the day-of-year number of the newest
+      // dated day), plus the unique countries, cities and ships counted
       // from the index. A day counts when a journal entry or a dated
       // framework day carries its date.
       (function () {
@@ -5355,8 +5356,8 @@
         var year = latest.slice(0, 4);
         var count = 0, k;
         for (k in seen) { if (k.slice(0, 4) === year) { count++; } }
-        var y = parseInt(year, 10);
-        var daysInYear = ((y % 4 === 0 && y % 100 !== 0) || y % 400 === 0) ? 366 : 365;
+        var lp = latest.split("-");
+        var daysInYear = Math.round((Date.UTC(parseInt(lp[0], 10), parseInt(lp[1], 10) - 1, parseInt(lp[2], 10)) - Date.UTC(parseInt(lp[0], 10), 0, 0)) / 86400000);
         var pct = (100 * count / daysInYear).toFixed(1);
         var uniq = { country: 0, city: 0, ship: 0 };
         for (k in INDEX) {
@@ -5367,7 +5368,7 @@
         }
         function plural(n, one, many) { return n + (n === 1 ? one : many); }
         el.innerHTML = "<strong>" + year + ":</strong> " + count + " travel days of " + daysInYear +
-          " days in the year · <strong>" + pct + "%</strong> of the year traveling · " +
+          " days so far this year · <strong>" + pct + "%</strong> of the year traveling · " +
           plural(uniq.country, " country", " countries") + " · " +
           plural(uniq.city, " city", " cities") + " · " +
           plural(uniq.ship, " ship", " ships") + " " +
