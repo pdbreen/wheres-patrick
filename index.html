@@ -591,6 +591,9 @@
     .place-counts-label { font-weight: 600; }
     .place-count-btn strong { color: var(--ink); font-weight: 600; }
     .place-counts-note { font-size: .8rem; }
+    .year-tracker { margin: 10px 2px 0; color: var(--muted); font-size: .86rem; }
+    .year-tracker strong { color: var(--ink); font-weight: 600; }
+    .year-tracker-note { font-size: .8rem; }
     .place-panel { margin-top: 12px; }
     .place-panel-hint { margin: 0 0 10px; color: var(--muted); font-size: .84rem; max-width: 720px; }
     .place-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 6px; }
@@ -599,6 +602,7 @@
     .place-item:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
     .place-n { color: var(--muted); font-size: .78rem; white-space: nowrap; }
     .place-loc { display: block; color: var(--muted); font-size: .78rem; margin-top: 1px; }
+    .place-last { display: block; color: var(--muted); font-size: .74rem; margin-top: 1px; opacity: .78; }
     .place-results { margin-top: 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 16px 18px 12px; }
     .place-results-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 14px; }
     .place-results-head h3 { margin: 0; font: 650 1.25rem/1.2 "Newsreader", serif; }
@@ -709,6 +713,7 @@
         <button class="note-pop-btn place-count-btn" type="button" aria-expanded="false" aria-controls="place-ships"><strong>20 ships</strong><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
         <span class="place-counts-note">Counts cover page content through Oct 26, 2026.</span>
       </div>
+      <p class="year-tracker" id="year-tracker"><strong>2026:</strong> 198 travel days of 365 days in the year · <strong>54.2%</strong> of the year traveling · 27 countries · 85 cities · 11 ships <span class="year-tracker-note">(counted from this page, through Oct 26, 2026)</span></p>
       <div class="note-pop-panel place-panel" id="place-countries" hidden>
         <p class="place-panel-hint">Every country and territory on this page, most visited first. Tap one to find its days in the journal and the trip archives.</p>
         <ul class="place-list">
@@ -5301,6 +5306,73 @@
         "allure-caribbean-oct-2022": "Allure of the Seas, Oct 2022"
       };
       var ARCHIVES = ["spain-transatlantic-jul-aug-2026", "bayonne-miami-sep-2026", "alaska-may-jun-2026", "san-juan-rome-apr-may-2026", "miami-jan-feb-2026", "december-caribbean-nov-dec-2025", "fall-transatlantic-oct-nov-2025", "eastern-canada-sep-oct-2025", "star-cococay-aug-2025", "jewel-cococay-jul-2025", "odyssey-mediterranean-may-2025", "vision-baltimore-mar-2025", "adventure-caribbean-dec-2024", "oasis-transatlantic-oct-2024", "brilliance-alaska-may-2024", "symphony-caribbean-mar-2024", "adventure-caribbean-dec-2023", "oasis-caribbean-sep-2023", "harmony-caribbean-mar-2023", "allure-caribbean-oct-2022"];
+      // ----- Most-recent dates: a subtle line under each counter entry,
+      // read from the newest dated day in the index above — "Last visited"
+      // for countries and cities, "Last cruised" for ships. Entries whose
+      // only days are undated framework stops (Haines, Falmouth) get none.
+      (function () {
+        var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        function fmt(iso) {
+          var p = iso.split("-");
+          return MONTHS[parseInt(p[1], 10) - 1] + " " + parseInt(p[2], 10) + ", " + p[0];
+        }
+        Array.prototype.forEach.call(document.querySelectorAll(".place-item"), function (btn) {
+          var kind = btn.getAttribute("data-kind");
+          var rec = INDEX[kind + ":" + btn.getAttribute("data-key")];
+          if (!rec) { return; }
+          var latest = null;
+          rec.days.forEach(function (ref) { if (ref.d && (!latest || ref.d > latest)) { latest = ref.d; } });
+          if (!latest) { return; }
+          var host = btn.querySelector(".place-name") || btn;
+          var s = document.createElement("span");
+          s.className = "place-last";
+          s.textContent = (kind === "ship" ? "Last cruised " : "Last visited ") + fmt(latest);
+          host.appendChild(s);
+        });
+      })();
+      // ----- Year tracker: for the current year (the year of the newest
+      // dated day on the page), distinct travel days versus the days in
+      // the year, plus the unique countries, cities and ships counted
+      // from the index. A day counts when a journal entry or a dated
+      // framework day carries its date.
+      (function () {
+        var el = document.getElementById("year-tracker");
+        if (!el) { return; }
+        var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        function fmt(iso) {
+          var p = iso.split("-");
+          return MONTHS[parseInt(p[1], 10) - 1] + " " + parseInt(p[2], 10) + ", " + p[0];
+        }
+        var seen = {}, latest = null;
+        function add(iso) {
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) { return; }
+          seen[iso] = true;
+          if (!latest || iso > latest) { latest = iso; }
+        }
+        Array.prototype.forEach.call(document.querySelectorAll("[id^=\"entry-\"]"), function (n) { add(n.id.slice(6)); });
+        Array.prototype.forEach.call(document.querySelectorAll(".framework-day time[datetime]"), function (n) { add(n.getAttribute("datetime")); });
+        if (!latest) { return; }
+        var year = latest.slice(0, 4);
+        var count = 0, k;
+        for (k in seen) { if (k.slice(0, 4) === year) { count++; } }
+        var y = parseInt(year, 10);
+        var daysInYear = ((y % 4 === 0 && y % 100 !== 0) || y % 400 === 0) ? 366 : 365;
+        var pct = (100 * count / daysInYear).toFixed(1);
+        var uniq = { country: 0, city: 0, ship: 0 };
+        for (k in INDEX) {
+          var kind = k.split(":")[0];
+          if (!(kind in uniq)) { continue; }
+          var inYear = INDEX[k].days.some(function (ref) { return ref.d && ref.d.slice(0, 4) === year; });
+          if (inYear) { uniq[kind]++; }
+        }
+        function plural(n, one, many) { return n + (n === 1 ? one : many); }
+        el.innerHTML = "<strong>" + year + ":</strong> " + count + " travel days of " + daysInYear +
+          " days in the year · <strong>" + pct + "%</strong> of the year traveling · " +
+          plural(uniq.country, " country", " countries") + " · " +
+          plural(uniq.city, " city", " cities") + " · " +
+          plural(uniq.ship, " ship", " ships") + " " +
+          "<span class=\"year-tracker-note\">(counted from this page, through " + fmt(latest) + ")</span>";
+      })();
       var panel = document.getElementById("place-results");
       var titleEl = document.getElementById("place-results-title");
       var subEl = document.getElementById("place-results-sub");
