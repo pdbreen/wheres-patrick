@@ -609,15 +609,6 @@
     .fav-tag { display: inline-block; vertical-align: middle; margin-left: 8px; padding: 3px 9px; border-radius: 999px; background: color-mix(in srgb, var(--gold) 24%, transparent); color: var(--ink); font: 600 .68rem "IBM Plex Sans", sans-serif; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
     .place-fav { display: block; margin-top: 2px; color: var(--ink); font-size: .74rem; font-weight: 600; }
     .place-item.is-favorite { border-color: color-mix(in srgb, var(--gold) 55%, var(--line)); background: color-mix(in srgb, var(--gold) 9%, var(--surface)); }
-    .favorites { margin-top: 30px; }
-    .favorites-head { margin-bottom: 18px; }
-    .favorites-head h2 { font-size: clamp(1.9rem, 3.4vw, 3rem); }
-    .fav-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-    .fav-card { flex-direction: column; align-items: flex-start; gap: 7px; padding: 18px 20px; border-radius: 16px; }
-    .fav-card .place-name { font: 650 1.3rem/1.15 "Newsreader", serif; }
-    .fav-card .place-loc { font-family: "IBM Plex Sans", sans-serif; }
-    .fav-detail { color: var(--muted); font-size: .88rem; line-height: 1.5; text-align: left; }
-    @media (max-width: 860px) { .fav-grid { grid-template-columns: 1fr; } }
     .place-results { margin-top: 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 16px 18px 12px; }
     .place-results-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 14px; }
     .place-results-head h3 { margin: 0; font: 650 1.25rem/1.2 "Newsreader", serif; }
@@ -771,8 +762,11 @@
         </ul>
       </div>
       <div class="note-pop-panel place-panel" id="place-cities" hidden>
-        <p class="place-panel-hint">Every city, port and excursion stop on this page, most visited first. Tap one to find its days in the journal and the trip archives.</p>
+        <p class="place-panel-hint">Every city, port and excursion stop on this page — favorite ports first, most recently visited at the very top, then the rest most visited first. Tap one to find its days in the journal and the trip archives.</p>
         <ul class="place-list">
+            <li><button type="button" class="place-item is-favorite" data-kind="city" data-key="kotor"><span class="place-name"><svg class="fav-star" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Kotor<span class="place-loc">Montenegro</span><span class="place-fav">Favorite port</span></span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item is-favorite" data-kind="city" data-key="roseau"><span class="place-name"><svg class="fav-star" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Roseau<span class="place-loc">Dominica</span><span class="place-fav">Favorite port</span></span><span class="place-n">1 visit</span></button></li>
+            <li><button type="button" class="place-item is-favorite" data-kind="city" data-key="trieste"><span class="place-name"><svg class="fav-star" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Trieste<span class="place-loc">Friuli-Venezia Giulia, Italy</span><span class="place-fav">Favorite port</span></span><span class="place-n">1 visit</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="miami"><span class="place-name">Miami<span class="place-loc">Florida, United States</span></span><span class="place-n">16 visits</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="ft-lauderdale"><span class="place-name">Ft Lauderdale<span class="place-loc">Florida, United States</span></span><span class="place-n">13 visits</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="cococay"><span class="place-name">CocoCay<span class="place-loc">Berry Islands, Bahamas</span></span><span class="place-n">12 visits</span></button></li>
@@ -848,7 +842,6 @@
             <li><button type="button" class="place-item" data-kind="city" data-key="hamilton"><span class="place-name">Hamilton<span class="place-loc">Bermuda</span></span><span class="place-n">1 visit</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="harwich"><span class="place-name">Harwich<span class="place-loc">Massachusetts, United States</span></span><span class="place-n">1 visit</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="key-west"><span class="place-name">Key West<span class="place-loc">Florida, United States</span></span><span class="place-n">1 visit</span></button></li>
-            <li><button type="button" class="place-item is-favorite" data-kind="city" data-key="kotor"><span class="place-name"><svg class="fav-star" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Kotor<span class="place-loc">Montenegro</span><span class="place-fav">Favorite port</span></span><span class="place-n">1 visit</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="kralendijk-bonaire"><span class="place-name">Kralendijk (Bonaire)<span class="place-loc">Bonaire</span></span><span class="place-n">1 visit</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="kusadasi"><span class="place-name">Kusadasi<span class="place-loc">Aydın, Turkey</span></span><span class="place-n">1 visit</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="la-coruna"><span class="place-name">La Coruña<span class="place-loc">Galicia, Spain</span></span><span class="place-n">1 visit</span></button></li>
@@ -869,7 +862,6 @@
             <li><button type="button" class="place-item" data-kind="city" data-key="positano"><span class="place-name">Positano<span class="place-loc">Campania, Italy</span></span><span class="place-n">1 visit</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="riomaggiore"><span class="place-name">Riomaggiore<span class="place-loc">Liguria, Italy</span></span><span class="place-n">1 visit</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="rome"><span class="place-name">Rome<span class="place-loc">Lazio, Italy</span></span><span class="place-n">1 visit</span></button></li>
-            <li><button type="button" class="place-item is-favorite" data-kind="city" data-key="roseau"><span class="place-name"><svg class="fav-star" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Roseau<span class="place-loc">Dominica</span><span class="place-fav">Favorite port</span></span><span class="place-n">1 visit</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="rotterdam"><span class="place-name">Rotterdam<span class="place-loc">South Holland, Netherlands</span></span><span class="place-n">1 visit</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="salerno"><span class="place-name">Salerno<span class="place-loc">Campania, Italy</span></span><span class="place-n">1 visit</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="santiago-de-compostela"><span class="place-name">Santiago de Compostela<span class="place-loc">Galicia, Spain</span></span><span class="place-n">1 visit</span></button></li>
@@ -879,7 +871,6 @@
             <li><button type="button" class="place-item" data-kind="city" data-key="sorrento"><span class="place-name">Sorrento<span class="place-loc">Campania, Italy</span></span><span class="place-n">1 visit</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="toledo"><span class="place-name">Toledo<span class="place-loc">Castilla-La Mancha, Spain</span></span><span class="place-n">1 visit</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="toulon"><span class="place-name">Toulon<span class="place-loc">Provence, France</span></span><span class="place-n">1 visit</span></button></li>
-            <li><button type="button" class="place-item is-favorite" data-kind="city" data-key="trieste"><span class="place-name"><svg class="fav-star" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Trieste<span class="place-loc">Friuli-Venezia Giulia, Italy</span><span class="place-fav">Favorite port</span></span><span class="place-n">1 visit</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="trogir"><span class="place-name">Trogir<span class="place-loc">Split-Dalmatia, Croatia</span></span><span class="place-n">1 visit</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="valldemossa"><span class="place-name">Valldemossa<span class="place-loc">Balearic Islands, Spain</span></span><span class="place-n">1 visit</span></button></li>
             <li><button type="button" class="place-item" data-kind="city" data-key="venice"><span class="place-name">Venice<span class="place-loc">Veneto, Italy</span></span><span class="place-n">1 visit</span></button></li>
@@ -922,18 +913,6 @@
         <ul class="place-results-list" id="place-results-list"></ul>
       </div>
     </aside>
-
-    <section class="favorites" aria-labelledby="favorites-heading">
-      <div class="section-head favorites-head">
-        <h2 id="favorites-heading">Favorite ports</h2>
-        <p>Three ports Patrick has flagged as favorites — starred here, in the city list above, and on their days in the trip history. Tap one to find its day.</p>
-      </div>
-      <div class="fav-grid">
-        <button type="button" class="place-item fav-card" data-kind="city" data-key="trieste"><span class="place-name"><svg class="fav-star" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Trieste<span class="place-loc">Friuli-Venezia Giulia, Italy</span></span><span class="fav-detail">Tue · May 19, 2026 — in port 7:00 AM–5:00 PM on the San Juan to Rome sailing.</span><span class="place-n">1 visit</span></button>
-        <button type="button" class="place-item fav-card" data-kind="city" data-key="kotor"><span class="place-name"><svg class="fav-star" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Kotor<span class="place-loc">Montenegro</span></span><span class="fav-detail">Sun · Oct 11, 2026 — a scenic sail through the bay to the anchorage, Perast and Our Lady of the Rocks, then the old-city walking tour.</span><span class="place-n">1 visit</span></button>
-        <button type="button" class="place-item fav-card" data-kind="city" data-key="roseau"><span class="place-name"><svg class="fav-star" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Roseau<span class="place-loc">Dominica</span></span><span class="fav-detail">Thu · Aug 27, 2026 — the port for Dominica: the “Bubbles and Waterfalls” day, with Champagne Reef snorkeling, a gorge swim to a waterfall, and volcanic sulfur baths.</span><span class="place-n">1 visit</span></button>
-      </div>
-    </section>
 
     <div class="loyalty" aria-label="Crown and Anchor loyalty progress">
       <div class="loyalty-head"><strong>Crown &amp; Anchor — Diamond Plus</strong><span>587 / 700 points to Pinnacle</span></div>
