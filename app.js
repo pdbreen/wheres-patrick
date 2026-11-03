@@ -508,32 +508,49 @@ try {
     })();
 
     (function () {
-      var galleries = document.querySelectorAll("[data-gallery]");
-      Array.prototype.forEach.call(galleries, function (g) {
+      // Every gallery initialises in isolation, inside its own try/catch.
+      // This isolation is load-bearing: in the published bundle all of
+      // app.js runs inside a single try/catch, so one throw anywhere in
+      // this block used to abort every feature scripted after it — and
+      // the Spain & Transatlantic archive (the first trip page with
+      // galleries, eleven of them) rendered blank apart from the nav,
+      // while gallery-free pages like Alaska were unaffected. A gallery
+      // that fails now just stays a plain figure of photos; the other
+      // galleries and the rest of the page carry on regardless.
+      function initGallery(g) {
         var track = g.querySelector(".gallery-track");
-        // A gallery missing any of its parts must not throw: in the
-        // published bundle one throw aborts every script after this
-        // block for the whole page.
-        if (!track || !track.children.length) { return; }
+        // A gallery missing its track must not throw (see above).
+        if (!track) { return; }
         // Clicking a photo (not the prev/next buttons, dots or counter,
         // which sit outside the track) opens it full size in a new tab:
         // wrap each gallery image in a real link to its own file. This
         // runs for every [data-gallery] at load, so future galleries
         // built with the same markup get the behaviour automatically.
         // Video slides are left alone — they keep their own controls.
+        // The link is inserted in the image's OWN parent, never blindly
+        // in the track: insertBefore against the wrong parent throws,
+        // and an image without a src has nothing to link to.
         Array.prototype.forEach.call(track.querySelectorAll("img"), function (img) {
-          if (img.parentNode && img.parentNode.tagName === "A") { return; }
+          var parent = img.parentNode;
+          if (!parent || parent.tagName === "A") { return; }
+          var src = img.getAttribute("src");
+          if (!src) { return; }
           var link = document.createElement("a");
           link.className = "gallery-open";
-          link.href = img.getAttribute("src");
+          link.href = src;
           link.target = "_blank";
           link.rel = "noopener noreferrer";
           link.title = "Open full size in a new tab";
           link.setAttribute("aria-label", "Open full-size photo in a new tab" + (img.getAttribute("alt") ? ": " + img.getAttribute("alt") : ""));
-          track.insertBefore(link, img);
+          parent.insertBefore(link, img);
           link.appendChild(img);
         });
-        var total = track.children.length;
+        // Snapshot the slides only after wrapping: track.children is a
+        // live list and the wrapping above mutates it, so navigation
+        // below works from this fixed array, never the live list.
+        var slides = Array.prototype.slice.call(track.children);
+        var total = slides.length;
+        if (!total) { return; }
         var count = g.querySelector(".gallery-count");
         var dots = g.querySelectorAll(".gallery-dot");
         var i = 0;
@@ -546,10 +563,10 @@ try {
           // slides are display:none, so every visible photo link is
           // fully operable, and a hidden video slide is paused.
           track.style.transform = "";
-          Array.prototype.forEach.call(track.children, function (child, ci) {
+          slides.forEach(function (child, ci) {
             child.style.display = ci === i ? "" : "none";
             if (ci !== i) {
-              var v = child.tagName === "VIDEO" ? child : child.querySelector("video");
+              var v = child.tagName === "VIDEO" ? child : (child.querySelector ? child.querySelector("video") : null);
               if (v && v.pause) { v.pause(); }
             }
           });
@@ -570,10 +587,10 @@ try {
         var x0 = null;
         var swiped = false;
         g.addEventListener("touchstart", function (e) {
-          x0 = e.changedTouches[0].clientX;
+          if (e.changedTouches && e.changedTouches[0]) { x0 = e.changedTouches[0].clientX; }
         }, { passive: true });
         g.addEventListener("touchend", function (e) {
-          if (x0 === null) { return; }
+          if (x0 === null || !e.changedTouches || !e.changedTouches[0]) { return; }
           var dx = e.changedTouches[0].clientX - x0;
           x0 = null;
           if (Math.abs(dx) > 40) {
@@ -591,6 +608,13 @@ try {
             swiped = false;
           }
         }, true);
+      }
+      Array.prototype.forEach.call(document.querySelectorAll("[data-gallery]"), function (g) {
+        try {
+          initGallery(g);
+        } catch (err) {
+          if (window.console && window.console.warn) { window.console.warn("gallery skipped:", err); }
+        }
       });
     })();
 
