@@ -751,3 +751,31 @@ h3 .fav-star { width: 19px; height: 19px; vertical-align: -3px; margin-right: 7p
   letter-spacing: .05em;
   text-transform: uppercase;
 }
+
+/* ---------- Trip maps: current trip (home) + past-trip detail pages ---------- */
+.home-map { margin-top: 26px; }
+.map-head { margin-bottom: 16px; }
+.map-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; margin: 0 2px 12px; color: var(--muted); font-size: .88rem; }
+.legend-item { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); font-weight: 600; white-space: nowrap; }
+.legend-note { max-width: 560px; }
+.legend-pin { display: inline-grid; place-items: center; flex: 0 0 auto; width: 19px; height: 19px; border-radius: 50%; font-size: 11px; font-weight: 700; line-height: 1; }
+.legend-been { background: #1d585a; color: #fff; border: 2px solid #fff; box-shadow: 0 1px 5px rgba(7, 27, 29, .4); }
+.legend-today { background: var(--orange); border: 2px solid #fff; box-shadow: 0 0 0 4px color-mix(in srgb, var(--orange) 26%, transparent); }
+.legend-going { background: radial-gradient(circle, var(--orange) 0 4px, var(--surface) 4.5px); border: 3px solid var(--orange); }
+.wp-pin-wrap { background: none; border: none; }
+.wp-pin { position: relative; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; font: 700 13px/1 "IBM Plex Sans", sans-serif; }
+.wp-pin-been { background: #1d585a; color: #fff; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(7, 27, 29, .45); }
+.wp-pin-going { background: #fff; border: 3px solid var(--orange); box-shadow: 0 2px 8px rgba(7, 27, 29, .35); }
+.wp-pin-going::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--orange); }
+.wp-pin-today { background: var(--orange); border: 2px solid #fff; box-shadow: 0 2px 8px rgba(7, 27, 29, .45); }
+.wp-pin-today::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #fff; }
+.wp-pin-today::before { content: ""; position: absolute; inset: -9px; border-radius: 50%; border: 2px solid var(--orange); opacity: .55; animation: wp-ping 2.2s ease-out infinite; }
+@keyframes wp-ping { 0% { transform: scale(.55); opacity: .7; } 70% { transform: scale(1); opacity: 0; } 100% { transform: scale(1); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .wp-pin-today::before { animation: none; opacity: 0; } }
+.leaflet-popup-content { font-family: "IBM Plex Sans", sans-serif; font-size: .9rem; line-height: 1.5; }
+.leaflet-popup-content strong { font-weight: 600; }
+.trip-overview { margin: 2px 0 34px; }
+.trip-overview .map-caption { margin-top: 0; }
+.past-map { height: 340px; }
+.trip-stats { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+@media (max-width: 580px) { .past-map { height: 300px; } }

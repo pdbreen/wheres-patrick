@@ -173,19 +173,69 @@ try {
       show(HERO_FALLBACK, title, "Today", "A cruise ship at sea", null);
     })();
 
-    // ===== Current-trip map data =====
-    // TRIP_PORTS lists the ports of the sailing currently underway, in sailing
-    // order, each with its port date and coordinates. The daily page refresh
-    // updates this array (and the hero element's data-tz) when the trip changes.
-    const TRIP_PORTS = [
-      { port: "Civitavecchia (Rome), Italy", date: "Sun · Oct 25", lat: 42.0969, lng: 11.7898 },
-      { port: "La Spezia, Italy", date: "Mon · Oct 26", lat: 44.1025, lng: 9.8241 },
-      { port: "Barcelona, Spain", date: "Wed · Oct 28", lat: 41.3874, lng: 2.1686 },
-      { port: "Cartagena, Spain", date: "Thu · Oct 29", lat: 37.6257, lng: -0.9966 },
-      { port: "Lisbon, Portugal", date: "Sat · Oct 31", lat: 38.7223, lng: -9.1393 },
-      { port: "Ponta Delgada, Azores, Portugal", date: "Mon · Nov 2", lat: 37.7394, lng: -25.6687 },
-      { port: "Cape Liberty (Bayonne), New Jersey", date: "Sun · Nov 8", lat: 40.6650, lng: -74.1130 }
+    // ===== Trip map data =====
+    // CURRENT_TRIP_STOPS is the trip currently underway, in visit order:
+    // every stop of the whole trip (not just the current sailing), each
+    // marked "been" (visited), "today" (where Patrick is now) or "going"
+    // (still to come). The daily page refresh updates this list as the
+    // trip progresses — move a stop from "going" to "been" as its day
+    // passes, and when the trip ends move its route into PAST_TRIP_ROUTES
+    // below (all stops there render as visited) and load the next trip.
+    const CURRENT_TRIP_STOPS = [
+      { name: "Boston, Massachusetts", detail: "Tue · Oct 6 — the trip begins: travel day out of Boston", lat: 42.3601, lng: -71.0589, status: "been" },
+      { name: "Madrid, Spain", detail: "Wed · Oct 7 — Madrid, then on to Bologna and Venice", lat: 40.4168, lng: -3.7038, status: "been" },
+      { name: "Venice, Italy", detail: "Oct 7–10 — with Murano and Burano", lat: 45.4408, lng: 12.3155, status: "been" },
+      { name: "Ravenna, Italy", detail: "Sat · Oct 10 & Sat · Oct 17", lat: 44.4184, lng: 12.2035, status: "been" },
+      { name: "Kotor, Montenegro", detail: "Sun · Oct 11 — a favorite port", lat: 42.4247, lng: 18.7712, status: "been" },
+      { name: "Santorini, Greece", detail: "Tue · Oct 13 & Wed · Oct 21", lat: 36.4618, lng: 25.3760, status: "been" },
+      { name: "Athens (Piraeus), Greece", detail: "Wed · Oct 14", lat: 37.9429, lng: 23.6469, status: "been" },
+      { name: "Split, Croatia", detail: "Fri · Oct 16", lat: 43.5081, lng: 16.4402, status: "been" },
+      { name: "Civitavecchia (Rome), Italy", detail: "Oct 18 & 25 — aboard Odyssey of the Seas from here", lat: 42.0956, lng: 11.7879, status: "been" },
+      { name: "Messina, Sicily, Italy", detail: "Mon · Oct 19 — with Mt Etna and Taormina", lat: 38.1937, lng: 15.5542, status: "been" },
+      { name: "Mykonos, Greece", detail: "Thu · Oct 22", lat: 37.4467, lng: 25.3289, status: "been" },
+      { name: "Naples, Italy", detail: "Sat · Oct 24", lat: 40.8518, lng: 14.2681, status: "been" },
+      { name: "La Spezia, Italy", detail: "Mon · Oct 26 — Cinque Terre by train", lat: 44.1025, lng: 9.8241, status: "been" },
+      { name: "Barcelona, Spain", detail: "Wed · Oct 28", lat: 41.3874, lng: 2.1686, status: "been" },
+      { name: "Cartagena, Spain", detail: "Thu · Oct 29", lat: 37.6257, lng: -0.9966, status: "been" },
+      { name: "Lisbon, Portugal", detail: "Sat · Oct 31", lat: 38.7223, lng: -9.1393, status: "been" },
+      { name: "Ponta Delgada, Azores, Portugal", detail: "Mon · Nov 2 — the most recent stop", lat: 37.7394, lng: -25.6687, status: "been" },
+      { name: "At sea, North Atlantic", detail: "Today · Tue Nov 3 — a sea day aboard Odyssey of the Seas, en route to Cape Liberty (approximate position)", lat: 38.8, lng: -42.0, status: "today" },
+      { name: "Cape Liberty (Bayonne), New Jersey", detail: "Sun · Nov 8 — the transatlantic ends and the Bahamas finale boards", lat: 40.6650, lng: -74.1130, status: "going" },
+      { name: "Port Canaveral, Florida", detail: "Still to come — on the Nov 8–15 Bahamas finale", lat: 28.4103, lng: -80.6188, status: "going" },
+      { name: "Perfect Day at CocoCay, Bahamas", detail: "Still to come — on the Nov 8–15 Bahamas finale", lat: 25.8172, lng: -77.9375, status: "going" },
+      { name: "Nassau, Bahamas", detail: "Still to come — on the Nov 8–15 Bahamas finale", lat: 25.0480, lng: -77.3554, status: "going" },
+      { name: "Boston, Massachusetts", detail: "Sun · Nov 15 — back in New England, home after forty days away", lat: 42.3601, lng: -71.0589, status: "going" }
     ];
+
+    // PAST_TRIP_ROUTES: the stops of every finished trip's detail page, in
+    // the order Patrick reached them (one entry per place, however many
+    // times the trip called there). Keyed by the archive view's id; each
+    // view carries a matching [data-trip-map] element and its counters in
+    // the markup are counted from this same list.
+    const PAST_TRIP_ROUTES = {
+      "spain-transatlantic-jul-aug-2026": [{ name: "Madrid, Spain", lat: 40.4168, lng: -3.7038 }, { name: "Barcelona, Spain", lat: 41.3874, lng: 2.1686 }, { name: "Palma de Mallorca, Spain", lat: 39.5696, lng: 2.6502 }, { name: "Cartagena, Spain", lat: 37.6257, lng: -0.9966 }, { name: "M\u00e1laga, Spain", lat: 36.7213, lng: -4.4214 }, { name: "C\u00e1diz, Spain", lat: 36.5271, lng: -6.2886 }, { name: "Orlando, Florida", lat: 28.5383, lng: -81.3792 }, { name: "Port Canaveral, Florida", lat: 28.4103, lng: -80.6188 }, { name: "Nassau, Bahamas", lat: 25.048, lng: -77.3554 }, { name: "Perfect Day at CocoCay, Bahamas", lat: 25.8172, lng: -77.9375 }, { name: "San Juan, Puerto Rico", lat: 18.4655, lng: -66.1057 }, { name: "Tortola, British Virgin Islands", lat: 18.4236, lng: -64.6185 }, { name: "Philipsburg, St. Maarten", lat: 18.0237, lng: -63.0458 }, { name: "St. John\u2019s, Antigua", lat: 17.1274, lng: -61.8468 }, { name: "Basseterre, St. Kitts", lat: 17.3026, lng: -62.7177 }, { name: "St. Croix, US Virgin Islands", lat: 17.7125, lng: -64.8814 }, { name: "Charlotte Amalie, St. Thomas", lat: 18.3419, lng: -64.9307 }, { name: "Roseau, Dominica", lat: 15.3017, lng: -61.388 }],
+      "cape-cod-jul-2026": [{ name: "Harwich, Massachusetts", lat: 41.6865, lng: -70.0753 }],
+      "bayonne-miami-sep-2026": [{ name: "Newark, New Jersey", lat: 40.7357, lng: -74.1724 }, { name: "Cape Liberty (Bayonne), New Jersey", lat: 40.665, lng: -74.113 }, { name: "Boston, Massachusetts", lat: 42.3601, lng: -71.0589 }, { name: "Portland, Maine", lat: 43.6591, lng: -70.2568 }, { name: "Saint John, New Brunswick, Canada", lat: 45.2733, lng: -66.0633 }, { name: "Sydney, Nova Scotia, Canada", lat: 46.1368, lng: -60.1942 }, { name: "Royal Naval Dockyard, Bermuda", lat: 32.3265, lng: -64.8354 }, { name: "Miami, Florida", lat: 25.7617, lng: -80.1918 }, { name: "Grand Turk, Turks & Caicos", lat: 21.4675, lng: -71.1369 }, { name: "Bimini, Bahamas", lat: 25.7275, lng: -79.2976 }, { name: "Key West, Florida", lat: 24.5551, lng: -81.78 }],
+      "alaska-may-jun-2026": [{ name: "Seattle, Washington", lat: 47.6062, lng: -122.3321 }, { name: "Vancouver, British Columbia, Canada", lat: 49.2827, lng: -123.1207 }, { name: "Ketchikan, Alaska", lat: 55.3422, lng: -131.6461 }, { name: "Icy Strait Point, Alaska", lat: 58.1228, lng: -135.4447 }, { name: "Sitka, Alaska", lat: 57.0531, lng: -135.33 }, { name: "Juneau, Alaska", lat: 58.3019, lng: -134.4197 }, { name: "Skagway, Alaska", lat: 59.4583, lng: -135.3139 }, { name: "Hubbard Glacier, Alaska", lat: 60.0147, lng: -139.4947 }, { name: "Seward, Alaska", lat: 60.1042, lng: -149.442 }, { name: "Boston, Massachusetts", lat: 42.3601, lng: -71.0589 }],
+      "san-juan-rome-apr-may-2026": [{ name: "San Juan, Puerto Rico", lat: 18.4655, lng: -66.1057 }, { name: "Oranjestad, Aruba", lat: 12.519, lng: -70.037 }, { name: "Willemstad, Cura\u00e7ao", lat: 12.1224, lng: -68.9335 }, { name: "Kralendijk, Bonaire", lat: 12.1444, lng: -68.2655 }, { name: "Tortola, British Virgin Islands", lat: 18.4236, lng: -64.6185 }, { name: "Philipsburg, St. Maarten", lat: 18.0237, lng: -63.0458 }, { name: "Charlotte Amalie, St. Thomas", lat: 18.3419, lng: -64.9307 }, { name: "Basseterre, St. Kitts", lat: 17.3026, lng: -62.7177 }, { name: "Ft Lauderdale, Florida", lat: 26.0919, lng: -80.1143 }, { name: "Nassau, Bahamas", lat: 25.048, lng: -77.3554 }, { name: "Perfect Day at CocoCay, Bahamas", lat: 25.8172, lng: -77.9375 }, { name: "Royal Naval Dockyard, Bermuda", lat: 32.3265, lng: -64.8354 }, { name: "Ponta Delgada, Azores, Portugal", lat: 37.7394, lng: -25.6687 }, { name: "M\u00e1laga, Spain", lat: 36.7213, lng: -4.4214 }, { name: "Alicante, Spain", lat: 38.3452, lng: -0.4815 }, { name: "Valencia, Spain", lat: 39.4699, lng: -0.3763 }, { name: "Barcelona, Spain", lat: 41.3874, lng: 2.1686 }, { name: "Toulon, France", lat: 43.1242, lng: 5.928 }, { name: "Ajaccio, Corsica, France", lat: 41.9192, lng: 8.7386 }, { name: "Civitavecchia (Rome), Italy", lat: 42.0956, lng: 11.7879 }, { name: "Naples, Italy", lat: 40.8518, lng: 14.2681 }, { name: "Messina, Sicily, Italy", lat: 38.1937, lng: 15.5542 }, { name: "Ravenna, Italy", lat: 44.4184, lng: 12.2035 }, { name: "Trieste, Italy", lat: 45.6495, lng: 13.7768 }, { name: "Split, Croatia", lat: 43.5081, lng: 16.4402 }, { name: "Dubrovnik, Croatia", lat: 42.6507, lng: 18.0944 }, { name: "Sarand\u00eb, Albania", lat: 39.8756, lng: 20.0053 }, { name: "Salerno, Italy", lat: 40.6824, lng: 14.7681 }],
+      "miami-jan-feb-2026": [{ name: "Miami, Florida", lat: 25.7617, lng: -80.1918 }, { name: "George Town, Grand Cayman", lat: 19.2866, lng: -81.3749 }, { name: "Bimini, Bahamas", lat: 25.7275, lng: -79.2976 }, { name: "Cozumel, Mexico", lat: 20.5103, lng: -86.9493 }, { name: "Ocho Rios, Jamaica", lat: 18.4074, lng: -77.1025 }, { name: "Puerto Plata, Dominican Republic", lat: 19.7935, lng: -70.6871 }, { name: "Charlotte Amalie, St. Thomas", lat: 18.3419, lng: -64.9307 }, { name: "Basseterre, St. Kitts", lat: 17.3026, lng: -62.7177 }],
+      "december-caribbean-nov-dec-2025": [{ name: "Miami, Florida", lat: 25.7617, lng: -80.1918 }, { name: "Nassau, Bahamas", lat: 25.048, lng: -77.3554 }, { name: "Perfect Day at CocoCay, Bahamas", lat: 25.8172, lng: -77.9375 }, { name: "Puerto Plata, Dominican Republic", lat: 19.7935, lng: -70.6871 }, { name: "George Town, Grand Cayman", lat: 19.2866, lng: -81.3749 }, { name: "Cozumel, Mexico", lat: 20.5103, lng: -86.9493 }, { name: "Ft Lauderdale, Florida", lat: 26.0919, lng: -80.1143 }, { name: "Puerto Costa Maya, Mexico", lat: 18.7328, lng: -87.6915 }],
+      "fall-transatlantic-oct-nov-2025": [{ name: "Southampton, England", lat: 50.9049, lng: -1.4043 }, { name: "Hamburg, Germany", lat: 53.5511, lng: 9.9937 }, { name: "Rotterdam, Netherlands", lat: 51.9244, lng: 4.4777 }, { name: "La Coru\u00f1a, Spain", lat: 43.3623, lng: -8.3964 }, { name: "Vigo, Spain", lat: 42.2406, lng: -8.7207 }, { name: "Lisbon, Portugal", lat: 38.7223, lng: -9.1393 }, { name: "Ponta Delgada, Azores, Portugal", lat: 37.7394, lng: -25.6687 }, { name: "Miami, Florida", lat: 25.7617, lng: -80.1918 }, { name: "Nassau, Bahamas", lat: 25.048, lng: -77.3554 }, { name: "Puerto Costa Maya, Mexico", lat: 18.7328, lng: -87.6915 }, { name: "Roat\u00e1n, Honduras", lat: 16.3239, lng: -86.5363 }, { name: "Cozumel, Mexico", lat: 20.5103, lng: -86.9493 }, { name: "Perfect Day at CocoCay, Bahamas", lat: 25.8172, lng: -77.9375 }, { name: "Ft Lauderdale, Florida", lat: 26.0919, lng: -80.1143 }, { name: "Charlotte Amalie, St. Thomas", lat: 18.3419, lng: -64.9307 }, { name: "Philipsburg, St. Maarten", lat: 18.0237, lng: -63.0458 }, { name: "San Juan, Puerto Rico", lat: 18.4655, lng: -66.1057 }, { name: "Bimini, Bahamas", lat: 25.7275, lng: -79.2976 }],
+      "eastern-canada-sep-oct-2025": [{ name: "Boston, Massachusetts", lat: 42.3601, lng: -71.0589 }, { name: "Portland, Maine", lat: 43.6591, lng: -70.2568 }, { name: "Saint John, New Brunswick, Canada", lat: 45.2733, lng: -66.0633 }, { name: "Charlottetown, Prince Edward Island, Canada", lat: 46.2382, lng: -63.1311 }, { name: "Sydney, Nova Scotia, Canada", lat: 46.1368, lng: -60.1942 }, { name: "Halifax, Nova Scotia, Canada", lat: 44.6488, lng: -63.5752 }],
+      "star-cococay-aug-2025": [{ name: "Orlando, Florida", lat: 28.5383, lng: -81.3792 }, { name: "Port Canaveral, Florida", lat: 28.4103, lng: -80.6188 }, { name: "Perfect Day at CocoCay, Bahamas", lat: 25.8172, lng: -77.9375 }],
+      "jewel-cococay-jul-2025": [{ name: "Ft Lauderdale, Florida", lat: 26.0919, lng: -80.1143 }, { name: "Perfect Day at CocoCay, Bahamas", lat: 25.8172, lng: -77.9375 }],
+      "cape-cod-jun-jul-2025": [{ name: "Eastham, Massachusetts", lat: 41.8301, lng: -69.9743 }],
+      "odyssey-mediterranean-may-2025": [{ name: "Civitavecchia (Rome), Italy", lat: 42.0956, lng: 11.7879 }, { name: "Santorini, Greece", lat: 36.4618, lng: 25.376 }, { name: "Kusadasi (Ephesus), Turkey", lat: 37.8579, lng: 27.261 }, { name: "Mykonos, Greece", lat: 37.4467, lng: 25.3289 }, { name: "Naples, Italy", lat: 40.8518, lng: 14.2681 }],
+      "vision-baltimore-mar-2025": [{ name: "Baltimore, Maryland", lat: 39.2904, lng: -76.6122 }, { name: "Charleston, South Carolina", lat: 32.7765, lng: -79.9311 }, { name: "Port Canaveral, Florida", lat: 28.4103, lng: -80.6188 }, { name: "Grand Bahama, Bahamas", lat: 26.5412, lng: -78.696 }, { name: "Nassau, Bahamas", lat: 25.048, lng: -77.3554 }],
+      "adventure-caribbean-dec-2024": [{ name: "Port Canaveral, Florida", lat: 28.4103, lng: -80.6188 }, { name: "Labadee, Haiti", lat: 19.7853, lng: -72.2453 }, { name: "San Juan, Puerto Rico", lat: 18.4655, lng: -66.1057 }, { name: "St. Croix, US Virgin Islands", lat: 17.7125, lng: -64.8814 }, { name: "Philipsburg, St. Maarten", lat: 18.0237, lng: -63.0458 }, { name: "Fort Myers, Florida", lat: 26.6406, lng: -81.8723 }],
+      "oasis-transatlantic-oct-2024": [{ name: "Barcelona, Spain", lat: 41.3874, lng: 2.1686 }, { name: "Palma de Mallorca, Spain", lat: 39.5696, lng: 2.6502 }, { name: "Valencia, Spain", lat: 39.4699, lng: -0.3763 }, { name: "Cartagena, Spain", lat: 37.6257, lng: -0.9966 }, { name: "M\u00e1laga, Spain", lat: 36.7213, lng: -4.4214 }, { name: "Nassau, Bahamas", lat: 25.048, lng: -77.3554 }, { name: "Ft Lauderdale, Florida", lat: 26.0919, lng: -80.1143 }],
+      "brilliance-alaska-may-2024": [{ name: "Vancouver, British Columbia, Canada", lat: 49.2827, lng: -123.1207 }, { name: "Sitka, Alaska", lat: 57.0531, lng: -135.33 }, { name: "Juneau, Alaska", lat: 58.3019, lng: -134.4197 }, { name: "Haines, Alaska", lat: 59.2358, lng: -135.445 }, { name: "Ketchikan, Alaska", lat: 55.3422, lng: -131.6461 }],
+      "symphony-caribbean-mar-2024": [{ name: "Ft Lauderdale, Florida", lat: 26.0919, lng: -80.1143 }, { name: "Falmouth, Jamaica", lat: 18.4936, lng: -77.6556 }, { name: "Nassau, Bahamas", lat: 25.048, lng: -77.3554 }],
+      "adventure-caribbean-dec-2023": [{ name: "Port Canaveral, Florida", lat: 28.4103, lng: -80.6188 }, { name: "Nassau, Bahamas", lat: 25.048, lng: -77.3554 }, { name: "Labadee, Haiti", lat: 19.7853, lng: -72.2453 }, { name: "Puerto Plata, Dominican Republic", lat: 19.7935, lng: -70.6871 }],
+      "oasis-caribbean-sep-2023": [{ name: "Cape Liberty (Bayonne), New Jersey", lat: 40.665, lng: -74.113 }, { name: "Port Canaveral, Florida", lat: 28.4103, lng: -80.6188 }, { name: "Perfect Day at CocoCay, Bahamas", lat: 25.8172, lng: -77.9375 }, { name: "Nassau, Bahamas", lat: 25.048, lng: -77.3554 }],
+      "harmony-caribbean-mar-2023": [{ name: "Miami, Florida", lat: 25.7617, lng: -80.1918 }, { name: "Roat\u00e1n, Honduras", lat: 16.3239, lng: -86.5363 }, { name: "Cozumel, Mexico", lat: 20.5103, lng: -86.9493 }, { name: "Perfect Day at CocoCay, Bahamas", lat: 25.8172, lng: -77.9375 }],
+      "allure-caribbean-oct-2022": [{ name: "Ft Lauderdale, Florida", lat: 26.0919, lng: -80.1143 }, { name: "Puerto Plata, Dominican Republic", lat: 19.7935, lng: -70.6871 }, { name: "Labadee, Haiti", lat: 19.7853, lng: -72.2453 }, { name: "Nassau, Bahamas", lat: 25.048, lng: -77.3554 }, { name: "Perfect Day at CocoCay, Bahamas", lat: 25.8172, lng: -77.9375 }]
+    };
 
     // ----- Feature 1: live countdowns on the upcoming trips -----
     (function () {
@@ -224,23 +274,110 @@ try {
       setInterval(update, 30000);
     })();
 
-    // ----- Feature 3: interactive map of the current sailing -----
+    // ----- Feature 3: trip maps (current trip on the home page, one per
+    // past-trip detail page) -----
+    // Markers are CSS divIcons, never Leaflet's default pin images: the old
+    // single-sailing map depended on those image files loading from the
+    // CDN, and it was initialised while its section could be hidden, which
+    // left it broken. Maps here initialise lazily, only once their
+    // container is actually visible, and re-measure whenever a view is
+    // revealed (hash change, or the hidden attribute flipping, which is
+    // how the place search reveals archive views without a hash change).
     (function () {
       if (!window.L) { return; }
-      var el = document.getElementById("trip-map");
-      if (!el) { return; }
-      var map = L.map(el, { scrollWheelZoom: false });
-      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 18,
-        attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
-      }).addTo(map);
-      var pts = [];
-      TRIP_PORTS.forEach(function (p) {
-        L.marker([p.lat, p.lng]).addTo(map).bindPopup("<strong>" + p.port + "</strong><br>" + p.date);
-        pts.push([p.lat, p.lng]);
+      var liveMaps = [];
+      function pinIcon(kind) {
+        var glyph = kind === "been" ? "\u2713" : "";
+        return L.divIcon({
+          className: "wp-pin-wrap",
+          html: '<span class="wp-pin wp-pin-' + kind + '">' + glyph + "</span>",
+          iconSize: [26, 26],
+          iconAnchor: [13, 13]
+        });
+      }
+      function baseMap(el) {
+        var map = L.map(el, { scrollWheelZoom: false });
+        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 18,
+          attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+        }).addTo(map);
+        liveMaps.push(map);
+        return map;
+      }
+      function frame(map, pts) {
+        if (pts.length === 1) { map.setView(pts[0], 9); return; }
+        map.fitBounds(L.latLngBounds(pts).pad(0.12), { maxZoom: 11 });
+      }
+      function visible(el) {
+        return !!(el.offsetParent || el.getClientRects().length) && el.clientHeight > 0;
+      }
+      function initCurrent() {
+        var el = document.getElementById("trip-map");
+        if (!el || el.getAttribute("data-map-done")) { return; }
+        if (!visible(el)) { return; }
+        el.setAttribute("data-map-done", "1");
+        var map = baseMap(el);
+        var beenPts = [], goingPts = [], anchor = null;
+        CURRENT_TRIP_STOPS.forEach(function (p) {
+          L.marker([p.lat, p.lng], { icon: pinIcon(p.status) }).addTo(map)
+            .bindPopup("<strong>" + p.name + "</strong><br>" + p.detail);
+          if (p.status === "going") { goingPts.push([p.lat, p.lng]); }
+          else { beenPts.push([p.lat, p.lng]); anchor = [p.lat, p.lng]; }
+        });
+        if (beenPts.length > 1) {
+          L.polyline(beenPts, { color: "#1d585a", weight: 2.5 }).addTo(map);
+        }
+        if (anchor && goingPts.length) {
+          L.polyline([anchor].concat(goingPts), { color: "#e7743b", weight: 2.5, dashArray: "5 6" }).addTo(map);
+        }
+        frame(map, beenPts.concat(goingPts));
+      }
+      function initPast() {
+        Array.prototype.forEach.call(document.querySelectorAll("[data-trip-map]"), function (el) {
+          if (el.getAttribute("data-map-done")) { return; }
+          var stops = PAST_TRIP_ROUTES[el.getAttribute("data-trip-map")];
+          if (!stops || !visible(el)) { return; }
+          el.setAttribute("data-map-done", "1");
+          var map = baseMap(el);
+          var pts = [];
+          stops.forEach(function (p) {
+            L.marker([p.lat, p.lng], { icon: pinIcon("been") }).addTo(map)
+              .bindPopup("<strong>" + p.name + "</strong>");
+            pts.push([p.lat, p.lng]);
+          });
+          if (pts.length > 1) {
+            L.polyline(pts, { color: "#1d585a", weight: 2.5 }).addTo(map);
+          }
+          frame(map, pts);
+        });
+      }
+      function refresh() {
+        initCurrent();
+        initPast();
+        setTimeout(function () {
+          liveMaps.forEach(function (m) {
+            var c = m.getContainer();
+            if (c && visible(c)) { m.invalidateSize(); }
+          });
+        }, 80);
+      }
+      refresh();
+      window.addEventListener("hashchange", function () { setTimeout(refresh, 60); });
+      window.addEventListener("resize", function () {
+        liveMaps.forEach(function (m) {
+          var c = m.getContainer();
+          if (c && visible(c)) { m.invalidateSize(); }
+        });
       });
-      L.polyline(pts, { color: "#1d585a", weight: 2, dashArray: "5 6" }).addTo(map);
-      map.fitBounds(L.latLngBounds(pts).pad(0.12));
+      if (window.MutationObserver) {
+        var mo = new MutationObserver(function () { setTimeout(refresh, 60); });
+        Array.prototype.forEach.call(document.querySelectorAll(".view"), function (v) {
+          mo.observe(v, { attributes: true, attributeFilter: ["hidden"] });
+        });
+        Array.prototype.forEach.call(document.querySelectorAll("#view-main [data-page]"), function (g) {
+          mo.observe(g, { attributes: true, attributeFilter: ["hidden"] });
+        });
+      }
     })();
 
     // ----- Feature 5: journal search & filters (main journal history) -----
