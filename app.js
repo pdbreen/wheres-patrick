@@ -428,61 +428,254 @@ try {
       }
     })();
 
-    // ----- Feature 5: journal search & filters (main journal history) -----
+    // ----- Feature 5: journal search & filters — multi-page, powered by
+    // assets/search-index.json. That JSON file is the database: a flat
+    // index of every journal entry and day record on every trip page
+    // (the current trip's journal in the main view plus every archive
+    // trip view), each entry carrying its date, title, text snippet,
+    // trip name, page and entry anchor. No server is involved. The Trip
+    // and Year dropdowns are populated from the index itself, so they
+    // list every trip and every year that has entries — not just the
+    // current trip, which is all the old DOM-only filter could see.
+    // Typing in "Search the journal", changing Trip/Year, or clicking
+    // Apply runs the search against the whole index and renders the
+    // results here on the home page; tapping a result jumps to that
+    // trip's page and flashes the entry. If the index cannot be
+    // fetched, the same index is rebuilt from the DOM as a fallback.
     (function () {
-      var list = document.querySelector("#view-main .history-list");
       var tripSel = document.getElementById("filter-trip");
       var yearSel = document.getElementById("filter-year");
       var q = document.getElementById("filter-q");
-      var empty = document.getElementById("filter-empty");
-      if (!list || !tripSel || !yearSel || !q || !empty) { return; }
-      var entries = Array.prototype.slice.call(list.querySelectorAll(".memory"));
-      var labels = {
-        "venice-transatlantic": "Venice & Transatlantic",
-        "spain-transatlantic": "Spain & Transatlantic",
-        "bayonne-miami": "New England, Bermuda & Virgin Voyages"
-      };
-      var trips = {}, years = {};
-      entries.forEach(function (e) {
-        var t = e.getAttribute("data-trip"), y = e.getAttribute("data-year");
-        if (t) { trips[t] = true; }
-        if (y) { years[y] = true; }
-      });
-      Object.keys(trips).sort().forEach(function (t) {
-        var o = document.createElement("option");
-        o.value = t;
-        o.textContent = labels[t] || t;
-        tripSel.appendChild(o);
-      });
-      Object.keys(years).sort().reverse().forEach(function (y) {
-        var o = document.createElement("option");
-        o.value = y;
-        o.textContent = y;
-        yearSel.appendChild(o);
-      });
-      function apply() {
-        var t = tripSel.value, y = yearSel.value, needle = q.value.trim().toLowerCase();
+      var applyBtn = document.getElementById("filter-apply");
+      var panel = document.getElementById("search-results");
+      var titleEl = document.getElementById("search-results-title");
+      var subEl = document.getElementById("search-results-sub");
+      var listEl = document.getElementById("search-results-list");
+      var emptyEl = document.getElementById("search-results-empty");
+      var clearBtn = document.getElementById("search-results-clear");
+      var histEmpty = document.getElementById("filter-empty");
+      var main = document.getElementById("view-main");
+      if (!tripSel || !yearSel || !q || !panel || !listEl) { return; }
+      var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      var INDEX = null;
+      function clean(s) { return (s || "").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, ""); }
+      function fmtDate(iso) {
+        if (!iso) { return "Date not recorded"; }
+        var p = iso.split("-");
+        return MONTHS[parseInt(p[1], 10) - 1] + " " + parseInt(p[2], 10) + ", " + p[0];
+      }
+      function snippetOf(paras) {
+        var s = clean(paras.join(" "));
+        if (s.length > 280) { s = s.slice(0, 280).replace(/\s+\S*$/, "") + "\u2026"; }
+        return s;
+      }
+      function populate(idx) {
+        var tv = tripSel.value, yv = yearSel.value;
+        idx.trips.forEach(function (tr) {
+          var o = document.createElement("option");
+          o.value = tr.id;
+          o.textContent = tr.name;
+          tripSel.appendChild(o);
+        });
+        idx.years.forEach(function (yy) {
+          var o = document.createElement("option");
+          o.value = String(yy);
+          o.textContent = String(yy);
+          yearSel.appendChild(o);
+        });
+        if (tv) { tripSel.value = tv; }
+        if (yv) { yearSel.value = yv; }
+      }
+      function alignMainList(t, y, needle) {
+        // Keep the current trip's own day-by-day list (on its journal
+        // page) consistent with the filters, as the old filter did:
+        // its entries hide/show in place and its empty note follows.
+        if (!main) { return; }
         var shown = 0;
-        entries.forEach(function (e) {
+        Array.prototype.forEach.call((main ? main.querySelectorAll(".history-list .memory") : []), function (e) {
           var ok = (!t || e.getAttribute("data-trip") === t)
             && (!y || e.getAttribute("data-year") === y)
             && (!needle || e.textContent.toLowerCase().indexOf(needle) !== -1);
           e.style.display = ok ? "" : "none";
           if (ok) { shown++; }
         });
-        empty.hidden = shown !== 0;
-        // The filters live on the home page (Today) only, where the
-        // entries themselves are not shown — the full journal belongs to
-        // the trip's past page only, which (like the older trips' pages)
-        // has no search of its own. Using a filter on Today therefore
-        // opens that page, with this same filter state already applied
-        // to the now-visible entries.
-        var h = window.location.hash.replace(/^#/, "");
-        if (h === "" || h === "today") { window.location.hash = "venice-transatlantic"; }
+        if (histEmpty) { histEmpty.hidden = shown !== 0; }
       }
-      tripSel.addEventListener("change", apply);
-      yearSel.addEventListener("change", apply);
-      q.addEventListener("input", apply);
+      function resultItem(e) {
+        var li = document.createElement("li");
+        var a = document.createElement("a");
+        a.className = "place-day search-result";
+        a.href = e.url || ("#" + e.page);
+        a.setAttribute("data-page", e.page);
+        if (e.anchor) { a.setAttribute("data-anchor", e.anchor); }
+        var dEl = document.createElement("span");
+        dEl.className = "place-day-date";
+        dEl.textContent = fmtDate(e.date);
+        var tEl = document.createElement("span");
+        tEl.className = "place-day-title";
+        tEl.textContent = e.title;
+        var sEl = document.createElement("span");
+        sEl.className = "search-result-snippet";
+        sEl.textContent = e.snippet || "";
+        var trEl = document.createElement("span");
+        trEl.className = "place-day-trip";
+        trEl.textContent = e.trip;
+        a.appendChild(dEl);
+        a.appendChild(tEl);
+        if (e.snippet) { a.appendChild(sEl); }
+        a.appendChild(trEl);
+        li.appendChild(a);
+        return li;
+      }
+      function run() {
+        var t = tripSel.value, y = yearSel.value, needle = q.value.trim().toLowerCase();
+        alignMainList(t, y, needle);
+        if (!INDEX) { return; }
+        if (!t && !y && !needle) { panel.hidden = true; return; }
+        var hits = INDEX.entries.filter(function (e) {
+          if (t && e.tripId !== t) { return false; }
+          if (y && String(e.year) !== y) { return false; }
+          if (needle) {
+            var hay = (e.title + " " + e.snippet + " " + e.trip).toLowerCase();
+            if (hay.indexOf(needle) === -1) { return false; }
+          }
+          return true;
+        });
+        var tripCount = {};
+        hits.forEach(function (e) { tripCount[e.tripId] = true; });
+        var nTrips = Object.keys(tripCount).length;
+        titleEl.textContent = "Search results";
+        subEl.textContent = hits.length + (hits.length === 1 ? " entry" : " entries")
+          + " across " + nTrips + (nTrips === 1 ? " trip" : " trips")
+          + (hits.length > 60 ? " \u2014 showing the 60 most recent" : "")
+          + ". Tap a result to open that day on its trip page.";
+        listEl.innerHTML = "";
+        hits.slice(0, 60).forEach(function (e) { listEl.appendChild(resultItem(e)); });
+        emptyEl.hidden = hits.length !== 0;
+        panel.hidden = false;
+      }
+      function goTo(page, anchor) {
+        var el = anchor ? document.getElementById(anchor) : null;
+        if (!el) {
+          // No resolvable entry: land on the trip's page itself.
+          if (page) { window.location.hash = page; }
+          return;
+        }
+        var host = el.closest ? el.closest(".view") : null;
+        if (host && main && host !== main) {
+          Array.prototype.forEach.call(document.querySelectorAll(".archive-view"), function (v) { v.hidden = v !== host; });
+          main.hidden = true;
+          var t = host.getAttribute("data-title");
+          document.title = t ? t + " \u00B7 Where's Patrick?" : "Where's Patrick?";
+          try { history.pushState(null, "", "#" + page); } catch (err) { /* in-page only */ }
+        } else if (main) {
+          Array.prototype.forEach.call(document.querySelectorAll(".archive-view"), function (v) { v.hidden = true; });
+          main.hidden = false;
+          try { history.pushState(null, "", "#" + (anchor.indexOf("entry-") === 0 ? anchor : page)); } catch (err) { /* in-page only */ }
+        }
+        setTimeout(function () {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          el.classList.add("flash");
+          setTimeout(function () { el.classList.remove("flash"); }, 2400);
+        }, 60);
+      }
+      function clearAll() {
+        tripSel.value = "";
+        yearSel.value = "";
+        q.value = "";
+        run();
+      }
+      tripSel.addEventListener("change", run);
+      yearSel.addEventListener("change", run);
+      q.addEventListener("input", run);
+      q.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") { e.preventDefault(); run(); }
+      });
+      if (applyBtn) { applyBtn.addEventListener("click", run); }
+      if (clearBtn) { clearBtn.addEventListener("click", clearAll); }
+      listEl.addEventListener("click", function (e) {
+        var a = e.target && e.target.closest ? e.target.closest("a.search-result") : null;
+        if (!a) { return; }
+        e.preventDefault();
+        goTo(a.getAttribute("data-page"), a.getAttribute("data-anchor"));
+      });
+      function buildFromDOM() {
+        var trips = {}, tripList = [], entries = [], years = {};
+        function reg(id, name) {
+          if (!trips[id]) { trips[id] = { id: id, name: name, page: id }; tripList.push(trips[id]); }
+        }
+        function add(e) { entries.push(e); if (e.year) { years[e.year] = true; } }
+        function memEntry(art, tid, name) {
+          var copy = art.querySelector(".memory-copy");
+          var h = art.querySelector("h3");
+          var paras = [];
+          if (copy) {
+            Array.prototype.forEach.call(copy.children, function (c) {
+              if (c.tagName === "P") { paras.push(c.textContent); }
+            });
+          }
+          var d = art.getAttribute("data-date") || "";
+          add({ date: d, year: d ? +d.slice(0, 4) : null, title: clean(h ? h.textContent : ""), snippet: snippetOf(paras), trip: name, tripId: tid, page: tid, url: "#" + tid, anchor: art.id, type: "journal" });
+        }
+        var hh = document.getElementById("history-heading");
+        var curName = hh ? clean(hh.textContent) : "Venice & Transatlantic";
+        reg("venice-transatlantic", curName);
+        if (main) {
+          Array.prototype.forEach.call((main ? main.querySelectorAll(".history-list .memory") : []), function (a) { memEntry(a, "venice-transatlantic", curName); });
+        }
+        Array.prototype.forEach.call(document.querySelectorAll(".archive-view"), function (view) {
+          var h2 = view.querySelector(".archive-head h2") || view.querySelector("h2");
+          var name = clean(h2 ? h2.textContent : view.id);
+          reg(view.id, name);
+          Array.prototype.forEach.call(view.querySelectorAll("article"), function (art) {
+            var cls = " " + (art.className || "") + " ";
+            if (cls.indexOf(" memory ") !== -1) { memEntry(art, view.id, name); }
+            else if (cls.indexOf(" framework-day ") !== -1) {
+              var tm = art.querySelector("time[datetime]");
+              var d = tm ? tm.getAttribute("datetime") : "";
+              var h = art.querySelector("h3");
+              var paras = [];
+              Array.prototype.forEach.call(art.querySelectorAll("p"), function (p) {
+                if ((p.className || "").indexOf("framework-source") === -1) { paras.push(p.textContent); }
+              });
+              add({ date: d, year: d ? +d.slice(0, 4) : null, title: clean(h ? h.textContent : ""), snippet: snippetOf(paras), trip: name, tripId: view.id, page: view.id, url: "#" + view.id, anchor: art.id, type: "record" });
+            }
+          });
+        });
+        var byTrip = {};
+        entries.forEach(function (e) { if (e.year) { (byTrip[e.tripId] = byTrip[e.tripId] || {}); byTrip[e.tripId][e.year] = true; } });
+        entries.forEach(function (e) {
+          if (!e.year && byTrip[e.tripId]) {
+            var ys = Object.keys(byTrip[e.tripId]);
+            e.year = +ys[ys.length - 1];
+            if (e.year) { years[e.year] = true; }
+          }
+        });
+        entries.sort(function (a, b) {
+          if (a.date === b.date) { return a.title < b.title ? 1 : -1; }
+          return a.date < b.date ? 1 : -1;
+        });
+        var latest = {};
+        entries.forEach(function (e) { if (e.date && (!latest[e.tripId] || e.date > latest[e.tripId])) { latest[e.tripId] = e.date; } });
+        tripList.sort(function (a, b) { return (latest[a.id] || "") < (latest[b.id] || "") ? 1 : -1; });
+        return { trips: tripList, years: Object.keys(years).sort().reverse(), entries: entries };
+      }
+      function setIndex(idx) {
+        INDEX = idx;
+        populate(idx);
+        run();
+      }
+      if (window.fetch) {
+        fetch("assets/search-index.json")
+          .then(function (r) { if (!r.ok) { throw new Error("search index unavailable"); } return r.json(); })
+          .then(function (data) {
+            if (!data || !data.entries || !data.trips || !data.years) { throw new Error("search index malformed"); }
+            setIndex(data);
+          })
+          .catch(function () { setIndex(buildFromDOM()); });
+      } else {
+        setIndex(buildFromDOM());
+      }
     })();
 
     // ----- Feature 6: a year ago today (renders only when a prior-year entry matches today's month & day) -----

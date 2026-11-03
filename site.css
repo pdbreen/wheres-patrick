@@ -1220,6 +1220,14 @@ footer a { text-underline-offset: 3px; }
 .journal-filters .filter-search { flex: 1 1 220px; }
 .journal-filters .filter-search input { width: 100%; }
 .filter-empty { color: var(--muted); margin: 18px 0 4px; }
+.filter-apply { min-height: 42px; padding: 8px 20px; border: 1px solid var(--ink); border-radius: 10px; background: var(--ink); color: var(--surface); font: 600 .92rem "IBM Plex Sans", sans-serif; cursor: pointer; }
+.filter-apply:hover { opacity: .88; }
+.filter-apply:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+.search-results-part { margin-top: 4px; }
+a.search-result { text-decoration: none; }
+.search-result-snippet { grid-column: 2; color: var(--muted); font-size: .85rem; line-height: 1.45; }
+.search-results-empty { color: var(--muted); margin: 10px 0 6px; font-size: .9rem; }
+@media (max-width: 580px) { .search-result-snippet { grid-column: 1; } }
 
 .throwback { margin-top: clamp(54px, 8vw, 92px); background: var(--surface-alt); border-radius: 20px 20px 56px 20px; padding: clamp(24px, 4vw, 38px); }
 .throwback:empty { display: none; }

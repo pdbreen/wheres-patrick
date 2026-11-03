@@ -300,7 +300,19 @@
         <label class="filter-search">Search the journal
           <input type="search" id="filter-q" placeholder="Try “Santorini” or “sea day”" autocomplete="off" />
         </label>
+        <button class="filter-apply" id="filter-apply" type="button">Apply</button>
       </div>
+    </div>
+<div class="search-results-part">
+      <section class="place-results search-results" id="search-results" hidden aria-label="Journal search results">
+        <div class="place-results-head">
+          <h3 id="search-results-title">Search results</h3>
+          <button class="place-clear-btn" id="search-results-clear" type="button">Clear search</button>
+        </div>
+        <p class="place-results-sub" id="search-results-sub"></p>
+        <ul class="place-results-list" id="search-results-list"></ul>
+        <p class="search-results-empty" id="search-results-empty" hidden>No entries match that search — try a different word, or clear the trip and year filters.</p>
+      </section>
     </div>
 </div>
 </main>
