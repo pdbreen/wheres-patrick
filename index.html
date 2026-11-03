@@ -393,6 +393,8 @@
     .gallery { position: relative; background: var(--deep); }
     .gallery-track { display: flex; height: 100%; transition: transform .45s ease; }
     .gallery-track img, .gallery-track video { flex: 0 0 100%; width: 100%; height: 100%; object-fit: contain; background: var(--deep); }
+    .gallery-track a.gallery-open { flex: 0 0 100%; width: 100%; height: 100%; display: block; cursor: zoom-in; }
+    .gallery-track a.gallery-open:focus-visible { outline: 3px solid var(--orange); outline-offset: -3px; }
     .gallery-btn {
       position: absolute;
       top: 50%;
@@ -5154,6 +5156,24 @@
       var galleries = document.querySelectorAll("[data-gallery]");
       Array.prototype.forEach.call(galleries, function (g) {
         var track = g.querySelector(".gallery-track");
+        // Clicking a photo (not the prev/next buttons, dots or counter,
+        // which sit outside the track) opens it full size in a new tab:
+        // wrap each gallery image in a real link to its own file. This
+        // runs for every [data-gallery] at load, so future galleries
+        // built with the same markup get the behaviour automatically.
+        // Video slides are left alone — they keep their own controls.
+        Array.prototype.forEach.call(track.querySelectorAll("img"), function (img) {
+          if (img.parentNode && img.parentNode.tagName === "A") { return; }
+          var link = document.createElement("a");
+          link.className = "gallery-open";
+          link.href = img.getAttribute("src");
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.title = "Open full size in a new tab";
+          link.setAttribute("aria-label", "Open full-size photo in a new tab" + (img.getAttribute("alt") ? ": " + img.getAttribute("alt") : ""));
+          track.insertBefore(link, img);
+          link.appendChild(img);
+        });
         var total = track.children.length;
         var count = g.querySelector(".gallery-count");
         var dots = g.querySelectorAll(".gallery-dot");
@@ -5173,6 +5193,7 @@
           d.addEventListener("click", function () { go(di); });
         });
         var x0 = null;
+        var swiped = false;
         g.addEventListener("touchstart", function (e) {
           x0 = e.changedTouches[0].clientX;
         }, { passive: true });
@@ -5180,8 +5201,21 @@
           if (x0 === null) { return; }
           var dx = e.changedTouches[0].clientX - x0;
           x0 = null;
-          if (Math.abs(dx) > 40) { go(i + (dx < 0 ? 1 : -1)); }
+          if (Math.abs(dx) > 40) {
+            swiped = true;
+            window.setTimeout(function () { swiped = false; }, 400);
+            go(i + (dx < 0 ? 1 : -1));
+          }
         }, { passive: true });
+        // A swipe that navigated the carousel also fires a click on the
+        // photo link — swallow that one click so swiping never opens a tab.
+        g.addEventListener("click", function (e) {
+          if (swiped && e.target && e.target.tagName === "IMG") {
+            e.preventDefault();
+            e.stopPropagation();
+            swiped = false;
+          }
+        }, true);
       });
     })();
   </script>
