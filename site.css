@@ -1164,6 +1164,14 @@ footer a { text-underline-offset: 3px; }
 .back-link { display: inline-flex; align-items: center; min-height: 42px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--deep-2); font-size: .88rem; font-weight: 600; text-decoration: none; }
 .back-link:hover { border-color: var(--deep-2); }
 .archive-head { margin-top: 30px; }
+/* The current trip's standalone past page is assembled by the exporter
+   inside a wrapper with this id; the page's own header lives in its
+   .archive-top-part, like every other trip's. Never show a second header
+   placed directly in that wrapper above it — one header, then the trip
+   map with counters, then the journal entries, as on all the other
+   archive trip pages. (This id exists only on the exported page; the
+   in-page history view is unaffected.) */
+#venice-transatlantic-oct-nov-2026 > .archive-head { display: none; }
 .archive-view .history-list + .back-link { margin-top: 34px; }
 .archive-bottom-part { margin-top: 34px; }
 .archive-note { max-width: 640px; margin: 4px 0 34px; padding: 26px 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; color: var(--muted); line-height: 1.6; }
