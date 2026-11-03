@@ -483,13 +483,44 @@ try {
       function slugify(s) {
         return (s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
       }
+      // The Trip dropdown shows short names only: drop any date or
+      // extra detail — a parenthetical like "(Oct-Nov 2026)", a
+      // trailing ", Aug 2025", or a bare trailing year — then put the
+      // name in title case, keeping small joining words (of, the, to,
+      // and, …) lower case unless they start the name. So
+      // "Venice & Transatlantic (Oct-Nov 2026)" and
+      // "star of the seas, aug 2025" both come out as short,
+      // properly capitalised names. The option's value stays the
+      // trip's id, so trips that share a short name (two sailings of
+      // the same ship) still filter to their own entries.
+      function shortTripName(name) {
+        var s = clean(name || "");
+        if (!s) { return s; }
+        s = s.replace(/\s*\([^)]*\)/g, "");
+        s = s.replace(/,?\s*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*\.?\s+\d{4}\s*$/i, "");
+        s = s.replace(/,?\s*\d{4}\s*$/, "");
+        s = clean(s.replace(/,\s*$/, ""));
+        var minor = { a: 1, an: 1, the: 1, and: 1, or: 1, of: 1, to: 1, in: 1, on: 1, at: 1, by: 1, for: 1 };
+        var words = s.split(" ");
+        for (var i = 0; i < words.length; i++) {
+          var w = words[i];
+          if (!w || w === "&") { continue; }
+          var core = w.toLowerCase().replace(/[^a-z]/g, "");
+          if (i > 0 && minor[core]) { words[i] = w.toLowerCase(); continue; }
+          words[i] = w.replace(/[A-Za-z\u00C0-\u00FF]+/, function (m) {
+            var rest = (m === m.toUpperCase()) ? m.slice(1).toLowerCase() : m.slice(1);
+            return m.charAt(0).toUpperCase() + rest;
+          });
+        }
+        return words.join(" ");
+      }
       // One internal entry shape, whichever file format was fetched:
       // { date, year, title, time, snippet, text, trip, tripId, page,
       //   url, anchor, type } — tripId is the trip_slug when the file
       // provides one, else the tripId/page of the wrapped shape.
       function normalizeEntry(e) {
         if (!e || typeof e !== "object") { return null; }
-        var tripName = e.trip || e.trip_name || "";
+        var tripName = shortTripName(e.trip || e.trip_name || "");
         var tripId = e.trip_slug || e.tripId || e.trip_id || e.page || slugify(tripName);
         var date = e.date || "";
         var year = null;
@@ -516,7 +547,7 @@ try {
         var tripsById = {}, trips = [];
         function regTrip(id, name) {
           if (!id || tripsById[id]) { return; }
-          tripsById[id] = { id: id, name: name || id };
+          tripsById[id] = { id: id, name: shortTripName(name || id) };
           trips.push(tripsById[id]);
         }
         if (isArray(rawTrips)) {
@@ -546,7 +577,7 @@ try {
         idx.trips.forEach(function (tr) {
           var o = document.createElement("option");
           o.value = tr.id;
-          o.textContent = tr.name;
+          o.textContent = shortTripName(tr.name);
           tripSel.appendChild(o);
         });
         idx.years.forEach(function (yy) {
@@ -622,7 +653,7 @@ try {
             // trip name too — an entry whose slug differs from the
             // dropdown's must not silently drop out of its own trip.
             var okTrip = e.tripId === t || e.trip === t || slugify(e.trip) === t
-              || (tName && e.trip === tName);
+              || (tName && (e.trip === tName || shortTripName(e.trip) === tName));
             if (!okTrip) { return false; }
           }
           if (y && String(e.year) !== y) { return false; }
