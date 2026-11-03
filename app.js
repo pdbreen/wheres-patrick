@@ -284,8 +284,15 @@ try {
     // revealed (hash change, or the hidden attribute flipping, which is
     // how the place search reveals archive views without a hash change).
     (function () {
-      if (!window.L) { return; }
+      // Leaflet is a separate CDN script tag ahead of this file. On a slow
+      // connection (ship Wi-Fi) it can arrive late or fail once and then
+      // succeed on a later attempt — so never give up after one check:
+      // refresh() below re-runs until window.L exists (bounded retries),
+      // and the window load event plus an IntersectionObserver give the
+      // maps further chances to initialise whenever they scroll into view.
       var liveMaps = [];
+      var leafletRetries = 0;
+      var leafletTimer = null;
       function pinIcon(kind) {
         var glyph = kind === "been" ? "\u2713" : "";
         return L.divIcon({
@@ -316,6 +323,8 @@ try {
         if (!el || el.getAttribute("data-map-done")) { return; }
         if (!visible(el)) { return; }
         el.setAttribute("data-map-done", "1");
+        var fb = el.querySelector(".map-fallback");
+        if (fb && fb.parentNode) { fb.parentNode.removeChild(fb); }
         var map = baseMap(el);
         var beenPts = [], goingPts = [], anchor = null;
         CURRENT_TRIP_STOPS.forEach(function (p) {
@@ -331,6 +340,11 @@ try {
           L.polyline([anchor].concat(goingPts), { color: "#e7743b", weight: 2.5, dashArray: "5 6" }).addTo(map);
         }
         frame(map, beenPts.concat(goingPts));
+        // At phone widths the container can still be settling (fonts,
+        // hero image) when the map measures itself, which leaves grey,
+        // unpainted tile areas. Re-measure twice shortly after init.
+        setTimeout(function () { map.invalidateSize(); }, 60);
+        setTimeout(function () { map.invalidateSize(); }, 400);
       }
       function initPast() {
         Array.prototype.forEach.call(document.querySelectorAll("[data-trip-map]"), function (el) {
@@ -352,6 +366,18 @@ try {
         });
       }
       function refresh() {
+        if (!window.L) {
+          // Leaflet has not arrived yet: keep retrying for ~10 seconds
+          // instead of leaving the map permanently blank.
+          if (!leafletTimer && leafletRetries < 40) {
+            leafletTimer = setTimeout(function () {
+              leafletTimer = null;
+              leafletRetries++;
+              refresh();
+            }, 250);
+          }
+          return;
+        }
         initCurrent();
         initPast();
         setTimeout(function () {
@@ -362,7 +388,17 @@ try {
         }, 80);
       }
       refresh();
+      window.addEventListener("load", refresh);
       window.addEventListener("hashchange", function () { setTimeout(refresh, 60); });
+      if (window.IntersectionObserver) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) { if (en.isIntersecting) { refresh(); } });
+        }, { rootMargin: "240px" });
+        Array.prototype.forEach.call(
+          document.querySelectorAll("#trip-map, [data-trip-map]"),
+          function (el) { io.observe(el); }
+        );
+      }
       window.addEventListener("resize", function () {
         liveMaps.forEach(function (m) {
           var c = m.getContainer();
@@ -423,6 +459,13 @@ try {
           if (ok) { shown++; }
         });
         empty.hidden = shown !== 0;
+        // The filters also live on the home page (Today), where the
+        // entries themselves are not shown — the full journal belongs to
+        // the trip's day-by-day page only. Using a filter on Today
+        // therefore opens that page, where this same filter state is
+        // already applied to the now-visible entries.
+        var h = window.location.hash.replace(/^#/, "");
+        if (h === "" || h === "today") { window.location.hash = "venice-transatlantic"; }
       }
       tripSel.addEventListener("change", apply);
       yearSel.addEventListener("change", apply);
@@ -1300,9 +1343,11 @@ try {
     var linksBox = document.getElementById("nav-links");
     function activate(page) {
       // A block may belong to more than one page (space-separated
-      // data-page): the current trip's journal — with its trip / year /
-      // text search — belongs to both the home page (today) and the
-      // journal page (history), so the search stays on the home page.
+      // data-page). The journal is split into flat blocks: its search
+      // filters alone belong to both the home page (today) and the
+      // journal page (history); the heading and the day-by-day entries
+      // belong to history only, so Today shows the search without the
+      // full journal.
       groups.forEach(function (g) { g.hidden = g.getAttribute("data-page").split(/\s+/).indexOf(page) === -1; });
       var navKey = page === "history" ? "past" : page;
       navLinks.forEach(function (a) {
@@ -1331,11 +1376,11 @@ try {
     }
     window.addEventListener("hashchange", route);
     route();
-    // The menu toggle itself is bound by the small inline script right
-    // after the nav in index.html (it must work even when this file is
+    // The menu toggle itself is bound by the button's inline onclick
+    // attribute in index.html (it must work even when this file is
     // delayed or fails on a slow connection). Only bind here as a
-    // fallback if that script did not run — binding both would make a
-    // single tap toggle the menu open and closed again.
+    // fallback if the inline nav script did not run — binding both
+    // would make a single tap toggle the menu open and closed again.
     if (!window.__navToggleBound && toggle && linksBox) {
       toggle.addEventListener("click", function () {
         var open = linksBox.classList.toggle("open");
