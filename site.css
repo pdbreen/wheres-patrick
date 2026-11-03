@@ -674,6 +674,7 @@ h3 .fav-star { width: 19px; height: 19px; vertical-align: -3px; margin-right: 7p
   box-shadow: 0 8px 28px rgba(19, 49, 48, .07);
 }
 .nav-toggle svg { width: 20px; height: 20px; }
+.nav-toggle { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .nav-toggle:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
 .nav-links { display: flex; flex-wrap: wrap; gap: 8px; }
 .nav-links a {
@@ -693,8 +694,12 @@ h3 .fav-star { width: 19px; height: 19px; vertical-align: -3px; margin-right: 7p
 .nav-links a:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
 .nav-links a[aria-current="page"] { background: var(--deep); border-color: var(--deep); color: #f7fffb; }
 @media (max-width: 640px) {
-  .nav-toggle { display: inline-flex; }
-  .nav-links {
+  /* The Menu button and the collapsed link list only apply when JS is
+     running (html.js is set by an inline head script). Without JS the
+     button stays hidden and the links render as a plain stacked list,
+     so navigation is never trapped behind a dead toggle. */
+  html.js .nav-toggle { display: inline-flex; }
+  html.js .nav-links {
     display: none;
     position: absolute;
     z-index: 60;
@@ -709,7 +714,9 @@ h3 .fav-star { width: 19px; height: 19px; vertical-align: -3px; margin-right: 7p
     border-radius: 18px;
     box-shadow: var(--shadow);
   }
-  .nav-links.open { display: flex; }
+  html.js .nav-links.open { display: flex; }
+  .nav-links { flex-direction: column; align-items: stretch; }
+  .nav-links a { justify-content: flex-start; }
   .nav-links a { border: 0; border-radius: 12px; padding: 12px 16px; font-size: 1rem; }
   .nav-links a + a { border-top: 1px solid var(--line); }
   .nav-links a[aria-current="page"] { background: var(--deep); color: #f7fffb; }

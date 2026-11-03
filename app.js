@@ -1,4 +1,59 @@
 try {
+
+    // Mark JS as available before first paint: the mobile nav only
+    // collapses behind the Menu button when this class is present, so a
+    // slow or failed script load can never leave the links unreachable.
+    document.documentElement.classList.add('js');
+  
+} catch (e) { if (window.console) console.warn('page script:', e); }
+try {
+
+      // Mobile menu, bound here — immediately after the nav markup — rather
+      // than at the end of assets/app.js. On iPhone Safari (especially on
+      // slow ship Wi-Fi) the toggle previously never got its handler when
+      // the large app.js was delayed by the Leaflet download ahead of it or
+      // stopped by an earlier error, leaving the Menu button dead. This
+      // small dependency-free script runs as soon as the nav exists; the
+      // router in app.js checks window.__navToggleBound and skips its own
+      // binding so one tap can never toggle the menu twice.
+      (function () {
+        var toggle = document.getElementById("nav-toggle");
+        var links = document.getElementById("nav-links");
+        if (!toggle || !links || window.__navToggleBound) { return; }
+        window.__navToggleBound = true;
+        function setOpen(open) {
+          if (open) { links.classList.add("open"); } else { links.classList.remove("open"); }
+          toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        }
+        function isOpen() { return links.classList.contains("open"); }
+        toggle.addEventListener("click", function (e) {
+          e.preventDefault();
+          setOpen(!isOpen());
+        });
+        links.addEventListener("click", function (e) {
+          var t = e.target;
+          while (t && t !== links) {
+            if (t.tagName === "A") { setOpen(false); return; }
+            t = t.parentNode;
+          }
+        });
+        document.addEventListener("click", function (e) {
+          if (!isOpen()) { return; }
+          var t = e.target;
+          while (t) {
+            if (t === links || t === toggle) { return; }
+            t = t.parentNode;
+          }
+          setOpen(false);
+        });
+        document.addEventListener("keydown", function (e) {
+          if ((e.key === "Escape" || e.key === "Esc") && isOpen()) { setOpen(false); toggle.focus(); }
+        });
+        window.addEventListener("hashchange", function () { setOpen(false); });
+      })();
+    
+} catch (e) { if (window.console) console.warn('page script:', e); }
+try {
     // ===== Dynamic hero photo =====
     // The hero photo follows the "What's next" day-cards below: it is chosen
     // from the cards, never from a hard-coded date. On a PORT day the hero
@@ -375,13 +430,27 @@ try {
         var i = 0;
         function go(n) {
           i = ((n % total) + total) % total;
-          track.style.transform = "translateX(" + (-i * 100) + "%)";
+          // Show only the active slide instead of sliding a wide track:
+          // off-screen slides used to sit clipped inside the figure,
+          // leaving their full-size photo links unreachable (and
+          // unfocusable in any practical sense) on a phone. Hidden
+          // slides are display:none, so every visible photo link is
+          // fully operable, and a hidden video slide is paused.
+          track.style.transform = "";
+          Array.prototype.forEach.call(track.children, function (child, ci) {
+            child.style.display = ci === i ? "" : "none";
+            if (ci !== i) {
+              var v = child.tagName === "VIDEO" ? child : child.querySelector("video");
+              if (v && v.pause) { v.pause(); }
+            }
+          });
           count.textContent = (i + 1) + " of " + total;
           Array.prototype.forEach.call(dots, function (d, di) {
             if (di === i) { d.setAttribute("aria-current", "true"); }
             else { d.removeAttribute("aria-current"); }
           });
         }
+        go(0);
         g.querySelector(".gallery-btn.prev").addEventListener("click", function () { go(i - 1); });
         g.querySelector(".gallery-btn.next").addEventListener("click", function () { go(i + 1); });
         Array.prototype.forEach.call(dots, function (d, di) {
@@ -1087,7 +1156,11 @@ try {
     var toggle = document.getElementById("nav-toggle");
     var linksBox = document.getElementById("nav-links");
     function activate(page) {
-      groups.forEach(function (g) { g.hidden = g.getAttribute("data-page") !== page; });
+      // A block may belong to more than one page (space-separated
+      // data-page): the current trip's journal — with its trip / year /
+      // text search — belongs to both the home page (today) and the
+      // journal page (history), so the search stays on the home page.
+      groups.forEach(function (g) { g.hidden = g.getAttribute("data-page").split(/\s+/).indexOf(page) === -1; });
       var navKey = page === "history" ? "past" : page;
       navLinks.forEach(function (a) {
         if (a.getAttribute("data-nav") === navKey) { a.setAttribute("aria-current", "page"); }
@@ -1115,7 +1188,12 @@ try {
     }
     window.addEventListener("hashchange", route);
     route();
-    if (toggle && linksBox) {
+    // The menu toggle itself is bound by the small inline script right
+    // after the nav in index.html (it must work even when this file is
+    // delayed or fails on a slow connection). Only bind here as a
+    // fallback if that script did not run — binding both would make a
+    // single tap toggle the menu open and closed again.
+    if (!window.__navToggleBound && toggle && linksBox) {
       toggle.addEventListener("click", function () {
         var open = linksBox.classList.toggle("open");
         toggle.setAttribute("aria-expanded", open ? "true" : "false");
@@ -1138,7 +1216,8 @@ try {
           if (!main.contains(el) || main.hidden) { return; }
           var grp = el.closest ? el.closest("[data-page]") : null;
           if (grp && grp.hidden) {
-            activate(grp.getAttribute("data-page"));
+            var pages = grp.getAttribute("data-page").split(/\s+/);
+            activate(pages.indexOf("history") !== -1 ? "history" : pages[0]);
             setTimeout(function () { el.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
           }
         });
