@@ -10,7 +10,6 @@
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac8ec613a4e94bc989bad09cb803ab8b"}'></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,650&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="stylesheet" href="../site.css">
 <link rel="icon" href="data:," />
 </head>
@@ -37,28 +36,22 @@
   </div>
   <p class="back-link"><a href="../past.html">← All past trips</a></p>
 </header>
-<div id="throwback"></div>
-<section class="journal-head-part" aria-labelledby="history-heading">
-      <div class="section-head">
-        <h2 id="history-heading">Venice &amp; Transatlantic — day by day</h2>
-        <p>Built from Patrick’s Day One journal, this history runs newest-first through November 2026 — journal entries up to Nov 2 — including recent days in Lisbon, Messina, Split, Venice, Ravenna, Kotor, Santorini, Athens and at sea.</p>
-      </div>
-    </section>
-<div class="journal-filters-part">
-      <div class="journal-filters" role="search">
-        <label>Trip
-          <select id="filter-trip"><option value="">All trips</option></select>
-        </label>
-        <label>Year
-          <select id="filter-year"><option value="">All years</option></select>
-        </label>
-        <label class="filter-search">Search the journal
-          <input type="search" id="filter-q" placeholder="Try “Santorini” or “sea day”" autocomplete="off" />
-        </label>
+<div class="archive-top-part">
+      <a class="back-link" href="../past.html">&larr; Back to past trips</a>
+      <header class="section-head archive-head">
+        <h2 id="history-heading">Venice &amp; Transatlantic</h2>
+        <p>Oct 6 to Nov 15, 2026 · Venice and the Adriatic, Greece, then the transatlantic home aboard Odyssey of the Seas. The trip is still underway — this page is its journal so far, day by day.</p>
+      </header>
+      <div class="trip-overview">
+        <p class="map-caption"><strong>This trip, mapped</strong> &mdash; every stop so far, in the order Patrick reached it. Tap a pin for the stop.</p>
+        <div class="trip-map past-map" data-trip-map="venice-transatlantic" role="img" aria-label="Map of this trip&rsquo;s stops so far: Boston, Madrid, Venice, Ravenna, Kotor, Santorini, Athens, Split, Civitavecchia, Messina, Mykonos, Naples, La Spezia, Barcelona, Cartagena, Lisbon and Ponta Delgada"></div>
+        <div class="stats-strip trip-stats" aria-label="This trip by the numbers so far: 7 countries, 17 cities, 2 ships">
+          <div class="stat-card"><strong>7</strong><span>Countries</span></div><div class="stat-card"><strong>17</strong><span>Cities</span></div><div class="stat-card"><strong>2</strong><span>Ships</span></div>
+        </div>
       </div>
     </div>
 <section class="journal-list-part" aria-label="Journal entries">
-      <p class="filter-empty" id="filter-empty" hidden>No journal entries match — try clearing the search or filters.</p>
+      <p class="filter-empty" id="filter-empty" hidden>No journal entries match the home-page search — clear it there to see the whole trip.</p>
       <div class="history-list">
         <article class="memory" id="entry-2026-11-02" data-date="2026-11-02" data-year="2026" data-trip="venice-transatlantic">
           <figure class="memory-photo gallery" data-gallery aria-roledescription="carousel" aria-label="Photos from Ponta Delgada">
@@ -514,6 +507,9 @@
         </article>
       </div>
     </section>
+<div class="archive-bottom-part">
+      <a class="back-link" href="../past.html">&larr; Back to past trips</a>
+    </div>
 </div>
 </main>
 <script src="../app.js" defer></script>
