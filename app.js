@@ -32,7 +32,7 @@ try {
       "Manarola": "assets/hero-cinque-terre.jpg"
     };
     // Generic fallback: a cruise ship at sea, used when a port has no photo.
-    const HERO_FALLBACK = "assets/hero-at-sea.jpg";
+    const HERO_FALLBACK = "assets/img-666542a14bb3.jpg";
     // Photo credits for the hero images above — every hero photo is freely
     // licensed via Wikimedia Commons; "url" is its Commons file page. The
     // credit line is rendered unobtrusively in the hero's corner.
