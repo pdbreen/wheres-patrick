@@ -475,15 +475,30 @@ try {
 
     (function () {
       var main = document.getElementById("view-main");
-      var slugs = ["spain-transatlantic-jul-aug-2026", "bayonne-miami-sep-2026", "cape-cod-jul-2026", "alaska-may-jun-2026", "san-juan-rome-apr-may-2026", "miami-jan-feb-2026", "december-caribbean-nov-dec-2025", "fall-transatlantic-oct-nov-2025", "eastern-canada-sep-oct-2025", "star-cococay-aug-2025", "jewel-cococay-jul-2025", "cape-cod-jun-jul-2025", "odyssey-mediterranean-may-2025", "vision-baltimore-mar-2025", "adventure-caribbean-dec-2024", "oasis-transatlantic-oct-2024", "brilliance-alaska-may-2024", "symphony-caribbean-mar-2024", "adventure-caribbean-dec-2023", "oasis-caribbean-sep-2023", "harmony-caribbean-mar-2023", "allure-caribbean-oct-2022"];
+      // Standalone trip pages (the published past/<slug>.html files) have
+      // no #view-main and exactly one .archive-view — that view IS the
+      // page's content. This router only exists to switch views inside
+      // the single-page artifact, so on a standalone page it must do
+      // nothing at all. The previous version looked every trip's view up
+      // by id from a hard-coded list: on a past-trip page it set `hidden`
+      // on the one archive view the page does have (the location hash
+      // there is empty or an #entry- anchor, never the view's own slug),
+      // then threw on the first listed view missing from the page —
+      // leaving a blank page with only the nav, and, because the publish
+      // pipeline wraps this bundle in a single try/catch, aborting every
+      // feature scripted after this block (galleries, day links,
+      // Background popovers, place search, the multi-page router).
+      if (!main) { return; }
+      // Derive the views from the DOM rather than a hard-coded slug
+      // list, so a view can never be dereferenced while missing.
+      var views = Array.prototype.slice.call(document.querySelectorAll(".archive-view"));
       function route() {
         var slug = window.location.hash.replace(/^#/, "");
         var active = null;
-        for (var i = 0; i < slugs.length; i++) {
-          var view = document.getElementById(slugs[i]);
-          view.hidden = slugs[i] !== slug;
-          if (slugs[i] === slug) { active = view; }
-        }
+        views.forEach(function (view) {
+          view.hidden = view.id !== slug;
+          if (view.id === slug) { active = view; }
+        });
         main.hidden = !!active;
         document.title = active ? active.getAttribute("data-title") + " · Where's Patrick?" : "Where's Patrick?";
         window.scrollTo(0, 0);
@@ -496,6 +511,10 @@ try {
       var galleries = document.querySelectorAll("[data-gallery]");
       Array.prototype.forEach.call(galleries, function (g) {
         var track = g.querySelector(".gallery-track");
+        // A gallery missing any of its parts must not throw: in the
+        // published bundle one throw aborts every script after this
+        // block for the whole page.
+        if (!track || !track.children.length) { return; }
         // Clicking a photo (not the prev/next buttons, dots or counter,
         // which sit outside the track) opens it full size in a new tab:
         // wrap each gallery image in a real link to its own file. This
@@ -534,15 +553,17 @@ try {
               if (v && v.pause) { v.pause(); }
             }
           });
-          count.textContent = (i + 1) + " of " + total;
+          if (count) { count.textContent = (i + 1) + " of " + total; }
           Array.prototype.forEach.call(dots, function (d, di) {
             if (di === i) { d.setAttribute("aria-current", "true"); }
             else { d.removeAttribute("aria-current"); }
           });
         }
         go(0);
-        g.querySelector(".gallery-btn.prev").addEventListener("click", function () { go(i - 1); });
-        g.querySelector(".gallery-btn.next").addEventListener("click", function () { go(i + 1); });
+        var prevBtn = g.querySelector(".gallery-btn.prev");
+        var nextBtn = g.querySelector(".gallery-btn.next");
+        if (prevBtn) { prevBtn.addEventListener("click", function () { go(i - 1); }); }
+        if (nextBtn) { nextBtn.addEventListener("click", function () { go(i + 1); }); }
         Array.prototype.forEach.call(dots, function (d, di) {
           d.addEventListener("click", function () { go(di); });
         });
@@ -826,6 +847,12 @@ try {
       var datesEl = document.getElementById("trip-modal-dates");
       var bookingsEl = document.getElementById("trip-modal-bookings");
       var stopsEl = document.getElementById("trip-modal-stops");
+      // The modal markup sits outside the page groups, so no standalone
+      // published page carries it. Bail out when it is absent instead of
+      // throwing on modal.querySelectorAll below — in the published
+      // bundle that throw would abort the day-link, Background-popover
+      // and router scripts that follow this block.
+      if (!modal || !titleEl || !datesEl || !bookingsEl || !stopsEl) { return; }
       var lastTrigger = null;
 
       function fillList(ul, items, isStops) {
@@ -910,16 +937,18 @@ try {
     // hashchange, after the router has run.
     (function () {
       var main = document.getElementById("view-main");
-      var archiveIds = ["spain-transatlantic-jul-aug-2026", "bayonne-miami-sep-2026", "alaska-may-jun-2026", "san-juan-rome-apr-may-2026", "miami-jan-feb-2026", "december-caribbean-nov-dec-2025", "fall-transatlantic-oct-nov-2025", "eastern-canada-sep-oct-2025"];
       function showView(view) {
-        archiveIds.forEach(function (id) {
-          var v = document.getElementById(id);
-          if (v) { v.hidden = v !== view; }
+        // Every archive view in the DOM, not a hard-coded subset: the
+        // old 8-id list left deep links to entries in the other trips'
+        // views unrevealed (their view stayed hidden while the main
+        // view hid too — a blank page). On a standalone trip page the
+        // list is just that page's own view, which stays visible.
+        Array.prototype.forEach.call(document.querySelectorAll(".archive-view"), function (v) {
+          v.hidden = v !== view;
         });
         if (main) { main.hidden = view !== main; }
-        document.title = (view && view !== main)
-          ? view.getAttribute("data-title") + " · Where's Patrick?"
-          : "Where's Patrick?";
+        var t = (view && view !== main) ? view.getAttribute("data-title") : null;
+        document.title = t ? t + " · Where's Patrick?" : "Where's Patrick?";
       }
       function goToEntry(el, push) {
         var view = el.closest ? el.closest(".view") : null;
