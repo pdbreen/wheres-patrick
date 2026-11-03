@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Past trips · Where&#x27;s Patrick?</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac8ec613a4e94bc989bad09cb803ab8b"}'></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,650&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="site.css">
+<link rel="icon" href="data:," />
+</head>
+<body>
+<main class="page">
+<nav class="site-nav" aria-label="Pages">
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="4" x2="20" y1="7" y2="7"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="17" y2="17"/></svg>
+        <span>Menu</span>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html" data-nav="today">Today</a>
+        <a href="next.html" data-nav="next">Next</a>
+        <a href="future.html" data-nav="future">Future</a>
+        <a href="past.html" data-nav="past" aria-current="page">Past</a>
+      </div>
+    </nav>
+<div class="view" id="view-past">
+<section aria-labelledby="archive-heading">
+      <div class="section-head">
+        <h2 id="archive-heading">Trip archive</h2>
+        <p>Earlier journeys, kept day by day — every journal entry and photo from the summer’s travels.</p>
+      </div>
+      <div class="archive-list">
+        <a class="archive-card current-card" href="past/venice-transatlantic-oct-nov-2026.html">
+          <time>Oct 6 to Nov 15, 2026</time>
+          <strong>Venice &amp; Transatlantic <span class="current-badge">Current trip</span></strong>
+          <span class="desc">The trip happening now — Venice and the Adriatic, Greece, then the transatlantic home aboard Odyssey of the Seas. The journal is still accumulating, day by day.</span>
+          <span class="go">Read the trip journal →</span>
+        </a>
+        <a class="archive-card" href="past/bayonne-miami-sep-2026.html">
+          <time>Sep 2 to Sep 28, 2026</time>
+          <strong>New England, Bermuda &amp; Virgin Voyages</strong>
+          <span class="desc">Two back-to-back Independence of the Seas sailings out of Bayonne — New England and Canada, then Bermuda — followed by two back-to-back Resilient Lady sailings out of Miami.</span>
+          <span class="go">Read the trip journal →</span>
+        </a>
+        <a class="archive-card" href="past/spain-transatlantic-jul-aug-2026.html">
+          <time>Jul 22 to Aug 29, 2026</time>
+          <strong>Spain &amp; Transatlantic</strong>
+          <span class="desc">Madrid and Spain, the transatlantic crossing, Orlando and Universal Studios, Utopia of the Seas, and Rhapsody of the Seas ending in San Juan.</span>
+          <span class="go">Read the trip journal →</span>
+        </a>
+        <a class="archive-card" href="past/cape-cod-jul-2026.html">
+          <time>Jul 11 to Jul 18, 2026</time>
+          <strong>Annual Summer Vacation 2026</strong>
+          <span class="desc">A week on Cape Cod — the annual summer vacation at a rental house at 15 Shore Road in Harwich, Massachusetts.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/alaska-may-jun-2026.html">
+          <time>May 27 to Jun 27, 2026</time>
+          <strong>Alaska 2026</strong>
+          <span class="desc">Four back-to-back Ovation of the Seas sailings between Vancouver and Seward. Day by day from the receipts.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/san-juan-rome-apr-may-2026.html">
+          <time>Apr 11 to May 25, 2026</time>
+          <strong>San Juan to Rome 2026</strong>
+          <span class="desc">Five back-to-back Brilliance of the Seas sailings from San Juan to Rome. Day by day from the receipts.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/miami-jan-feb-2026.html">
+          <time>Jan 2 to Feb 4, 2026</time>
+          <strong>Miami 2026</strong>
+          <span class="desc">Five back-to-back sailings out of Miami on Virgin Voyages and Celebrity. Day by day from the receipts.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/december-caribbean-nov-dec-2025.html">
+          <time>Nov 29 to Dec 20, 2025</time>
+          <strong>December Caribbean 2025</strong>
+          <span class="desc">Symphony, Independence and Allure, back to back out of Miami and Ft Lauderdale. Day by day from the receipts.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/fall-transatlantic-oct-nov-2025.html">
+          <time>Oct 8 to Nov 21, 2025</time>
+          <strong>Fall Transatlantic 2025</strong>
+          <span class="desc">Southampton, a transatlantic crossing, and three Florida sailings. Day by day from the receipts.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/eastern-canada-sep-oct-2025.html">
+          <time>Sep 21 to Oct 5, 2025</time>
+          <strong>Eastern Canada 2025</strong>
+          <span class="desc">Two back-to-back Brilliance of the Seas sailings from Boston. Day by day from the receipts.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/star-cococay-aug-2025.html">
+          <time>Aug 26 to Aug 31, 2025</time>
+          <strong>Star of the Seas, Aug 2025</strong>
+          <span class="desc">Star of the Seas to Perfect Day CocoCay, with Orlando flights and a hotel night. Day by day from the receipts.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/jewel-cococay-jul-2025.html">
+          <time>Jul 24 to Jul 28, 2025</time>
+          <strong>Jewel of the Seas, Jul 2025</strong>
+          <span class="desc">Jewel of the Seas to Perfect Day CocoCay, with Ft Lauderdale flights and a hotel night. Day by day from the receipts.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/cape-cod-jun-jul-2025.html">
+          <time>Jun 28 to Jul 5, 2025</time>
+          <strong>Annual Summer Vacation 2025</strong>
+          <span class="desc">A week on Cape Cod — the annual summer vacation at &ldquo;3 By the Sea&rdquo;, a three-cottage rental on Higgins Road in Eastham, Massachusetts.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/odyssey-mediterranean-may-2025.html">
+          <time>May 16 to May 25, 2025</time>
+          <strong>Odyssey of the Seas, May 2025</strong>
+          <span class="desc">Odyssey of the Seas in the Greek Isles — Santorini, Kusadasi, Mykonos and Naples. Day by day from the receipts.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/vision-baltimore-mar-2025.html">
+          <time>Mar 20 to Mar 29, 2025</time>
+          <strong>Vision of the Seas, Mar 2025</strong>
+          <span class="desc">Vision of the Seas from Baltimore — Charleston, Port Canaveral, Grand Bahama and Nassau. Day by day from the receipts.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/adventure-caribbean-dec-2024.html">
+          <time>Dec 26, 2024 to Jan 6, 2025</time>
+          <strong>Adventure of the Seas, Dec 2024</strong>
+          <span class="desc">Adventure of the Seas — Labadee, San Juan, St. Croix and St. Maarten over New Year. Day by day from the receipts.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/oasis-transatlantic-oct-2024.html">
+          <time>Oct 24 to Nov 7, 2024</time>
+          <strong>Oasis of the Seas, Oct 2024</strong>
+          <span class="desc">Oasis of the Seas across the Atlantic — Spain and Nassau, Barcelona to Ft Lauderdale. Ports in order from the Cruise Globe.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/brilliance-alaska-may-2024.html">
+          <time>May 26 to Jun 2, 2024</time>
+          <strong>Brilliance of the Seas, May 2024</strong>
+          <span class="desc">Brilliance of the Seas in Alaska — Sitka, Juneau, Haines and Ketchikan from Vancouver. Ports in order from the Cruise Globe.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/symphony-caribbean-mar-2024.html">
+          <time>Mar 17 to Mar 23, 2024</time>
+          <strong>Symphony of the Seas, Mar 2024</strong>
+          <span class="desc">Symphony of the Seas from Ft Lauderdale — Falmouth and Nassau. Ports in order from the Cruise Globe.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/adventure-caribbean-dec-2023.html">
+          <time>Dec 30, 2023 to Jan 5, 2024</time>
+          <strong>Adventure of the Seas, Dec 2023</strong>
+          <span class="desc">Adventure of the Seas from Port Canaveral — Nassau, Labadee and Puerto Plata. Ports in order from the Cruise Globe.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/oasis-caribbean-sep-2023.html">
+          <time>Sep 3 to Sep 10, 2023</time>
+          <strong>Oasis of the Seas, Sep 2023</strong>
+          <span class="desc">Oasis of the Seas from Cape Liberty — Port Canaveral, CocoCay and Nassau. Ports in order from the Cruise Globe.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/harmony-caribbean-mar-2023.html">
+          <time>Mar 25 to Apr 1, 2023</time>
+          <strong>Harmony of the Seas, Mar 2023</strong>
+          <span class="desc">Harmony of the Seas from Miami — Roatan, Cozumel and CocoCay. Ports in order from the Cruise Globe.</span>
+          <span class="go">View the trip →</span>
+        </a>
+        <a class="archive-card" href="past/allure-caribbean-oct-2022.html">
+          <time>Oct 29 to Nov 5, 2022</time>
+          <strong>Allure of the Seas, Oct 2022</strong>
+          <span class="desc">Allure of the Seas from Ft Lauderdale — Puerto Plata, Labadee, Nassau and CocoCay. Ports in order from the Cruise Globe.</span>
+          <span class="go">View the trip →</span>
+        </a>
+      </div>
+    </section>
+</div>
+</main>
+<script src="app.js" defer></script>
+<script>
+(function () {
+  var PAGES = {"today": "index.html", "next": "next.html", "future": "future.html", "past": "past.html", "venice-transatlantic": "past/venice-transatlantic-oct-nov-2026.html", "spain-transatlantic-jul-aug-2026": "past/spain-transatlantic-jul-aug-2026.html", "cape-cod-jul-2026": "past/cape-cod-jul-2026.html", "bayonne-miami-sep-2026": "past/bayonne-miami-sep-2026.html", "alaska-may-jun-2026": "past/alaska-may-jun-2026.html", "san-juan-rome-apr-may-2026": "past/san-juan-rome-apr-may-2026.html", "miami-jan-feb-2026": "past/miami-jan-feb-2026.html", "december-caribbean-nov-dec-2025": "past/december-caribbean-nov-dec-2025.html", "fall-transatlantic-oct-nov-2025": "past/fall-transatlantic-oct-nov-2025.html", "eastern-canada-sep-oct-2025": "past/eastern-canada-sep-oct-2025.html", "star-cococay-aug-2025": "past/star-cococay-aug-2025.html", "jewel-cococay-jul-2025": "past/jewel-cococay-jul-2025.html", "cape-cod-jun-jul-2025": "past/cape-cod-jun-jul-2025.html", "odyssey-mediterranean-may-2025": "past/odyssey-mediterranean-may-2025.html", "vision-baltimore-mar-2025": "past/vision-baltimore-mar-2025.html", "adventure-caribbean-dec-2024": "past/adventure-caribbean-dec-2024.html", "oasis-transatlantic-oct-2024": "past/oasis-transatlantic-oct-2024.html", "brilliance-alaska-may-2024": "past/brilliance-alaska-may-2024.html", "symphony-caribbean-mar-2024": "past/symphony-caribbean-mar-2024.html", "adventure-caribbean-dec-2023": "past/adventure-caribbean-dec-2023.html", "oasis-caribbean-sep-2023": "past/oasis-caribbean-sep-2023.html", "harmony-caribbean-mar-2023": "past/harmony-caribbean-mar-2023.html", "allure-caribbean-oct-2022": "past/allure-caribbean-oct-2022.html"};
+  var ENTRIES = {"2026-11-02": "past/venice-transatlantic-oct-nov-2026.html", "2026-11-01": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-31": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-30": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-29": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-28": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-27": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-26": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-25": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-24": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-23": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-22": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-21": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-20": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-19": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-18": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-17": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-16": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-15": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-14": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-13": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-12": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-11": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-10": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-09": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-08": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-07": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-06": "past/venice-transatlantic-oct-nov-2026.html", "2026-08-29": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-27": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-25": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-22": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-12": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-11": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-10": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-09": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-08": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-05": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-03": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-02": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-01": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-31": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-30": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-29": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-28": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-27": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-26": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-25": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-24": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-23": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-22": "past/spain-transatlantic-jul-aug-2026.html", "2026-09-28": "past/bayonne-miami-sep-2026.html", "2026-09-27": "past/bayonne-miami-sep-2026.html", "2026-09-26": "past/bayonne-miami-sep-2026.html", "2026-09-25": "past/bayonne-miami-sep-2026.html", "2026-09-24": "past/bayonne-miami-sep-2026.html", "2026-09-23": "past/bayonne-miami-sep-2026.html", "2026-09-22": "past/bayonne-miami-sep-2026.html", "2026-09-21": "past/bayonne-miami-sep-2026.html", "2026-09-20": "past/bayonne-miami-sep-2026.html", "2026-09-19": "past/bayonne-miami-sep-2026.html", "2026-09-18": "past/bayonne-miami-sep-2026.html", "2026-09-17": "past/bayonne-miami-sep-2026.html", "2026-09-16": "past/bayonne-miami-sep-2026.html", "2026-09-15": "past/bayonne-miami-sep-2026.html", "2026-09-14": "past/bayonne-miami-sep-2026.html", "2026-09-13": "past/bayonne-miami-sep-2026.html", "2026-09-12": "past/bayonne-miami-sep-2026.html", "2026-09-11": "past/bayonne-miami-sep-2026.html", "2026-09-10": "past/bayonne-miami-sep-2026.html", "2026-09-09": "past/bayonne-miami-sep-2026.html", "2026-09-08": "past/bayonne-miami-sep-2026.html", "2026-09-07": "past/bayonne-miami-sep-2026.html", "2026-09-06": "past/bayonne-miami-sep-2026.html", "2026-09-05": "past/bayonne-miami-sep-2026.html", "2026-09-04": "past/bayonne-miami-sep-2026.html", "2026-09-03": "past/bayonne-miami-sep-2026.html"};
+  function cur() {
+    var s = location.pathname.split("/").pop();
+    return s === "" ? "index.html" : s;
+  }
+  function onPage(u) { return u.split("#")[0].split("/").pop() === cur(); }
+  function go() {
+    var h = location.hash.replace(/^#/, "");
+    if (!h) { return; }
+    if (PAGES[h]) {
+      if (!onPage(PAGES[h])) { location.replace(PAGES[h]); }
+      return;
+    }
+    if (h.indexOf("entry-") === 0) {
+      var t = ENTRIES[h.slice(6)];
+      if (t && !onPage(t)) { location.replace(t + "#" + h); }
+    }
+  }
+  window.addEventListener("hashchange", go);
+  go();
+})();
+</script>
+</body>
+</html>

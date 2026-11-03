@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>What&#x27;s after · Where&#x27;s Patrick?</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac8ec613a4e94bc989bad09cb803ab8b"}'></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,650&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="site.css">
+<link rel="icon" href="data:," />
+</head>
+<body>
+<main class="page">
+<nav class="site-nav" aria-label="Pages">
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="4" x2="20" y1="7" y2="7"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="17" y2="17"/></svg>
+        <span>Menu</span>
+      </button>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html" data-nav="today">Today</a>
+        <a href="next.html" data-nav="next">Next</a>
+        <a href="future.html" data-nav="future" aria-current="page">Future</a>
+        <a href="past.html" data-nav="past">Past</a>
+      </div>
+    </nav>
+<div class="view" id="view-future">
+<section aria-labelledby="next-heading">
+      <div class="section-head">
+        <h2 id="next-heading">What’s after Venice</h2>
+        <p>The calendar stays busy.</p>
+      </div>
+      <div class="journeys">
+        <article class="next-primary" data-start="2026-11-19">
+          <div data-cd-slot><span class="date">November 19–23, 2026</span><h3>Seattle &amp; Redmond</h3><p>A family wedding weekend in Washington, with a little time around the Eastside and Seattle.</p></div>
+          <div class="route-line"><span>Boston</span><i aria-hidden="true"></i><span>Seattle</span></div>
+        </article>
+        <div class="upcoming-list" aria-label="Later journeys">
+          <div class="trip-row" data-start="2026-11-28" data-end="2026-12-19" data-trip="december-caribbean"><time>Nov 28<br />Dec 19</time><div data-cd-slot><strong>Caribbean</strong><span>Bahamas, Dominican Republic, Aruba, Curaçao &amp; Mexico</span></div></div>
+          <div class="trip-row" data-start="2027-01-02" data-end="2027-01-25" data-trip="january-caribbean"><time>Jan 2<br />Jan 25</time><div data-cd-slot><strong>Eastern &amp; Southern Caribbean</strong><span>Two voyages from New Jersey</span></div></div>
+          <div class="trip-row" data-start="2027-02-05" data-end="2027-02-19" data-trip="february-caribbean"><time>Feb 5<br />Feb 19</time><div data-cd-slot><strong>Florida &amp; the Bahamas</strong><span>Miami, Estero and two short cruises</span></div></div>
+          <div class="trip-row" data-start="2027-02-26" data-end="2027-05-05" data-trip="australia"><time>Feb 26<br />May 5</time><div data-cd-slot><strong>Pacific crossing</strong><span>Hawaii, Australia, New Zealand and the South Pacific</span></div></div>
+          <div class="trip-row" data-start="2027-05-12" data-end="2027-05-29" data-trip="legend"><time>May 12<br />May 29</time><div data-cd-slot><strong>Spain &amp; the Mediterranean</strong><span>Barcelona, the western Med and Andalusia</span></div></div>
+          <div class="trip-row" data-start="2027-07-10" data-end="2027-07-17" data-trip="annual-summer-vacation"><time>Jul 10<br />Jul 17</time><div data-cd-slot><strong>Annual Summer Vacation</strong><span>Boyajian Family Beach House, 43 Oceanside Drive, Scituate, MA — driving from Nashua, NH both ways; booking status to be confirmed</span></div></div>
+          <div class="trip-row" data-start="2027-08-20" data-end="2027-09-03" data-trip="alaska"><time>Aug 20<br />Sep 3</time><div data-cd-slot><strong>Alaska</strong><span>Fairbanks to Vancouver by road, rail and sea</span></div></div>
+          <div class="trip-row" data-start="2027-09-19" data-end="2027-10-30" data-trip="panama-canal"><time>Sep 19<br />Oct 30</time><div data-cd-slot><strong>Panama Canal</strong><span>Vancouver down the Pacific coast to San Diego, through the Canal to Tampa, then the eastern Caribbean</span></div></div>
+          <div class="trip-row" data-start="2028-03-08" data-end="2028-05-03" data-trip="japan"><time>Mar 8<br />May 3<br />2028</time><div data-cd-slot><strong>Japan</strong><span>Shanghai to Seattle via Tokyo &amp; Kyoto</span></div></div>
+          <div class="trip-row" data-start="2028-08-29" data-end="2028-09-15" data-trip="iceland-greenland"><time>Aug 29<br />Sep 15<br />2028</time><div data-cd-slot><strong>Iceland &amp; Greenland</strong><span>Jewel of the Seas, 17n — Copenhagen → Aarhus → Reykjavik (overnight) → Isafjordur → Akureyri → Prins Christian Sund (cruise-by) → Qaqortoq, Greenland → St. John’s → Halifax → Boston. Spacious Ocean View Balcony, stateroom 2B 9604</span></div></div>
+        </div>
+      </div>
+    </section>
+</div>
+</main>
+<script src="app.js" defer></script>
+<script>
+(function () {
+  var PAGES = {"today": "index.html", "next": "next.html", "future": "future.html", "past": "past.html", "venice-transatlantic": "past/venice-transatlantic-oct-nov-2026.html", "spain-transatlantic-jul-aug-2026": "past/spain-transatlantic-jul-aug-2026.html", "cape-cod-jul-2026": "past/cape-cod-jul-2026.html", "bayonne-miami-sep-2026": "past/bayonne-miami-sep-2026.html", "alaska-may-jun-2026": "past/alaska-may-jun-2026.html", "san-juan-rome-apr-may-2026": "past/san-juan-rome-apr-may-2026.html", "miami-jan-feb-2026": "past/miami-jan-feb-2026.html", "december-caribbean-nov-dec-2025": "past/december-caribbean-nov-dec-2025.html", "fall-transatlantic-oct-nov-2025": "past/fall-transatlantic-oct-nov-2025.html", "eastern-canada-sep-oct-2025": "past/eastern-canada-sep-oct-2025.html", "star-cococay-aug-2025": "past/star-cococay-aug-2025.html", "jewel-cococay-jul-2025": "past/jewel-cococay-jul-2025.html", "cape-cod-jun-jul-2025": "past/cape-cod-jun-jul-2025.html", "odyssey-mediterranean-may-2025": "past/odyssey-mediterranean-may-2025.html", "vision-baltimore-mar-2025": "past/vision-baltimore-mar-2025.html", "adventure-caribbean-dec-2024": "past/adventure-caribbean-dec-2024.html", "oasis-transatlantic-oct-2024": "past/oasis-transatlantic-oct-2024.html", "brilliance-alaska-may-2024": "past/brilliance-alaska-may-2024.html", "symphony-caribbean-mar-2024": "past/symphony-caribbean-mar-2024.html", "adventure-caribbean-dec-2023": "past/adventure-caribbean-dec-2023.html", "oasis-caribbean-sep-2023": "past/oasis-caribbean-sep-2023.html", "harmony-caribbean-mar-2023": "past/harmony-caribbean-mar-2023.html", "allure-caribbean-oct-2022": "past/allure-caribbean-oct-2022.html"};
+  var ENTRIES = {"2026-11-02": "past/venice-transatlantic-oct-nov-2026.html", "2026-11-01": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-31": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-30": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-29": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-28": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-27": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-26": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-25": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-24": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-23": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-22": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-21": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-20": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-19": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-18": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-17": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-16": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-15": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-14": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-13": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-12": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-11": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-10": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-09": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-08": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-07": "past/venice-transatlantic-oct-nov-2026.html", "2026-10-06": "past/venice-transatlantic-oct-nov-2026.html", "2026-08-29": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-27": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-25": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-22": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-12": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-11": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-10": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-09": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-08": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-05": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-03": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-02": "past/spain-transatlantic-jul-aug-2026.html", "2026-08-01": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-31": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-30": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-29": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-28": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-27": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-26": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-25": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-24": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-23": "past/spain-transatlantic-jul-aug-2026.html", "2026-07-22": "past/spain-transatlantic-jul-aug-2026.html", "2026-09-28": "past/bayonne-miami-sep-2026.html", "2026-09-27": "past/bayonne-miami-sep-2026.html", "2026-09-26": "past/bayonne-miami-sep-2026.html", "2026-09-25": "past/bayonne-miami-sep-2026.html", "2026-09-24": "past/bayonne-miami-sep-2026.html", "2026-09-23": "past/bayonne-miami-sep-2026.html", "2026-09-22": "past/bayonne-miami-sep-2026.html", "2026-09-21": "past/bayonne-miami-sep-2026.html", "2026-09-20": "past/bayonne-miami-sep-2026.html", "2026-09-19": "past/bayonne-miami-sep-2026.html", "2026-09-18": "past/bayonne-miami-sep-2026.html", "2026-09-17": "past/bayonne-miami-sep-2026.html", "2026-09-16": "past/bayonne-miami-sep-2026.html", "2026-09-15": "past/bayonne-miami-sep-2026.html", "2026-09-14": "past/bayonne-miami-sep-2026.html", "2026-09-13": "past/bayonne-miami-sep-2026.html", "2026-09-12": "past/bayonne-miami-sep-2026.html", "2026-09-11": "past/bayonne-miami-sep-2026.html", "2026-09-10": "past/bayonne-miami-sep-2026.html", "2026-09-09": "past/bayonne-miami-sep-2026.html", "2026-09-08": "past/bayonne-miami-sep-2026.html", "2026-09-07": "past/bayonne-miami-sep-2026.html", "2026-09-06": "past/bayonne-miami-sep-2026.html", "2026-09-05": "past/bayonne-miami-sep-2026.html", "2026-09-04": "past/bayonne-miami-sep-2026.html", "2026-09-03": "past/bayonne-miami-sep-2026.html"};
+  function cur() {
+    var s = location.pathname.split("/").pop();
+    return s === "" ? "index.html" : s;
+  }
+  function onPage(u) { return u.split("#")[0].split("/").pop() === cur(); }
+  function go() {
+    var h = location.hash.replace(/^#/, "");
+    if (!h) { return; }
+    if (PAGES[h]) {
+      if (!onPage(PAGES[h])) { location.replace(PAGES[h]); }
+      return;
+    }
+    if (h.indexOf("entry-") === 0) {
+      var t = ENTRIES[h.slice(6)];
+      if (t && !onPage(t)) { location.replace(t + "#" + h); }
+    }
+  }
+  window.addEventListener("hashchange", go);
+  go();
+})();
+</script>
+</body>
+</html>
