@@ -7,53 +7,6 @@ try {
   
 } catch (e) { if (window.console) console.warn('page script:', e); }
 try {
-
-      // Mobile menu, bound here — immediately after the nav markup — rather
-      // than at the end of assets/app.js. On iPhone Safari (especially on
-      // slow ship Wi-Fi) the toggle previously never got its handler when
-      // the large app.js was delayed by the Leaflet download ahead of it or
-      // stopped by an earlier error, leaving the Menu button dead. This
-      // small dependency-free script runs as soon as the nav exists; the
-      // router in app.js checks window.__navToggleBound and skips its own
-      // binding so one tap can never toggle the menu twice.
-      (function () {
-        var toggle = document.getElementById("nav-toggle");
-        var links = document.getElementById("nav-links");
-        if (!toggle || !links || window.__navToggleBound) { return; }
-        window.__navToggleBound = true;
-        function setOpen(open) {
-          if (open) { links.classList.add("open"); } else { links.classList.remove("open"); }
-          toggle.setAttribute("aria-expanded", open ? "true" : "false");
-        }
-        function isOpen() { return links.classList.contains("open"); }
-        toggle.addEventListener("click", function (e) {
-          e.preventDefault();
-          setOpen(!isOpen());
-        });
-        links.addEventListener("click", function (e) {
-          var t = e.target;
-          while (t && t !== links) {
-            if (t.tagName === "A") { setOpen(false); return; }
-            t = t.parentNode;
-          }
-        });
-        document.addEventListener("click", function (e) {
-          if (!isOpen()) { return; }
-          var t = e.target;
-          while (t) {
-            if (t === links || t === toggle) { return; }
-            t = t.parentNode;
-          }
-          setOpen(false);
-        });
-        document.addEventListener("keydown", function (e) {
-          if ((e.key === "Escape" || e.key === "Esc") && isOpen()) { setOpen(false); toggle.focus(); }
-        });
-        window.addEventListener("hashchange", function () { setOpen(false); });
-      })();
-    
-} catch (e) { if (window.console) console.warn('page script:', e); }
-try {
     // ===== Dynamic hero photo =====
     // The hero photo follows the "What's next" day-cards below: it is chosen
     // from the cards, never from a hard-coded date. On a PORT day the hero
