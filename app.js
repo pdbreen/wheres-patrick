@@ -5703,8 +5703,8 @@ try {
       // to the DOM — a wrong guess about the page's depth must not by
       // itself empty the search.
       var inPast = window.location.pathname.indexOf("/past/") !== -1;
-      var primaryPath = inPast ? "../assets/search-index.json" : "assets/search-index.json";
-      var secondaryPath = inPast ? "assets/search-index.json" : "../assets/search-index.json";
+      var primaryPath = (inPast ? "../assets/search-index.json" : "assets/search-index.json") + '?v=' + (window.__SITE_VERSION__ || '');
+      var secondaryPath = (inPast ? "assets/search-index.json" : "../assets/search-index.json") + '?v=' + (window.__SITE_VERSION__ || '');
       function fetchIndex(path) {
         return fetch(path).then(function (r) {
           if (!r.ok) { throw new Error("search index unavailable"); }
