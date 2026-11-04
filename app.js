@@ -221,10 +221,12 @@ try {
     // view carries a matching [data-trip-map] element and its counters in
     // the markup are counted from this same list.
     const PAST_TRIP_ROUTES = {
-      // The current trip's past page (reached from Past trips) maps the
-      // stops reached so far, mirroring the older trips' pages; when the
-      // trip ends, extend this to the full route.
-      "venice-transatlantic": [{ name: "Boston, Massachusetts", lat: 42.3601, lng: -71.0589 }, { name: "Madrid, Spain", lat: 40.4168, lng: -3.7038 }, { name: "Venice, Italy", lat: 45.4408, lng: 12.3155 }, { name: "Ravenna, Italy", lat: 44.4184, lng: 12.2035 }, { name: "Kotor, Montenegro", lat: 42.4247, lng: 18.7712 }, { name: "Santorini, Greece", lat: 36.4618, lng: 25.3760 }, { name: "Athens (Piraeus), Greece", lat: 37.9429, lng: 23.6469 }, { name: "Split, Croatia", lat: 43.5081, lng: 16.4402 }, { name: "Civitavecchia (Rome), Italy", lat: 42.0956, lng: 11.7879 }, { name: "Messina, Sicily, Italy", lat: 38.1937, lng: 15.5542 }, { name: "Mykonos, Greece", lat: 37.4467, lng: 25.3289 }, { name: "Naples, Italy", lat: 40.8518, lng: 14.2681 }, { name: "La Spezia, Italy", lat: 44.1025, lng: 9.8241 }, { name: "Barcelona, Spain", lat: 41.3874, lng: 2.1686 }, { name: "Cartagena, Spain", lat: 37.6257, lng: -0.9966 }, { name: "Lisbon, Portugal", lat: 38.7223, lng: -9.1393 }, { name: "Ponta Delgada, Azores, Portugal", lat: 37.7394, lng: -25.6687 }],
+      // Note: the current trip (venice-transatlantic) is NOT in this
+      // table. Its history page carries [data-current-trip-map] and is
+      // rendered from CURRENT_TRIP_STOPS with the same been / today /
+      // going markers, solid + dashed route lines, key and totals as
+      // the home page's "The current trip, mapped" section. Only when
+      // the trip ends should its full route move into this table.
       "spain-transatlantic-jul-aug-2026": [{ name: "Madrid, Spain", lat: 40.4168, lng: -3.7038 }, { name: "Barcelona, Spain", lat: 41.3874, lng: 2.1686 }, { name: "Palma de Mallorca, Spain", lat: 39.5696, lng: 2.6502 }, { name: "Cartagena, Spain", lat: 37.6257, lng: -0.9966 }, { name: "M\u00e1laga, Spain", lat: 36.7213, lng: -4.4214 }, { name: "C\u00e1diz, Spain", lat: 36.5271, lng: -6.2886 }, { name: "Orlando, Florida", lat: 28.5383, lng: -81.3792 }, { name: "Port Canaveral, Florida", lat: 28.4103, lng: -80.6188 }, { name: "Nassau, Bahamas", lat: 25.048, lng: -77.3554 }, { name: "Perfect Day at CocoCay, Bahamas", lat: 25.8172, lng: -77.9375 }, { name: "San Juan, Puerto Rico", lat: 18.4655, lng: -66.1057 }, { name: "Tortola, British Virgin Islands", lat: 18.4236, lng: -64.6185 }, { name: "Philipsburg, St. Maarten", lat: 18.0237, lng: -63.0458 }, { name: "St. John\u2019s, Antigua", lat: 17.1274, lng: -61.8468 }, { name: "Basseterre, St. Kitts", lat: 17.3026, lng: -62.7177 }, { name: "St. Croix, US Virgin Islands", lat: 17.7125, lng: -64.8814 }, { name: "Charlotte Amalie, St. Thomas", lat: 18.3419, lng: -64.9307 }, { name: "Roseau, Dominica", lat: 15.3017, lng: -61.388 }],
       "cape-cod-jul-2026": [{ name: "Harwich, Massachusetts", lat: 41.6865, lng: -70.0753 }],
       "bayonne-miami-sep-2026": [{ name: "Newark, New Jersey", lat: 40.7357, lng: -74.1724 }, { name: "Cape Liberty (Bayonne), New Jersey", lat: 40.665, lng: -74.113 }, { name: "Boston, Massachusetts", lat: 42.3601, lng: -71.0589 }, { name: "Portland, Maine", lat: 43.6591, lng: -70.2568 }, { name: "Saint John, New Brunswick, Canada", lat: 45.2733, lng: -66.0633 }, { name: "Sydney, Nova Scotia, Canada", lat: 46.1368, lng: -60.1942 }, { name: "Royal Naval Dockyard, Bermuda", lat: 32.3265, lng: -64.8354 }, { name: "Miami, Florida", lat: 25.7617, lng: -80.1918 }, { name: "Grand Turk, Turks & Caicos", lat: 21.4675, lng: -71.1369 }, { name: "Bimini, Bahamas", lat: 25.7275, lng: -79.2976 }, { name: "Key West, Florida", lat: 24.5551, lng: -81.78 }],
@@ -331,8 +333,7 @@ try {
       function visible(el) {
         return !!(el.offsetParent || el.getClientRects().length) && el.clientHeight > 0;
       }
-      function initCurrent() {
-        var el = document.getElementById("trip-map");
+      function renderCurrentMap(el) {
         if (!el || el.getAttribute("data-map-done")) { return; }
         if (!visible(el)) { return; }
         el.setAttribute("data-map-done", "1");
@@ -358,6 +359,18 @@ try {
         // unpainted tile areas. Re-measure twice shortly after init.
         setTimeout(function () { map.invalidateSize(); }, 60);
         setTimeout(function () { map.invalidateSize(); }, 400);
+      }
+      function initCurrent() {
+        // The home page map (#trip-map) and the current trip's history
+        // page map ([data-current-trip-map]) share this exact renderer:
+        // filled teal check pins for "been", the pulsing orange pin for
+        // "today", hollow orange-ring pins for "going", a solid teal
+        // line for the travelled path and a dashed orange line for the
+        // route still to come — never the generic archive renderer.
+        renderCurrentMap(document.getElementById("trip-map"));
+        Array.prototype.forEach.call(document.querySelectorAll("[data-current-trip-map]"), function (el) {
+          renderCurrentMap(el);
+        });
       }
       function initPast() {
         Array.prototype.forEach.call(document.querySelectorAll("[data-trip-map]"), function (el) {
@@ -407,7 +420,7 @@ try {
           entries.forEach(function (en) { if (en.isIntersecting) { refresh(); } });
         }, { rootMargin: "240px" });
         Array.prototype.forEach.call(
-          document.querySelectorAll("#trip-map, [data-trip-map]"),
+          document.querySelectorAll("#trip-map, [data-trip-map], [data-current-trip-map]"),
           function (el) { io.observe(el); }
         );
       }
