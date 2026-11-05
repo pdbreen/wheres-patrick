@@ -1991,13 +1991,36 @@ try {
         var inPast = window.location.pathname.indexOf("/past/") !== -1;
         var primaryPath = (inPast ? "../assets/search-index.json" : "assets/search-index.json") + '?v=' + (window.__SITE_VERSION__ || '');
         var secondaryPath = (inPast ? "assets/search-index.json" : "../assets/search-index.json") + '?v=' + (window.__SITE_VERSION__ || '');
+        // The fetched file should be the full index object
+        // ({ trips, years, placeMeta, entries }). A publish step once
+        // shipped only the bare entries array, which silently zeroed
+        // the counters: the journal search survived because it accepts
+        // either shape, the counters did not. Normalise whatever
+        // arrives — a bare array is wrapped, and a missing placeMeta
+        // (or trips list) is borrowed from the copy of the index
+        // embedded in the page — so a format drift in the generated
+        // file can never blank the counters again.
+        function normalizePlaces(data) {
+          if (!data) { return null; }
+          if (Object.prototype.toString.call(data) === "[object Array]") { data = { entries: data }; }
+          if (!data.entries || !data.entries.length) { return null; }
+          if (!data.placeMeta || !data.trips) {
+            var emb = embeddedIndex();
+            if (emb) {
+              if (!data.placeMeta && emb.placeMeta) { data.placeMeta = emb.placeMeta; }
+              if (!data.trips && emb.trips) { data.trips = emb.trips; }
+            }
+          }
+          return data.placeMeta ? data : null;
+        }
         function tryPath(path) {
           return fetch(path).then(function (r) {
             if (!r.ok) { throw new Error("places unavailable"); }
             return r.json();
           }).then(function (data) {
-            if (!data || !data.entries || !data.entries.length || !data.placeMeta) { throw new Error("places malformed"); }
-            return data;
+            var norm = normalizePlaces(data);
+            if (!norm) { throw new Error("places malformed"); }
+            return norm;
           });
         }
         tryPath(primaryPath).then(setPlaces).catch(function () {
