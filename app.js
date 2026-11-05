@@ -1717,8 +1717,16 @@ try {
       var listEl = document.getElementById("place-results-list");
       var clearBtn = document.getElementById("place-results-clear");
       var q = document.getElementById("filter-q");
-      var main = document.getElementById("view-main");
-      if (!panel || !titleEl || !listEl || !clearBtn || !main) { return; }
+      // The main view keeps its single-page name (view-main) inside this
+      // artifact, but the published site split it into per-page views
+      // (view-today on the front page, one archive view per trip page).
+      // Resolve whichever container this page actually has — and never
+      // let a missing container disable the counters' clicks: the search
+      // itself only needs the results panel. (Requiring view-main here
+      // is what silently killed every ship/city/country tap after the
+      // page split: the counts rendered, the click handler never bound.)
+      var main = document.getElementById("view-main") || document.getElementById("view-today") || document.querySelector(".view");
+      if (!panel || !titleEl || !listEl || !clearBtn) { return; }
       var programmatic = false;
 
       function findDay(ref) {
@@ -1757,9 +1765,42 @@ try {
           ? view.getAttribute("data-title") + " · Where's Patrick?"
           : "Where's Patrick?";
       }
+      // Readable label for a day that lives on another published page
+      // (its real date/title text sits in that page's DOM, out of
+      // findDay's reach): format the ISO date the index carries.
+      var MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      function fmtDay(iso) {
+        var p = String(iso || "").split("-");
+        if (p.length < 3) { return String(iso || ""); }
+        var m = MONTHS_SHORT[parseInt(p[1], 10) - 1];
+        return m ? m + " " + parseInt(p[2], 10) + ", " + p[0] : String(iso);
+      }
+      // On the published multi-page site a counted day usually lives on
+      // another page entirely — its trip's own past/<slug>.html, or the
+      // current trip's day-by-day page for view-main days — so findDay
+      // comes back empty-handed there. Build that page's URL instead:
+      // the current trip's page is read from the hero's journal link,
+      // which the publish step rewrites to the real file; trip archives
+      // are past/<slug>.html (a bare <slug>.html from inside past/).
+      function pageUrlFor(ref) {
+        if (!ref || ref.hero || !ref.v) { return ""; }
+        var inPast = window.location.pathname.indexOf("/past/") !== -1;
+        if (ref.v === "view-main") {
+          if (!ref.d) { return ""; }
+          var link = document.querySelector(".hero-journal-link");
+          var href = link ? link.getAttribute("href") || "" : "";
+          if (href.indexOf(".html") === -1) { return ""; }
+          return href.split("#")[0] + "#entry-" + ref.d;
+        }
+        return (inPast ? "" : "past/") + ref.v + ".html" + (ref.d ? "#entry-" + ref.d : "");
+      }
       function goToDay(ref) {
         var found = findDay(ref);
-        if (!found || !found.el) { return; }
+        if (!found || !found.el) {
+          var url = pageUrlFor(ref);
+          if (url) { window.location.href = url; }
+          return;
+        }
         var view = ref.hero ? main : (found.el.closest ? found.el.closest(".view") : null);
         if (view) { showView(view); }
         try { history.pushState(null, "", ref.hero ? "#hero" : (ref.v === "view-main" ? "#entry-" + ref.d : "#" + ref.v)); } catch (e) { /* in-page only */ }
@@ -1791,6 +1832,7 @@ try {
         listEl.innerHTML = "";
         rec.days.forEach(function (ref) {
           var found = findDay(ref);
+          if (!found && ref.d && !ref.date) { found = { date: fmtDay(ref.d), title: ref.title || rec.name }; }
           var li = document.createElement("li");
           var b = document.createElement("button");
           b.type = "button";
@@ -1814,9 +1856,11 @@ try {
           programmatic = false;
           var keep = {};
           rec.days.forEach(function (r) { if (r.v === "view-main" && !r.hero) { keep[r.d] = true; } });
-          Array.prototype.forEach.call(main.querySelectorAll(".history-list .memory"), function (e) {
-            e.style.display = keep[e.getAttribute("data-date")] ? "" : "none";
-          });
+          if (main) {
+            Array.prototype.forEach.call(main.querySelectorAll(".history-list .memory"), function (e) {
+              e.style.display = keep[e.getAttribute("data-date")] ? "" : "none";
+            });
+          }
           var empty = document.getElementById("filter-empty");
           if (empty) { empty.hidden = Object.keys(keep).length !== 0; }
         }
