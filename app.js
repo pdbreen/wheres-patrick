@@ -1734,26 +1734,47 @@ try {
         });
       }
       // ----- Year trackers: always exactly two lines — the current year
-      // (the year of the newest dated day on the page) and the year before
-      // it, never older years. Each line gives distinct travel days
-      // versus the days in that year — for the current year, the days
-      // elapsed so far (the day-of-year number of the newest dated day);
-      // for the completed prior year, its full day count — plus the
-      // unique countries, cities and ships counted from the places
-      // data. A day counts when a journal entry or a dated framework
-      // day carries it.
-      function renderYearTrackers() {
+      // (the year of the newest dated day in the data) and the year
+      // before it, never older years. Each line gives distinct travel
+      // days versus the days in that year — for the current year, the
+      // days elapsed so far (the day-of-year number of the newest dated
+      // day); for the completed prior year, its full day count — plus
+      // the unique countries, cities and ships counted from the places
+      // data. A day counts when the search index carries an entry for
+      // it (a journal day or a dated framework day).
+      // The days are counted from the search-index entries — the same
+      // data file the place counters above derive from — NOT from this
+      // page's own DOM. The trackers used to count the journal entries
+      // and framework days present in the document, which worked while
+      // everything lived on one page; once the published site split
+      // into per-trip pages, the home page held no entries at all, the
+      // count found nothing, and the render silently returned, leaving
+      // the last baked-in line frozen on the page (it sat at "through
+      // Nov 2, 2026" while the index already ran through Nov 4). The
+      // DOM days are still unioned in as a supplement, so a day that
+      // is on the page but somehow missing from the index still
+      // counts — but the index alone is enough, and if a loaded index
+      // yields no countable day at all, that is a data-shape failure:
+      // warn loudly instead of leaving a stale line looking current.
+      function renderYearTrackers(data) {
         var el = document.getElementById("year-tracker");
         var elPrior = document.getElementById("year-tracker-prior");
         if (!el) { return; }
-        var seen = {}, latest = null;
+        var seen = {}, latest = null, indexDays = 0;
         function add(iso) {
           if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) { return; }
           seen[iso] = true;
           if (!latest || iso > latest) { latest = iso; }
         }
+        if (data && data.entries) {
+          data.entries.forEach(function (e) { if (e && e.date) { add(e.date); } });
+          for (var dk in seen) { indexDays++; }
+        }
         Array.prototype.forEach.call(document.querySelectorAll("[id^=\"entry-\"]"), function (n) { add(n.id.slice(6)); });
         Array.prototype.forEach.call(document.querySelectorAll(".framework-day time[datetime]"), function (n) { add(n.getAttribute("datetime")); });
+        if (data && data.entries && data.entries.length && !indexDays) {
+          if (window.console) { console.warn("year trackers: search index carried no countable dates — check its entry date fields"); }
+        }
         if (!latest) { return; }
         function render(target, year, isCurrent) {
           if (!target) { return; }
@@ -1961,7 +1982,7 @@ try {
         });
         renderPlaceLists(places);
         renderLastVisited();
-        renderYearTrackers();
+        renderYearTrackers(data);
         placesReady = true;
         if (pendingSearch) {
           var ps = pendingSearch;
