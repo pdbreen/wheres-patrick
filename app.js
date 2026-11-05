@@ -1609,22 +1609,26 @@ try {
     // trip archives — each row jumping to the day itself.
     (function () {
       // ----- One source of truth for the place counters -----
-      // Every place record — each country, city and ship with its
-      // name, visit count, location line and dated days — lives ONLY
-      // in assets/search-index.json, in its top-level "places" array,
-      // the same file (and the same single fetch) the journal search
-      // already loads. Until this refactor the same records were kept
-      // three times: as the hard-coded panel lists in the markup, as
-      // a 47 KB literal in this file, and (for the journal entries
-      // themselves) in the search index — and the copies drifted: a
-      // dating update landed in two and silently missed the third,
-      // leaving the "Days in…" lists dateless for whole trips. Now
-      // the panels, the headline counts, the last-visited lines, the
-      // year trackers and the tap-a-place day lists below are ALL
-      // rendered or derived from the fetched "places" array, and the
-      // trip names come from the same file's "trips" array — there
-      // is no second copy left to forget. A future dating update
-      // edits search-index.json and everything follows.
+      // The place counters are DERIVED from the journal entries in
+      // assets/search-index.json — the same file (and the same single
+      // fetch) the journal search already loads. There is no places
+      // list anywhere any more: each entry carries its own place
+      // attribution — "c", the keys of the cities visited that day,
+      // and "s", the key of the ship whose sailing starts that day —
+      // and derivePlaces() below rebuilds every country, city and
+      // ship record (dated days, visit counts, last-visited dates)
+      // from those fields at load. The only place data kept apart
+      // from the entries is the file's "placeMeta" directory: a
+      // city's display name, location line and favorite flag, and a
+      // ship's name and total nights on board — reference data with
+      // no dates or counts in it, so it cannot drift the way the old
+      // hand-kept places list did (three copies once existed, and a
+      // dating update that reached two of them silently missed the
+      // third, leaving whole trips dateless in the "Days in…" lists).
+      // A future dating update edits the entries and everything —
+      // panels, headline counts, last-visited lines, year trackers,
+      // tap-a-place day lists — follows.
+      var CURRENT_TRIP = "venice-transatlantic";
       var INDEX = {};
       var TRIPS = {};
       var ARCHIVES = [];
@@ -1641,7 +1645,7 @@ try {
 
       // Render the three counter panels (countries / cities / ships),
       // the headline count buttons and the ships total line from the
-      // fetched places, in the array's order (the panels' display
+      // derived places, in the array's order (the panels' display
       // order: favorites first for cities, then most visited first),
       // reproducing the exact item markup the page used to hard-code.
       var FAV_STAR = '<svg class="fav-star" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
@@ -1791,25 +1795,171 @@ try {
         render(elPrior, String(parseInt(curYear, 10) - 1), false);
       }
 
-      // Build the lookup tables from the fetched file, render
+      // ----- Deriving the place records from the entries -----
+      // Counting rules, reproducing the judgments the old hand-kept
+      // list baked in:
+      //   city    — one visit per unbroken run of consecutive days
+      //             in the city on one trip (a multi-day stay counts
+      //             once; turnaround days count once).
+      //   country — a city's country is the last component of its
+      //             location line ("Azores, Portugal" → Portugal;
+      //             territories like Puerto Rico stand alone as
+      //             their own country entry). Its days are the union
+      //             of its cities' days, each day listed once, and
+      //             one visit is one unbroken stay: city visits on
+      //             the same trip whose date ranges overlap (a
+      //             turnaround day shared by two ports, a day trip
+      //             inside a longer stay) merge into a single visit.
+      //   ship    — one visit per sailing; a sailing's first day is
+      //             the entry carrying the ship's "s" marker, and
+      //             nights on board come from the directory (they
+      //             are a property of the sailings, not of any one
+      //             day's entry).
+      // Excursion cities count in their own right: an entry lists
+      // every city visited that day, not just the port slept in.
+      function slugifyPlaceName(s) {
+        return String(s || "").replace(/&/g, "and").normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+      }
+      function isoDay(iso) {
+        var p = String(iso || "").split("-");
+        return Date.UTC(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+      }
+      function isNextDay(a, b) { return isoDay(b) - isoDay(a) === 86400000; }
+      function sortedUniqDates(days) {
+        var seen = {}, out = [];
+        days.forEach(function (r) { if (!seen[r.d]) { seen[r.d] = 1; out.push(r.d); } });
+        return out.sort();
+      }
+      // One visit per run of consecutive days within each trip.
+      function countRuns(days) {
+        var byV = {};
+        days.forEach(function (r) { (byV[r.v] = byV[r.v] || []).push(r); });
+        var n = 0;
+        Object.keys(byV).forEach(function (v) {
+          var ds = sortedUniqDates(byV[v]);
+          ds.forEach(function (d, i) { if (i === 0 || !isNextDay(ds[i - 1], d)) { n++; } });
+        });
+        return n;
+      }
+      // A place's visit intervals: its runs of consecutive days,
+      // one interval per run per trip.
+      function runIntervals(days) {
+        var byV = {};
+        days.forEach(function (r) { (byV[r.v] = byV[r.v] || []).push(r); });
+        var out = [];
+        Object.keys(byV).forEach(function (v) {
+          var ds = sortedUniqDates(byV[v]);
+          var s = ds[0], prev = ds[0];
+          for (var i = 1; i < ds.length; i++) {
+            if (isNextDay(prev, ds[i])) { prev = ds[i]; }
+            else { out.push({ v: v, s: s, e: prev }); s = ds[i]; prev = ds[i]; }
+          }
+          if (ds.length) { out.push({ v: v, s: s, e: prev }); }
+        });
+        return out;
+      }
+      function derivePlaces(data) {
+        var meta = data.placeMeta || {};
+        var cityMeta = meta.cities || {};
+        var shipMeta = meta.ships || {};
+        var cityDays = {}, shipDays = {};
+        (data.entries || []).forEach(function (e) {
+          if (!e || !e.date || !e.tripId) { return; }
+          var ref = {
+            v: e.tripId === CURRENT_TRIP ? "view-main" : e.tripId,
+            d: e.date,
+            a: e.anchor || ""
+          };
+          var pre = "day-" + e.tripId + "-";
+          if (ref.a.indexOf(pre) === 0) { ref.p = ref.a.slice(pre.length); }
+          (e.c || []).forEach(function (k) { (cityDays[k] = cityDays[k] || []).push(ref); });
+          if (e.s) { (shipDays[e.s] = shipDays[e.s] || []).push(ref); }
+        });
+        function byDateDesc(a, b) { return a.d < b.d ? 1 : a.d > b.d ? -1 : 0; }
+        function byVisitsThenName(a, b) {
+          if (b.visits !== a.visits) { return b.visits - a.visits; }
+          return a.name.localeCompare(b.name);
+        }
+        var cities = [];
+        Object.keys(cityDays).forEach(function (k) {
+          var m = cityMeta[k] || {};
+          var days = cityDays[k].slice().sort(byDateDesc);
+          var rec = { kind: "city", key: k, name: m.name || k, visits: countRuns(days), days: days };
+          if (m.loc) { rec.loc = m.loc; }
+          if (m.fav) { rec.fav = true; }
+          cities.push(rec);
+        });
+        var byCountry = {};
+        cities.forEach(function (c) {
+          if (!c.loc) { return; }
+          var cname = c.loc.split(", ").pop();
+          (byCountry[cname] = byCountry[cname] || []).push(c);
+        });
+        var countries = [];
+        Object.keys(byCountry).forEach(function (cname) {
+          var recs = byCountry[cname];
+          var seen = {}, days = [];
+          recs.forEach(function (c) {
+            c.days.forEach(function (r) {
+              var kk = r.v + "|" + r.d;
+              if (!seen[kk]) { seen[kk] = 1; days.push(r); }
+            });
+          });
+          days.sort(byDateDesc);
+          var intervals = [];
+          recs.forEach(function (c) { intervals = intervals.concat(runIntervals(c.days)); });
+          var byV = {};
+          intervals.forEach(function (iv) { (byV[iv.v] = byV[iv.v] || []).push(iv); });
+          var visits = 0;
+          Object.keys(byV).forEach(function (v) {
+            var ivs = byV[v].sort(function (a, b) { return a.s < b.s ? -1 : a.s > b.s ? 1 : 0; });
+            var ce = null;
+            ivs.forEach(function (iv) {
+              if (ce === null || iv.s > ce) { visits++; ce = iv.e; }
+              else if (iv.e > ce) { ce = iv.e; }
+            });
+          });
+          countries.push({ kind: "country", key: slugifyPlaceName(cname), name: cname, visits: visits, days: days });
+        });
+        var ships = [];
+        Object.keys(shipDays).forEach(function (k) {
+          var m = shipMeta[k] || {};
+          var days = shipDays[k].slice().sort(byDateDesc);
+          ships.push({ kind: "ship", key: k, name: m.name || k, visits: days.length, nights: m.nights || 0, days: days });
+        });
+        countries.sort(byVisitsThenName);
+        ships.sort(byVisitsThenName);
+        cities.sort(function (a, b) {
+          var fa = a.fav ? 0 : 1, fb = b.fav ? 0 : 1;
+          if (fa !== fb) { return fa - fb; }
+          return byVisitsThenName(a, b);
+        });
+        return countries.concat(cities, ships);
+      }
+
+      // Build the lookup tables from the derived places, render
       // everything that depends on them, then honour any place tap
       // that arrived while the file was still loading.
       function setPlaces(data) {
-        if (!data || !data.places || !data.places.length) { return; }
-        data.places.forEach(function (p) {
+        if (!data || !data.entries || !data.entries.length) { return; }
+        var places = derivePlaces(data);
+        if (!places.length) { return; }
+        places.forEach(function (p) {
           var rec = { name: p.name, visits: p.visits, days: p.days || [] };
           if (p.nights !== undefined) { rec.nights = p.nights; }
           INDEX[p.kind + ":" + p.key] = rec;
         });
         (data.trips || []).forEach(function (tr) {
-          if (tr.id === "venice-transatlantic") {
+          if (tr.id === CURRENT_TRIP) {
             TRIPS["view-main"] = tr.name + " — current trip";
           } else {
             TRIPS[tr.id] = tr.name;
             ARCHIVES.push(tr.id);
           }
         });
-        renderPlaceLists(data.places);
+        renderPlaceLists(places);
         renderLastVisited();
         renderYearTrackers();
         placesReady = true;
@@ -1823,8 +1973,21 @@ try {
       // beside the site root's assets folder — root pages fetch it
       // directly, pages under past/ step up one level, and if the
       // expected path misses the other is tried before giving up.
+      // If both miss, the copy of the same index embedded in the
+      // page (the journal search's own fallback) is derived from
+      // instead, so the counters still render offline or on a
+      // failed fetch.
       (function loadPlaces() {
-        if (!window.fetch) { return; }
+        function embeddedIndex() {
+          var el = document.getElementById("search-index-data");
+          if (!el) { return null; }
+          try { return JSON.parse(el.textContent || ""); } catch (e) { return null; }
+        }
+        if (!window.fetch) {
+          var emb = embeddedIndex();
+          if (emb) { setPlaces(emb); }
+          return;
+        }
         var inPast = window.location.pathname.indexOf("/past/") !== -1;
         var primaryPath = (inPast ? "../assets/search-index.json" : "assets/search-index.json") + '?v=' + (window.__SITE_VERSION__ || '');
         var secondaryPath = (inPast ? "assets/search-index.json" : "../assets/search-index.json") + '?v=' + (window.__SITE_VERSION__ || '');
@@ -1833,12 +1996,15 @@ try {
             if (!r.ok) { throw new Error("places unavailable"); }
             return r.json();
           }).then(function (data) {
-            if (!data || !data.places || !data.places.length) { throw new Error("places malformed"); }
+            if (!data || !data.entries || !data.entries.length || !data.placeMeta) { throw new Error("places malformed"); }
             return data;
           });
         }
         tryPath(primaryPath).then(setPlaces).catch(function () {
-          tryPath(secondaryPath).then(setPlaces).catch(function () { /* counters stay unrendered; the journal search has its own fallback */ });
+          tryPath(secondaryPath).then(setPlaces).catch(function () {
+            var emb2 = embeddedIndex();
+            if (emb2) { setPlaces(emb2); }
+          });
         });
       })();
 
@@ -1864,6 +2030,17 @@ try {
         if (ref.hero) { return { el: document.getElementById("hero"), date: "Mon · Oct 26, 2026", title: "La Spezia, Italy — Cinque Terre by train" }; }
         var view = document.getElementById(ref.v);
         if (!view) { return null; }
+        // The entry's own anchor is the direct route: journal days
+        // carry "entry-<date>" ids, framework days carry their
+        // "day-<trip>-<port>" id — both are the anchor the search
+        // index records for the day.
+        if (ref.a) {
+          var byAnchor = view.querySelector("#" + ref.a);
+          if (byAnchor) {
+            var at = byAnchor.querySelector("time"), ah = byAnchor.querySelector("h3");
+            return { el: byAnchor, date: at ? at.textContent : ref.d, title: ah ? ah.textContent : "" };
+          }
+        }
         var entry = view.querySelector("#entry-" + ref.d);
         if (entry) {
           var t = entry.querySelector("time"), h = entry.querySelector("h3");
@@ -1916,14 +2093,15 @@ try {
       function pageUrlFor(ref) {
         if (!ref || ref.hero || !ref.v) { return ""; }
         var inPast = window.location.pathname.indexOf("/past/") !== -1;
+        var anchor = ref.a || (ref.d ? "entry-" + ref.d : "");
         if (ref.v === "view-main") {
           if (!ref.d) { return ""; }
           var link = document.querySelector(".hero-journal-link");
           var href = link ? link.getAttribute("href") || "" : "";
           if (href.indexOf(".html") === -1) { return ""; }
-          return href.split("#")[0] + "#entry-" + ref.d;
+          return href.split("#")[0] + "#" + anchor;
         }
-        return (inPast ? "" : "past/") + ref.v + ".html" + (ref.d ? "#entry-" + ref.d : "");
+        return (inPast ? "" : "past/") + ref.v + ".html" + (anchor ? "#" + anchor : "");
       }
       function goToDay(ref) {
         var found = findDay(ref);
