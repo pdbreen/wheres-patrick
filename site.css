@@ -999,6 +999,8 @@ h2 {
   height: auto;
   object-fit: contain;
 }
+.memory-photo.whole-photo a { display: block; cursor: zoom-in; }
+.memory-photo.whole-photo a:focus-visible { outline: 3px solid var(--orange); outline-offset: -3px; }
 .memory-copy { max-width: 480px; }
 .memory-copy time {
   display: block;
