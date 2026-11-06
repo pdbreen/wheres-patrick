@@ -1683,7 +1683,14 @@ try {
           ship: document.querySelector('#place-ships ul.place-list')
         };
         var counts = { country: 0, city: 0, ship: 0 };
-        var sailings = 0, nights = 0, latest = null;
+        // The "counts cover" note tracks page content, not places:
+        // its date is the latest date among ALL index entries
+        // (derivePlaces stashes it on the array as latestEntryDate),
+        // so sea days — entries with no city and no ship key, hence
+        // no place-attached day — still advance it. The place-day
+        // scan below can only ever match or trail that date, since
+        // every place-day comes from an entry.
+        var sailings = 0, nights = 0, latest = places.latestEntryDate || null;
         places.forEach(function (p) {
           counts[p.kind]++;
           if (p.kind === "ship") { sailings += p.visits; nights += p.nights || 0; }
@@ -1913,8 +1920,11 @@ try {
         var cityMeta = meta.cities || {};
         var shipMeta = meta.ships || {};
         var cityDays = {}, shipDays = {};
+        var latestEntryDate = null;
         (data.entries || []).forEach(function (e) {
-          if (!e || !e.date || !e.tripId) { return; }
+          if (!e || !e.date) { return; }
+          if (/^\d{4}-\d{2}-\d{2}$/.test(e.date) && (!latestEntryDate || e.date > latestEntryDate)) { latestEntryDate = e.date; }
+          if (!e.tripId) { return; }
           var ref = {
             v: e.tripId === CURRENT_TRIP ? "view-main" : e.tripId,
             d: e.date,
@@ -1984,7 +1994,9 @@ try {
           if (fa !== fb) { return fa - fb; }
           return byVisitsThenName(a, b);
         });
-        return countries.concat(cities, ships);
+        var all = countries.concat(cities, ships);
+        all.latestEntryDate = latestEntryDate;
+        return all;
       }
 
       // Build the lookup tables from the derived places, render
