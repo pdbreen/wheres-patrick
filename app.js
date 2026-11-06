@@ -271,18 +271,45 @@ try {
       });
     })();
 
-    // ----- Feature 2: local time where Patrick is (timezone from the hero's data-tz) -----
+    // ----- Feature 2: local time where Patrick is -----
+    // The hero's data-tz is the zone Patrick himself is on at publish
+    // time — ashore it is the place's zone; at sea it is the ship's
+    // clock (the zone his own device reports), NOT the last port's
+    // zone: mid-crossing the ship sets its clocks back as it sails
+    // west, so a port zone left in data-tz drifts hours away from his
+    // actual local time (the Azores zone stayed in the hero for days
+    // after the ship had crossed to UTC−4). Known upcoming setbacks
+    // ride along in data-tz-schedule as {from, tz} steps — "from" is
+    // a UTC instant — and the clock adopts each step as it passes, so
+    // the line keeps tracking his local time between publishes.
     (function () {
       var hero = document.getElementById("hero");
       var line = document.getElementById("local-time");
       if (!hero || !line) { return; }
       var tz = hero.getAttribute("data-tz");
+      var schedule = [];
+      try { schedule = JSON.parse(hero.getAttribute("data-tz-schedule") || "[]"); } catch (e) { schedule = []; }
       var place = document.getElementById("current-place").textContent.trim();
+      function zoneNow() {
+        var z = tz;
+        var now = new Date();
+        schedule.forEach(function (s) {
+          if (s && s.tz && s.from && now >= new Date(s.from)) { z = s.tz; }
+        });
+        return z;
+      }
       function update() {
         try {
-          var fmt = new Intl.DateTimeFormat("en-US", { timeZone: tz, hour: "numeric", minute: "2-digit" });
+          var fmt = new Intl.DateTimeFormat("en-US", { timeZone: zoneNow(), hour: "numeric", minute: "2-digit" });
           line.innerHTML = "It&rsquo;s currently <strong>" + fmt.format(new Date()) + "</strong> in " + place + ".";
-        } catch (e) { line.textContent = ""; }
+        } catch (e) {
+          // An unrecognised zone must never blank the line: fall back
+          // to the reader's own clock rather than showing nothing.
+          try {
+            var fmt2 = new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit" });
+            line.innerHTML = "It&rsquo;s currently <strong>" + fmt2.format(new Date()) + "</strong> in " + place + ".";
+          } catch (e2) { line.textContent = ""; }
+        }
       }
       update();
       setInterval(update, 30000);
