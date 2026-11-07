@@ -10,9 +10,9 @@
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac8ec613a4e94bc989bad09cb803ab8b"}'></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,650&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="site.css?v=20261107-103704">
+<link rel="stylesheet" href="site.css?v=20261107-123129">
 <link rel="icon" href="data:," />
-<script>window.__SITE_VERSION__="20261107-103704";</script></head>
+<script>window.__SITE_VERSION__="20261107-123129";</script></head>
 <body>
 <main class="page">
 <nav class="site-nav" aria-label="Pages">
@@ -49,6 +49,26 @@
           <div class="trip-row" data-start="2027-09-19" data-end="2027-10-30" data-trip="panama-canal"><time>Sep 19<br />Oct 30</time><div data-cd-slot><strong>Panama Canal</strong><span>Vancouver down the Pacific coast to San Diego, through the Canal to Tampa, then the eastern Caribbean</span></div></div>
           <div class="trip-row" data-start="2028-03-08" data-end="2028-05-03" data-trip="japan"><time>Mar 8<br />May 3<br />2028</time><div data-cd-slot><strong>Japan</strong><span>Shanghai to Seattle via Tokyo &amp; Kyoto</span></div></div>
           <div class="trip-row" data-start="2028-08-29" data-end="2028-09-15" data-trip="iceland-greenland"><time>Aug 29<br />Sep 15<br />2028</time><div data-cd-slot><strong>Iceland &amp; Greenland</strong><span>Jewel of the Seas, 17n — Copenhagen → Aarhus → Reykjavik (overnight) → Isafjordur → Akureyri → Prins Christian Sund (cruise-by) → Qaqortoq, Greenland → St. John’s → Halifax → Boston. Spacious Ocean View Balcony, stateroom 2B 9604</span></div></div>
+        </div>
+      </div>
+      <!-- The trip-details dialog lives INSIDE this Future section, not
+           after </main>: the GitHub Pages publisher builds each page
+           from the data-page groups alone, so markup outside them never
+           reaches future.html — when the dialog sat outside, the
+           published Future page had the trip rows but no dialog, and
+           app.js (which bails when the dialog is missing) never added
+           the Details buttons. Nested here it travels with the section
+           in both the single-page artifact and the published site. -->
+      <div class="trip-modal" id="trip-modal" hidden>
+        <div class="trip-modal-backdrop" data-trip-close></div>
+        <div class="trip-modal-card" role="dialog" aria-modal="true" aria-labelledby="trip-modal-title">
+          <button class="trip-modal-x" type="button" data-trip-close aria-label="Close trip details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+          <p class="trip-modal-dates" id="trip-modal-dates"></p>
+          <h3 id="trip-modal-title"></h3>
+          <h4>Headline bookings</h4>
+          <ul class="trip-modal-bookings" id="trip-modal-bookings"></ul>
+          <h4>Ports &amp; stops</h4>
+          <ul class="trip-modal-stops" id="trip-modal-stops"></ul>
         </div>
       </div>
     </section>
@@ -6296,7 +6316,7 @@
  ]
 }
   </script>
-<script src="app.js?v=20261107-103704" defer></script>
+<script src="app.js?v=20261107-123129" defer></script>
 <script>
 (function () {
   var PAGES = {"today": "index.html", "next": "next.html", "future": "future.html", "past": "past.html", "venice-transatlantic": "past/venice-transatlantic-oct-nov-2026.html", "spain-transatlantic-jul-aug-2026": "past/spain-transatlantic-jul-aug-2026.html", "cape-cod-jul-2026": "past/cape-cod-jul-2026.html", "bayonne-miami-sep-2026": "past/bayonne-miami-sep-2026.html", "alaska-may-jun-2026": "past/alaska-may-jun-2026.html", "san-juan-rome-apr-may-2026": "past/san-juan-rome-apr-may-2026.html", "miami-jan-feb-2026": "past/miami-jan-feb-2026.html", "december-caribbean-nov-dec-2025": "past/december-caribbean-nov-dec-2025.html", "fall-transatlantic-oct-nov-2025": "past/fall-transatlantic-oct-nov-2025.html", "eastern-canada-sep-oct-2025": "past/eastern-canada-sep-oct-2025.html", "star-cococay-aug-2025": "past/star-cococay-aug-2025.html", "jewel-cococay-jul-2025": "past/jewel-cococay-jul-2025.html", "cape-cod-jun-jul-2025": "past/cape-cod-jun-jul-2025.html", "odyssey-mediterranean-may-2025": "past/odyssey-mediterranean-may-2025.html", "vision-baltimore-mar-2025": "past/vision-baltimore-mar-2025.html", "adventure-caribbean-dec-2024": "past/adventure-caribbean-dec-2024.html", "oasis-transatlantic-oct-2024": "past/oasis-transatlantic-oct-2024.html", "brilliance-alaska-may-2024": "past/brilliance-alaska-may-2024.html", "symphony-caribbean-mar-2024": "past/symphony-caribbean-mar-2024.html", "adventure-caribbean-dec-2023": "past/adventure-caribbean-dec-2023.html", "oasis-caribbean-sep-2023": "past/oasis-caribbean-sep-2023.html", "harmony-caribbean-mar-2023": "past/harmony-caribbean-mar-2023.html", "allure-caribbean-oct-2022": "past/allure-caribbean-oct-2022.html"};

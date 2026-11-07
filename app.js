@@ -1455,11 +1455,40 @@ try {
       var datesEl = document.getElementById("trip-modal-dates");
       var bookingsEl = document.getElementById("trip-modal-bookings");
       var stopsEl = document.getElementById("trip-modal-stops");
-      // The modal markup sits outside the page groups, so no standalone
-      // published page carries it. Bail out when it is absent instead of
-      // throwing on modal.querySelectorAll below — in the published
-      // bundle that throw would abort the day-link, Background-popover
-      // and router scripts that follow this block.
+      // The dialog markup lives inside the Future section so the
+      // multi-page publisher carries it onto future.html (it used to
+      // sit outside the page groups, no published page carried it, and
+      // this block bailed before ever adding the Details buttons — the
+      // buttons silently vanished from the live site). If a page still
+      // arrives without the markup, build the dialog here instead of
+      // giving up: the Details buttons must never depend on which
+      // publish path the page took. Only bail if even that fails, so a
+      // throw can never abort the scripts that follow this block.
+      if (!modal || !titleEl || !datesEl || !bookingsEl || !stopsEl) {
+        try {
+          var built = document.createElement("div");
+          built.className = "trip-modal";
+          built.id = "trip-modal";
+          built.hidden = true;
+          built.innerHTML =
+            '<div class="trip-modal-backdrop" data-trip-close></div>' +
+            '<div class="trip-modal-card" role="dialog" aria-modal="true" aria-labelledby="trip-modal-title">' +
+            '<button class="trip-modal-x" type="button" data-trip-close aria-label="Close trip details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>' +
+            '<p class="trip-modal-dates" id="trip-modal-dates"></p>' +
+            '<h3 id="trip-modal-title"></h3>' +
+            '<h4>Headline bookings</h4>' +
+            '<ul class="trip-modal-bookings" id="trip-modal-bookings"></ul>' +
+            '<h4>Ports &amp; stops</h4>' +
+            '<ul class="trip-modal-stops" id="trip-modal-stops"></ul>' +
+            "</div>";
+          document.body.appendChild(built);
+          modal = document.getElementById("trip-modal");
+          titleEl = document.getElementById("trip-modal-title");
+          datesEl = document.getElementById("trip-modal-dates");
+          bookingsEl = document.getElementById("trip-modal-bookings");
+          stopsEl = document.getElementById("trip-modal-stops");
+        } catch (e) { /* fall through to the bail-out below */ }
+      }
       if (!modal || !titleEl || !datesEl || !bookingsEl || !stopsEl) { return; }
       var lastTrigger = null;
 
