@@ -1319,12 +1319,15 @@ h3 .fav-star { width: 19px; height: 19px; vertical-align: -3px; margin-right: 7p
 .trip-row.clickable:focus-visible { outline: 3px solid var(--orange); outline-offset: -3px; }
 .trip-hint { display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; color: var(--deep-2); font-size: .78rem; font-weight: 600; letter-spacing: .02em; }
 .trip-hint svg { width: 13px; height: 13px; }
+.trip-row .trip-tag { display: inline-block; margin-left: 8px; padding: 2px 8px 3px; border-radius: 999px; background: var(--gold); color: #122625; font-size: .66rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; vertical-align: 2px; }
 
 .trip-modal[hidden] { display: none; }
 .trip-modal { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 20px; }
 .trip-modal-backdrop { position: absolute; inset: 0; background: rgba(7, 27, 29, .62); }
 .trip-modal-card { position: relative; width: min(620px, 100%); max-height: min(84vh, 760px); overflow-y: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); padding: 30px 32px 28px; }
 .trip-modal-dates { margin: 0 0 6px; color: var(--orange); font-size: .8rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+.trip-modal-flag { display: inline-block; margin: 0 0 10px; padding: 3px 10px 4px; border-radius: 999px; background: var(--gold); color: #122625; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.trip-modal-flag[hidden] { display: none; }
 .trip-modal-card h3 { margin: 0 44px 4px 0; font: 650 2rem/1.05 "Newsreader", serif; letter-spacing: -.02em; }
 .trip-modal-card h4 { margin: 22px 0 8px; color: var(--deep-2); font-size: .82rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
 .trip-modal-card ul { margin: 0; padding: 0; list-style: none; }

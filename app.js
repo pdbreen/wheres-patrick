@@ -1212,6 +1212,8 @@ try {
     //   goals/legend/files/itinerary.md
     //   goals/alaska-land-trip-and-cruise/files/itinerary.md
     //   goals/panama-canal/files/itinerary.md
+    //   goals/2027-11-liberty-mariner/files/itinerary.md
+    //   goals/2028-01-legend-vision/files/itinerary.md
     //   goals/2028-03-japan/files/itinerary.md
     //   goals/2028-08-iceland-greenland/files/itinerary.md
     // (goals/venice-transatlantic-trip/files/itinerary.md covers the current
@@ -1395,6 +1397,72 @@ try {
             ["Oct 30", "Miami", "Disembark; fly home to Boston"]
           ]
         },
+        "liberty-mariner": {
+          title: "Liberty & Mariner",
+          range: "November 26 – December 18, 2027 · 22 days",
+          tentative: true,
+          bookings: [
+            "Liberty of the Seas, 5nt Western Caribbean from Galveston — Ocean View Balcony 4D 8242 (priced, not yet booked)",
+            "Mariner of the Seas, 7nt Western Caribbean from New Orleans — Ocean View Balcony 2D 6590 (priced, not yet booked)",
+            "Mariner of the Seas, 7nt Western Caribbean from New Orleans — Ocean View Balcony 2D 6296 (priced, not yet booked)",
+            "Flights & hotels still to book: Boston → Houston (Nov 26), Houston → New Orleans (Dec 2), 2 nights in New Orleans, home Dec 18"
+          ],
+          stops: [
+            ["Nov 26", "Houston", "Fly in from Boston; night in Houston or Galveston"],
+            ["Nov 27", "Galveston", "Board Liberty of the Seas"],
+            ["Nov 29", "Cozumel, Mexico", "In port 8:00 AM–6:00 PM"],
+            ["Nov 30", "Puerto Costa Maya, Mexico", "In port 7:00 AM–2:00 PM"],
+            ["Dec 2", "Galveston → New Orleans", "Disembark; afternoon flight — French Quarter walk & featured dinner at the Gumbo Shop"],
+            ["Dec 3", "New Orleans", "Café du Monde beignets, featured lunch at Dooky Chase's, Garden District walk"],
+            ["Dec 4", "New Orleans", "Morning in the Quarter; board Mariner of the Seas"],
+            ["Dec 6", "Cozumel, Mexico", "In port 7:00 AM–5:00 PM"],
+            ["Dec 7", "Puerto Costa Maya, Mexico", "In port 8:00 AM–5:00 PM"],
+            ["Dec 8", "Belize City, Belize", "Tendered, 8:00 AM–5:00 PM — local buy: Marie Sharp's hot sauce"],
+            ["Dec 11", "New Orleans", "Turn-around day — straight onto the next Mariner sailing"],
+            ["Dec 13", "Cozumel, Mexico", "In port 7:00 AM–4:00 PM"],
+            ["Dec 14", "George Town, Grand Cayman", "Tendered, 10:00 AM–6:00 PM — local drink: Cayman Mama"],
+            ["Dec 15", "Falmouth, Jamaica", "In port 8:00 AM–5:00 PM — local food: Jamaican jerk"],
+            ["Dec 18", "New Orleans", "Disembark; fly home to Boston"]
+          ]
+        },
+        "legend-vision": {
+          title: "Legend & Vision",
+          range: "January 7 – February 6, 2028 · 30 days",
+          tentative: true,
+          bookings: [
+            "Legend of the Seas, 8nt Southern Caribbean from Fort Lauderdale — Ocean View Balcony D4 7726 (priced, not yet booked)",
+            "Legend of the Seas, 6nt Western Caribbean from Fort Lauderdale — Ocean View Balcony D4 7336 (priced, not yet booked)",
+            "Vision of the Seas, 7nt Southern Caribbean from San Juan — Spacious Ocean View Balcony 4B 7634 (priced, not yet booked)",
+            "Vision of the Seas, 7nt Southern Caribbean from San Juan — Spacious Ocean View Balcony 4B 7626 (priced, not yet booked)",
+            "Flights & hotels still to book: Boston → Fort Lauderdale (Jan 7), Fort Lauderdale → San Juan (Jan 22), San Juan → Boston (Feb 6); a night each in Fort Lauderdale & San Juan"
+          ],
+          stops: [
+            ["Jan 7", "Fort Lauderdale", "Fly in from Boston; at least one night ashore"],
+            ["Jan 8", "Fort Lauderdale", "Board Legend of the Seas"],
+            ["Jan 11", "Willemstad, Curaçao", "In port 8:00 AM–6:00 PM — local drink: Blue Curaçao liqueur"],
+            ["Jan 12", "Oranjestad, Aruba", "In port 8:00 AM–5:00 PM — local drink: Balashi beer"],
+            ["Jan 13", "Cabo Rojo, Dominican Republic", "In port 11:00 AM–6:00 PM"],
+            ["Jan 15", "Perfect Day at CocoCay", "In port 8:00 AM–5:00 PM"],
+            ["Jan 16", "Fort Lauderdale", "Turn-around day — straight onto the next Legend sailing"],
+            ["Jan 17", "Perfect Day at CocoCay", "In port 7:00 AM–5:00 PM"],
+            ["Jan 19", "Puerto Costa Maya, Mexico", "In port 8:00 AM–5:00 PM"],
+            ["Jan 20", "Cozumel, Mexico", "In port 7:00 AM–5:00 PM"],
+            ["Jan 22", "Fort Lauderdale → San Juan", "Disembark; fly to San Juan for one night ashore"],
+            ["Jan 23", "San Juan", "Board Vision of the Seas"],
+            ["Jan 25", "Kingstown, St. Vincent", "In port 8:00 AM–5:00 PM"],
+            ["Jan 26", "St. George's, Grenada", "In port 8:00 AM–5:00 PM — local buy: nutmeg"],
+            ["Jan 27", "Fort-de-France, Martinique", "In port 8:00 AM–5:00 PM — local drink: rhum agricole"],
+            ["Jan 28", "St. John's, Antigua", "In port 8:00 AM–5:00 PM — local food: Antigua black pineapple"],
+            ["Jan 29", "Charlotte Amalie, St. Thomas", "In port 8:00 AM–5:00 PM"],
+            ["Jan 30", "San Juan", "Turn-around day — straight onto the next Vision sailing"],
+            ["Feb 1", "Bridgetown, Barbados", "In port 8:00 AM–5:00 PM — local drink: Mount Gay rum"],
+            ["Feb 2", "St. George's, Grenada", "In port 8:00 AM–5:00 PM — local buy: nutmeg"],
+            ["Feb 3", "Kingstown, St. Vincent", "In port 8:00 AM–5:00 PM"],
+            ["Feb 4", "St. John's, Antigua", "In port 9:00 AM–5:00 PM — local food: Antigua black pineapple"],
+            ["Feb 5", "Charlotte Amalie, St. Thomas", "In port 8:00 AM–5:00 PM"],
+            ["Feb 6", "San Juan", "Disembark; fly home to Boston"]
+          ]
+        },
         "japan": {
           title: "Japan",
           range: "March 8 – May 3, 2028 · 56 days",
@@ -1453,6 +1521,7 @@ try {
       var modal = document.getElementById("trip-modal");
       var titleEl = document.getElementById("trip-modal-title");
       var datesEl = document.getElementById("trip-modal-dates");
+      var flagEl = document.getElementById("trip-modal-flag");
       var bookingsEl = document.getElementById("trip-modal-bookings");
       var stopsEl = document.getElementById("trip-modal-stops");
       // The dialog markup lives inside the Future section so the
@@ -1464,7 +1533,7 @@ try {
       // giving up: the Details buttons must never depend on which
       // publish path the page took. Only bail if even that fails, so a
       // throw can never abort the scripts that follow this block.
-      if (!modal || !titleEl || !datesEl || !bookingsEl || !stopsEl) {
+      if (!modal || !titleEl || !datesEl || !flagEl || !bookingsEl || !stopsEl) {
         try {
           var built = document.createElement("div");
           built.className = "trip-modal";
@@ -1475,6 +1544,7 @@ try {
             '<div class="trip-modal-card" role="dialog" aria-modal="true" aria-labelledby="trip-modal-title">' +
             '<button class="trip-modal-x" type="button" data-trip-close aria-label="Close trip details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>' +
             '<p class="trip-modal-dates" id="trip-modal-dates"></p>' +
+            '<p class="trip-modal-flag" id="trip-modal-flag" hidden></p>' +
             '<h3 id="trip-modal-title"></h3>' +
             '<h4>Headline bookings</h4>' +
             '<ul class="trip-modal-bookings" id="trip-modal-bookings"></ul>' +
@@ -1485,11 +1555,12 @@ try {
           modal = document.getElementById("trip-modal");
           titleEl = document.getElementById("trip-modal-title");
           datesEl = document.getElementById("trip-modal-dates");
+          flagEl = document.getElementById("trip-modal-flag");
           bookingsEl = document.getElementById("trip-modal-bookings");
           stopsEl = document.getElementById("trip-modal-stops");
         } catch (e) { /* fall through to the bail-out below */ }
       }
-      if (!modal || !titleEl || !datesEl || !bookingsEl || !stopsEl) { return; }
+      if (!modal || !titleEl || !datesEl || !flagEl || !bookingsEl || !stopsEl) { return; }
       var lastTrigger = null;
 
       function fillList(ul, items, isStops) {
@@ -1519,6 +1590,13 @@ try {
         lastTrigger = trigger || null;
         titleEl.textContent = d.title;
         datesEl.textContent = d.range;
+        if (d.tentative) {
+          flagEl.textContent = "Tentative — nothing booked yet; firm once the first booking lands";
+          flagEl.hidden = false;
+        } else {
+          flagEl.textContent = "";
+          flagEl.hidden = true;
+        }
         fillList(bookingsEl, d.bookings, false);
         fillList(stopsEl, d.stops, true);
         modal.hidden = false;
