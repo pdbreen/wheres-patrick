@@ -1428,10 +1428,10 @@ try {
         "legend-vision": {
           title: "Legend & Vision",
           range: "January 7 – February 6, 2028 · 30 days",
-          tentative: true,
+          tentative: false,
           bookings: [
-            "Legend of the Seas, 8nt Southern Caribbean from Fort Lauderdale — Ocean View Balcony D4 7726 (priced, not yet booked)",
-            "Legend of the Seas, 6nt Western Caribbean from Fort Lauderdale — Ocean View Balcony D4 7336 (priced, not yet booked)",
+            "Legend of the Seas, 8nt Southern Caribbean from Fort Lauderdale — Ocean View N4 11106 (10% obstructed), res 9896294 — $3,180.67 total, $100 paid, balance $3,080.67 due Oct 10, 2027; remaining deposit $150 due Fri Nov 13, 2026; $38 OBC",
+            "Legend of the Seas, 6nt Western Caribbean from Fort Lauderdale — Ocean View N4 11106 (10% obstructed), res 9895744 — $2,259.48 total, $100 paid, balance $2,159.48 due Oct 18, 2027; remaining deposit $150 due Fri Nov 13, 2026; $38 OBC",
             "Vision of the Seas, 7nt Southern Caribbean from San Juan — Spacious Ocean View Balcony 4B 7634 (priced, not yet booked)",
             "Vision of the Seas, 7nt Southern Caribbean from San Juan — Spacious Ocean View Balcony 4B 7626 (priced, not yet booked)",
             "Flights & hotels still to book: Boston → Fort Lauderdale (Jan 7), Fort Lauderdale → San Juan (Jan 22), San Juan → Boston (Feb 6); a night each in Fort Lauderdale & San Juan"
