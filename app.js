@@ -1227,7 +1227,7 @@ try {
           bookings: [
             "JetBlue Boston → Ft Lauderdale (Nov 28), home Dec 19",
             "Bahia Mar, Ft Lauderdale — 1 night before the first sailing",
-            "Adventure of the Seas — stateroom 4N 7506 Ocean View, three back-to-back sailings (6 + 8 + 6 nights), same cabin throughout",
+            "Adventure of the Seas — Ocean View, three back-to-back sailings (6 + 8 + 6 nights), same cabin throughout",
             "Royal Beach Club day passes booked for all three Nassau stops"
           ],
           stops: [
@@ -1249,8 +1249,8 @@ try {
           range: "January 2 – 25, 2027 · 23 days",
           bookings: [
             "Delta Boston → Newark (Jan 2); Fairfield Inn Newark Airport, 1 night",
-            "Odyssey of the Seas, 11nt Eastern Caribbean — Studio Ocean View Balcony 2F 7650",
-            "Odyssey of the Seas, 11nt Southern Caribbean — Studio Ocean View Balcony 2F 7250",
+            "Odyssey of the Seas, 11nt Eastern Caribbean — Studio Ocean View Balcony",
+            "Odyssey of the Seas, 11nt Southern Caribbean — Studio Ocean View Balcony",
             "Delta home from Newark on Jan 25"
           ],
           stops: [
@@ -1272,9 +1272,9 @@ try {
           range: "February 5 – 19, 2027 · 14 days",
           bookings: [
             "Delta Boston → Miami (Feb 5); citizenM Miami Brickell, 1 night",
-            "Freedom of the Seas, 5nt Caribbean Getaway — Ocean View Balcony 2D 7544",
+            "Freedom of the Seas, 5nt Caribbean Getaway — Ocean View Balcony",
             "Avis Mustang Mach-E rental, Feb 11–15; staying with a friend in Estero Feb 13–14",
-            "Wonder of the Seas, 4nt Bahamas & Perfect Day — Interior 4V 10103",
+            "Wonder of the Seas, 4nt Bahamas & Perfect Day — Interior",
             "Delta home via Atlanta on Feb 19"
           ],
           stops: [
@@ -1330,7 +1330,7 @@ try {
           range: "May 12 – 29, 2027 · 17 days",
           bookings: [
             "Iberia Boston → Barcelona via Madrid (overnight May 12–13); H10 Port Vell, 3 nights",
-            "Legend of the Seas, 7nt Western Mediterranean — Ocean View N4 9504",
+            "Legend of the Seas, 7nt Western Mediterranean — Ocean View",
             "Flight Barcelona → Málaga (May 23); staying at Sean's place in Málaga",
             "H10 Corregidor, Seville (May 25–27); H10 Palacio Colomera, Córdoba (May 27–29)",
             "iryo trains Seville → Córdoba and Córdoba → Madrid; Iberia home May 29"
@@ -1376,9 +1376,9 @@ try {
           bookings: [
             "Serenade of the Seas, 7nt Pacific Coastal Vancouver → San Diego — Ocean View Balcony Guarantee",
             "San Diego, 4 nights between sailings (Oct 3–7)",
-            "Serenade of the Seas, 15nt Panama Canal eastward — Spacious Ocean View Balcony 2B 9570, Deluxe Beverage Package booked",
+            "Serenade of the Seas, 15nt Panama Canal eastward — Spacious Ocean View Balcony, Deluxe Beverage Package booked",
             "Amtrak Tampa → Miami (Oct 22); 1 night in Miami",
-            "Hero of the Seas, 7nt Perfect Day CocoCay & East Caribbean — Ocean View N4 10120"
+            "Hero of the Seas, 7nt Perfect Day CocoCay & East Caribbean — Ocean View"
           ],
           stops: [
             ["Sep 28", "Astoria, Oregon", "Port day on the Columbia River"],
@@ -1402,9 +1402,9 @@ try {
           range: "November 26 – December 18, 2027 · 22 days",
           tentative: true,
           bookings: [
-            "Liberty of the Seas, 5nt Western Caribbean from Galveston — Ocean View Balcony 4D 8242 (priced, not yet booked)",
-            "Mariner of the Seas, 7nt Western Caribbean from New Orleans — Ocean View Balcony 2D 6590 (priced, not yet booked)",
-            "Mariner of the Seas, 7nt Western Caribbean from New Orleans — Ocean View Balcony 2D 6296 (priced, not yet booked)",
+            "Liberty of the Seas, 5nt Western Caribbean from Galveston — Ocean View Balcony (priced, not yet booked)",
+            "Mariner of the Seas, 7nt Western Caribbean from New Orleans — Ocean View Balcony (priced, not yet booked)",
+            "Mariner of the Seas, 7nt Western Caribbean from New Orleans — Ocean View Balcony (priced, not yet booked)",
             "Flights & hotels still to book: Boston → Houston (Nov 26), Houston → New Orleans (Dec 2), 2 nights in New Orleans, home Dec 18"
           ],
           stops: [
@@ -1430,10 +1430,10 @@ try {
           range: "January 7 – February 6, 2028 · 30 days",
           tentative: false,
           bookings: [
-            "Legend of the Seas, 8nt Southern Caribbean from Fort Lauderdale — Ocean View N4 11106 (10% obstructed), res 9896294 — $3,180.67 total, $100 paid, balance $3,080.67 due Oct 10, 2027; remaining deposit $150 due Fri Nov 13, 2026; $38 OBC",
-            "Legend of the Seas, 6nt Western Caribbean from Fort Lauderdale — Ocean View N4 11106 (10% obstructed), res 9895744 — $2,259.48 total, $100 paid, balance $2,159.48 due Oct 18, 2027; remaining deposit $150 due Fri Nov 13, 2026; $38 OBC",
-            "Vision of the Seas, 7nt Southern Caribbean from San Juan — Spacious Ocean View Balcony 4B 7634 (priced, not yet booked)",
-            "Vision of the Seas, 7nt Southern Caribbean from San Juan — Spacious Ocean View Balcony 4B 7626 (priced, not yet booked)",
+            "Legend of the Seas, 8nt Southern Caribbean from Fort Lauderdale — Ocean View (10% obstructed)",
+            "Legend of the Seas, 6nt Western Caribbean from Fort Lauderdale — Ocean View (10% obstructed)",
+            "Vision of the Seas, 7nt Southern Caribbean from San Juan — Spacious Ocean View Balcony (priced, not yet booked)",
+            "Vision of the Seas, 7nt Southern Caribbean from San Juan — Spacious Ocean View Balcony (priced, not yet booked)",
             "Flights & hotels still to book: Boston → Fort Lauderdale (Jan 7), Fort Lauderdale → San Juan (Jan 22), San Juan → Boston (Feb 6); a night each in Fort Lauderdale & San Juan"
           ],
           stops: [
@@ -1468,10 +1468,10 @@ try {
           range: "March 8 – May 3, 2028 · 56 days",
           bookings: [
             "Positioning: Boston → San Francisco → Shanghai, arriving Mar 12 (flights still to book)",
-            "Spectrum of the Seas, 8nt Shanghai → Yokohama — Ocean View with Large Balcony 4C 10728",
+            "Spectrum of the Seas, 8nt Shanghai → Yokohama — Ocean View with Large Balcony",
             "Tokyo, 5 nights (Mar 23–28) and Kyoto, 4 nights (Mar 28–Apr 1) — peak cherry-blossom season",
-            "Voyager of the Seas, 12nt Japan Cherry Blossoms roundtrip — Sunset Balcony SB 9690",
-            "Voyager of the Seas, 16nt Yokohama → Seattle — Junior Suite J4 9318"
+            "Voyager of the Seas, 12nt Japan Cherry Blossoms roundtrip — Sunset Balcony",
+            "Voyager of the Seas, 16nt Yokohama → Seattle — Junior Suite"
           ],
           stops: [
             ["Mar 12–14", "Shanghai", "Yu Garden, the Bund & Shanghai Tower"],
@@ -1495,7 +1495,7 @@ try {
           title: "Iceland & Greenland",
           range: "August 29 – September 15, 2028 · 17 nights",
           bookings: [
-            "Jewel of the Seas, 17nt Copenhagen → Boston — Spacious Ocean View Balcony 2B 9604, My Time dining (waitlist)",
+            "Jewel of the Seas, 17nt Copenhagen → Boston — Spacious Ocean View Balcony, My Time dining (waitlist)",
             "Copenhagen pre-stay, 3 nights before boarding (from Aug 26) — Kronborg Castle day trip to Helsingør"
           ],
           stops: [
