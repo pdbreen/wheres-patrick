@@ -37,7 +37,10 @@ try {
     // photo BEFORE the trip starts — when a new trip is loaded, source an
     // iconic photo for each of its ports, save it as assets/hero-<port>.jpg
     // and add its PORT_HEROES, STOP_HEROES and HERO_CREDITS entries in the
-    // same publish. A port with no entry silently falls back to the generic
+    // same publish — AND its embed line (<img data-hero-embed>) in the hero
+    // article in index.html: the publish only carries photos embedded as
+    // <img> elements in the page, so a hero file with no embed never
+    // reaches the live site no matter what these maps say. A port with no entry silently falls back to the generic
     // ship-at-sea photo, which is how Port Canaveral, CocoCay and Nassau
     // shipped without photos on the Nov 2026 Bahamas finale until they
     // were added by hand.
@@ -65,6 +68,14 @@ try {
     // not in the document (the published home page), so the image follows
     // the trip on its own between publishes, exactly as the label does.
     const STOP_HEROES = {
+      "Mykonos, Greece": "assets/hero-mykonos.jpg",
+      "Naples, Italy": "assets/hero-naples.jpg",
+      "Civitavecchia (Rome), Italy": "assets/hero-rome.jpg",
+      "La Spezia, Italy": "assets/hero-la-spezia.jpg",
+      "Barcelona, Spain": "assets/hero-barcelona.jpg",
+      "Cartagena, Spain": "assets/hero-cartagena.jpg",
+      "Lisbon, Portugal": "assets/hero-lisbon.jpg",
+      "Ponta Delgada, Azores, Portugal": "assets/hero-ponta-delgada.jpg",
       "Port Canaveral, Florida": "assets/hero-port-canaveral.jpg",
       "Perfect Day at CocoCay, Bahamas": "assets/hero-cococay.jpg",
       "Nassau, Bahamas": "assets/hero-nassau.jpg"
@@ -110,6 +121,24 @@ try {
       var coords = document.getElementById("hero-label-coords");
       var creditEl = document.getElementById("hero-credit");
 
+      // Hero photos ride along INSIDE the page: the hidden embed <img>s in
+      // the hero article (index.html) carry one copy of every hero file.
+      // That matters because the publish pipeline only carries images that
+      // appear as <img> elements in the page — it extracts those to real
+      // files and rewrites their srcs, while a bare path string in this
+      // script (PORT_HEROES & co.) is never carried and unreferenced files
+      // are pruned, which is how the hero went blank on the live site in
+      // Nov 2026 even though the files sat in assets/. So every hero src
+      // below is resolved through the embed that carries it: in the
+      // artifact the embed's src is the plain file path; after a publish
+      // it is the extracted file the pipeline wrote. Either way the photo
+      // displays. A file with no embed keeps its literal path.
+      var heroEmbedSrc = {};
+      Array.prototype.slice.call(document.querySelectorAll("img[data-hero-embed]")).forEach(function (el) {
+        heroEmbedSrc[el.getAttribute("data-hero-embed")] = el.getAttribute("src");
+      });
+      function heroSrc(file) { return heroEmbedSrc[file] || file; }
+
       // Fallback derivation of the "Next stop" label, from the trip data
       // itself. The card-based logic further down reads the "What's next"
       // day-cards, but those cards live in a different page group: on the
@@ -154,8 +183,13 @@ try {
       // only if the fallback itself is the file that failed.
       img.addEventListener("error", function () {
         var cur = img.getAttribute("src") || "";
-        if (cur.indexOf("hero-at-sea.jpg") !== -1) { return; }
-        img.src = HERO_FALLBACK;
+        var fb = heroSrc(HERO_FALLBACK);
+        // Give up only when the fallback itself is the src that failed.
+        // After a publish the fallback's src is the pipeline's extracted
+        // file name, which no longer contains "hero-at-sea.jpg" — compare
+        // against the resolved fallback as well as the literal name.
+        if (cur === fb || cur.indexOf("hero-at-sea.jpg") !== -1) { return; }
+        img.src = fb;
         img.alt = "A cruise ship at sea";
         setCredit(HERO_FALLBACK);
       });
@@ -170,6 +204,22 @@ try {
           if (CURRENT_TRIP_STOPS[i].status === "today") { ti = i; break; }
         }
         if (ti === -1) { return; }
+        // Port day on a page WITHOUT the day-cards (the published home
+        // page): the card logic below never runs there, so this stops
+        // path owns the photo — show today's port, exactly as the card
+        // logic would. The "Next stop" label still advances in the loop
+        // below; only the photo belongs to the port he is in. When the
+        // cards ARE in the document they own the port-day photo (they
+        // can also spot plan-text attractions), so leave it to them.
+        var todayStop = CURRENT_TRIP_STOPS[ti];
+        if (!document.querySelector(".days .day") && !/^at sea/i.test(todayStop.name)) {
+          var todayFile = STOP_HEROES[todayStop.name];
+          if (todayFile) {
+            img.src = heroSrc(todayFile);
+            img.alt = "Iconic view of " + (HERO_STOP_LABELS[todayStop.name] || todayStop.name);
+            setCredit(todayFile);
+          }
+        }
         for (i = ti + 1; i < CURRENT_TRIP_STOPS.length; i++) {
           s = CURRENT_TRIP_STOPS[i];
           if (s.status !== "going" || /^at sea/i.test(s.name)) { continue; }
@@ -183,7 +233,7 @@ try {
           // today's port (the card logic, or the baked markup, owns it).
           var stopFile = STOP_HEROES[s.name];
           if (stopFile && /^at sea/i.test(CURRENT_TRIP_STOPS[ti].name)) {
-            img.src = stopFile;
+            img.src = heroSrc(stopFile);
             img.alt = "Iconic view of " + (HERO_STOP_LABELS[s.name] || s.name) + ", the next port";
             setCredit(stopFile);
           }
@@ -238,7 +288,7 @@ try {
       function planOf(card) { var p = card.querySelector("p"); return p ? p.textContent : ""; }
 
       function show(file, place, kickerText, alt, nextCaption) {
-        img.src = file;
+        img.src = heroSrc(file);
         img.alt = alt;
         if (placeEl) { placeEl.textContent = place; }
         if (kicker) { kicker.textContent = kickerText; }

@@ -1135,7 +1135,7 @@ footer a { text-underline-offset: 3px; }
   .hero-photo { min-height: 330px; }
   .photo-label { left: 22px; right: 22px; bottom: 46px; }
   .photo-label .coords { display: none; }
-  .hero-next { top: 16px; left: 22px; }
+  .hero-next { top: 16px; left: 22px; right: 22px; padding: 7px 12px; font-size: .78rem; line-height: 1.35; }
   .hero-credit { left: 22px; right: 22px; }
   .tracking-note { grid-template-columns: auto 1fr; }
   .tracking-link { grid-column: 1 / -1; width: 100%; }
