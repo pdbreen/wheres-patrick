@@ -1841,6 +1841,115 @@ try {
           }
         });
       });
+
+      // The Summary timeline's bars open the same dialog as the cards
+      // for every trip that has a Details entry (same >7-day rule).
+      // Bars carry data-tl-start / data-tl-end rather than data-start /
+      // data-end so the countdown feature never appends a "days to go"
+      // label inside a bar.
+      Array.prototype.forEach.call(document.querySelectorAll(".tl-bar[data-tl-start][data-tl-end][data-trip]"), function (bar) {
+        var start = new Date(bar.getAttribute("data-tl-start") + "T00:00:00");
+        var end = new Date(bar.getAttribute("data-tl-end") + "T00:00:00");
+        var days = Math.round((end - start) / 86400000);
+        var key = bar.getAttribute("data-trip");
+        if (!(days > 7) || !TRIP_DETAILS[key]) { return; }
+        bar.classList.add("clickable");
+        bar.setAttribute("tabindex", "0");
+        bar.setAttribute("role", "button");
+        bar.setAttribute("aria-haspopup", "dialog");
+        bar.addEventListener("click", function () { openTrip(key, bar); });
+        bar.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            openTrip(key, bar);
+          }
+        });
+      });
+    })();
+
+    // ----- Future page: Summary | Cards toggle (backup binding) and
+    // timeline lane layout. The toggle buttons switch views through
+    // their inline onclick attributes, so the view works even before
+    // this file loads; the handlers bound here set the same absolute
+    // state, so a click running both never double-toggles. The lane
+    // layout recomputes each bar's position from its dates and packs
+    // overlapping bars into additional lanes — as many as the trips
+    // need, with no cap. The current trips never overlap, so each
+    // year renders as the single row the static markup already shows;
+    // if anything here fails, those baked-in positions stand.
+    (function () {
+      var summary = document.getElementById("future-summary");
+      var cards = document.getElementById("future-cards");
+      var btnSum = document.getElementById("future-btn-summary");
+      var btnCards = document.getElementById("future-btn-cards");
+      if (summary && cards && btnSum && btnCards) {
+        function showFuture(view) {
+          var isSum = view === "summary";
+          summary.hidden = !isSum;
+          cards.hidden = isSum;
+          btnSum.classList.toggle("is-active", isSum);
+          btnCards.classList.toggle("is-active", !isSum);
+          btnSum.setAttribute("aria-pressed", isSum ? "true" : "false");
+          btnCards.setAttribute("aria-pressed", isSum ? "false" : "true");
+        }
+        btnSum.addEventListener("click", function () { showFuture("summary"); });
+        btnCards.addEventListener("click", function () { showFuture("cards"); });
+      }
+
+      var BAR_H = 44;
+      var LANE_GAP = 8;
+      Array.prototype.forEach.call(document.querySelectorAll(".tl-year[data-tl-year]"), function (yearEl) {
+        var year = parseInt(yearEl.getAttribute("data-tl-year"), 10);
+        if (!year) { return; }
+        var track = yearEl.querySelector(".tl-track");
+        if (!track) { return; }
+        var yearStart = new Date(year, 0, 1).getTime();
+        var yearEnd = new Date(year + 1, 0, 1).getTime();
+        var daysInYear = Math.round((yearEnd - yearStart) / 86400000);
+        var bars = Array.prototype.slice.call(track.querySelectorAll(".tl-bar[data-tl-start][data-tl-end]"));
+        var items = [];
+        bars.forEach(function (bar) {
+          var s = new Date(bar.getAttribute("data-tl-start") + "T00:00:00").getTime();
+          var e = new Date(bar.getAttribute("data-tl-end") + "T00:00:00").getTime();
+          if (isNaN(s) || isNaN(e)) { return; }
+          // Clamp to this year so a trip spanning New Year still
+          // draws its in-year portion on this row (and the rest on
+          // the next year's row, when that bar is added there).
+          var cs = Math.max(s, yearStart);
+          var ce = Math.min(e, yearEnd - 86400000);
+          if (ce < cs) { return; }
+          items.push({ bar: bar, start: cs, end: ce });
+        });
+        items.sort(function (a, b) { return a.start - b.start; });
+        // Greedy lane packing: a bar takes the first lane whose last
+        // bar has ended before it starts, otherwise a new lane opens.
+        // Lanes are unbounded — three, four, however many overlaps
+        // a future year needs.
+        var laneEnds = [];
+        items.forEach(function (item) {
+          var lane = -1;
+          for (var i = 0; i < laneEnds.length; i++) {
+            if (item.start > laneEnds[i]) { lane = i; break; }
+          }
+          if (lane === -1) { lane = laneEnds.length; laneEnds.push(item.end); }
+          else { laneEnds[lane] = item.end; }
+          var startDay = Math.round((item.start - yearStart) / 86400000);
+          var endDay = Math.round((item.end - yearStart) / 86400000);
+          item.bar.style.left = (startDay / daysInYear * 100).toFixed(2) + "%";
+          item.bar.style.width = ((endDay - startDay + 1) / daysInYear * 100).toFixed(2) + "%";
+          item.bar.style.top = (lane * (BAR_H + LANE_GAP)) + "px";
+        });
+        var lanes = Math.max(1, laneEnds.length);
+        track.style.height = (lanes * BAR_H + (lanes - 1) * LANE_GAP) + "px";
+        // Gap labels describe the home stretch on the main row; if a
+        // year ever grows extra lanes they would sit across the first
+        // lane's bars, so hide them rather than mislabel.
+        if (lanes > 1) {
+          Array.prototype.forEach.call(track.querySelectorAll(".tl-gap"), function (gap) {
+            gap.style.display = "none";
+          });
+        }
+      });
     })();
 
     // ----- Day links: opening or following a #entry-YYYY-MM-DD anchor reveals

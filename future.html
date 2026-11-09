@@ -10,9 +10,9 @@
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac8ec613a4e94bc989bad09cb803ab8b"}'></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,650&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="site.css?v=20261109-143207">
+<link rel="stylesheet" href="site.css?v=20261109-220516">
 <link rel="icon" href="data:," />
-<script>window.__SITE_VERSION__="20261109-143207";</script></head>
+<script>window.__SITE_VERSION__="20261109-220516";</script></head>
 <body>
 <main class="page">
 <nav class="site-nav" aria-label="Pages">
@@ -30,9 +30,80 @@
 <div class="view" id="view-future">
 <section aria-labelledby="next-heading">
       <div class="section-head">
-        <h2 id="next-heading">What’s after Venice</h2>
+        <h2 id="next-heading">What’s in the Future</h2>
         <p>The calendar stays busy.</p>
       </div>
+      <!-- Summary | Cards toggle. The switching logic lives in each
+           button's inline onclick (absolute state, never a blind
+           toggle), so it works even if a publish step strips inline
+           scripts or app.js is delayed — the same pattern as the
+           mobile nav toggle. app.js binds the same handlers again as
+           a backup; because the state is set absolutely, running both
+           is harmless. Summary is the default view. -->
+      <div class="future-toggle" role="group" aria-label="Future trips view">
+        <button class="future-toggle-btn is-active" id="future-btn-summary" type="button" aria-pressed="true" onclick="document.getElementById('future-summary').hidden=false;document.getElementById('future-cards').hidden=true;this.classList.add('is-active');this.setAttribute('aria-pressed','true');var c=document.getElementById('future-btn-cards');c.classList.remove('is-active');c.setAttribute('aria-pressed','false');">Summary</button>
+        <button class="future-toggle-btn" id="future-btn-cards" type="button" aria-pressed="false" onclick="document.getElementById('future-summary').hidden=true;document.getElementById('future-cards').hidden=false;this.classList.add('is-active');this.setAttribute('aria-pressed','true');var s=document.getElementById('future-btn-summary');s.classList.remove('is-active');s.setAttribute('aria-pressed','false');">Cards</button>
+      </div>
+      <!-- Summary timeline: one Gantt-style row per year, bars laid out
+           left-to-right in date order. Bar left/width percentages are
+           day-of-year based (the no-JS fallback, matching the approved
+           mockup); app.js recomputes them from data-tl-start /
+           data-tl-end and packs overlapping bars into as many lanes
+           as needed — there is no lane cap, though the current trips
+           never overlap and render as a single row per year. Bars for
+           trips with a Details entry open the same dialog as the
+           cards (wired in app.js). Gap labels sit in the whitespace
+           between trips and count the full home stretch, including
+           any days that spill across the year boundary. -->
+      <div class="future-summary" id="future-summary">
+        <div class="tl-year" data-tl-year="2026">
+          <h3 class="tl-year-head">2026 <span>— 2 trips · 27 nights away</span></h3>
+          <div class="tl-months" aria-hidden="true"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span></div>
+          <div class="tl-track">
+            <div class="tl-gap" style="left:96.71%;width:3.29%">13 days home</div>
+            <div class="tl-bar tl-land" data-tl-start="2026-11-19" data-tl-end="2026-11-23" style="left:88.22%;width:1.50%" title="Seattle &amp; Redmond · Nov 19–23, 2026" aria-label="Seattle and Redmond, November 19 to 23, 2026"><span class="tl-bar-label">Seattle &amp; Redmond · Nov 19–Nov 23</span></div>
+            <div class="tl-bar tl-cruise" data-trip="december-caribbean" data-tl-start="2026-11-28" data-tl-end="2026-12-19" style="left:90.68%;width:6.03%" title="Caribbean · Nov 28–Dec 19, 2026" aria-label="Caribbean, November 28 to December 19, 2026"><span class="tl-bar-label">Caribbean · Nov 28–Dec 19</span></div>
+          </div>
+        </div>
+        <div class="tl-year" data-tl-year="2027">
+          <h3 class="tl-year-head">2027 <span>— 8 trips · 214 nights away</span></h3>
+          <div class="tl-months" aria-hidden="true"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span></div>
+          <div class="tl-track">
+            <div class="tl-gap" style="left:6.85%;width:2.74%">10 days home</div>
+            <div class="tl-gap" style="left:40.82%;width:11.23%">41 days home</div>
+            <div class="tl-gap" style="left:54.25%;width:9.04%">33 days home</div>
+            <div class="tl-gap" style="left:67.40%;width:4.11%">15 days home</div>
+            <div class="tl-gap" style="left:83.01%;width:7.12%">26 days home</div>
+            <div class="tl-gap" style="left:96.44%;width:3.56%">19 days home</div>
+            <div class="tl-bar tl-cruise" data-trip="january-caribbean" data-tl-start="2027-01-02" data-tl-end="2027-01-25" style="left:0.27%;width:6.58%" title="Eastern &amp; Southern Caribbean · Jan 2–25, 2027" aria-label="Eastern and Southern Caribbean, January 2 to 25, 2027"><span class="tl-bar-label">Eastern &amp; Southern Caribbean · Jan 2–Jan 25</span></div>
+            <div class="tl-bar tl-cruise" data-trip="february-caribbean" data-tl-start="2027-02-05" data-tl-end="2027-02-19" style="left:9.59%;width:4.11%" title="Florida &amp; the Bahamas · Feb 5–19, 2027" aria-label="Florida and the Bahamas, February 5 to 19, 2027"><span class="tl-bar-label">Florida &amp; the Bahamas · Feb 5–Feb 19</span></div>
+            <div class="tl-bar tl-cruise" data-trip="australia" data-tl-start="2027-02-26" data-tl-end="2027-05-05" style="left:15.34%;width:18.90%" title="Pacific crossing · Feb 26–May 5, 2027" aria-label="Pacific crossing, February 26 to May 5, 2027"><span class="tl-bar-label">Pacific crossing · Feb 26–May 5</span></div>
+            <div class="tl-bar tl-cruise" data-trip="legend" data-tl-start="2027-05-12" data-tl-end="2027-05-29" style="left:35.89%;width:4.93%" title="Spain &amp; the Mediterranean · May 12–29, 2027" aria-label="Spain and the Mediterranean, May 12 to 29, 2027"><span class="tl-bar-label">Spain &amp; the Mediterranean · May 12–May 29</span></div>
+            <div class="tl-bar tl-land" data-tl-start="2027-07-10" data-tl-end="2027-07-17" style="left:52.05%;width:2.19%" title="Annual Summer Vacation · Jul 10–17, 2027" aria-label="Annual Summer Vacation, July 10 to 17, 2027"><span class="tl-bar-label">Annual Summer Vacation · Jul 10–Jul 17</span></div>
+            <div class="tl-bar tl-cruise" data-trip="alaska" data-tl-start="2027-08-20" data-tl-end="2027-09-03" style="left:63.29%;width:4.11%" title="Alaska · Aug 20–Sep 3, 2027" aria-label="Alaska, August 20 to September 3, 2027"><span class="tl-bar-label">Alaska · Aug 20–Sep 3</span></div>
+            <div class="tl-bar tl-cruise" data-trip="panama-canal" data-tl-start="2027-09-19" data-tl-end="2027-10-30" style="left:71.51%;width:11.51%" title="Panama Canal · Sep 19–Oct 30, 2027" aria-label="Panama Canal, September 19 to October 30, 2027"><span class="tl-bar-label">Panama Canal · Sep 19–Oct 30</span></div>
+            <div class="tl-bar tl-tentative" data-trip="liberty-mariner" data-tl-start="2027-11-26" data-tl-end="2027-12-18" style="left:90.14%;width:6.30%" title="Liberty &amp; Mariner (tentative) · Nov 26–Dec 18, 2027" aria-label="Liberty and Mariner, tentative, November 26 to December 18, 2027"><span class="tl-bar-label">Liberty &amp; Mariner · Nov 26–Dec 18</span></div>
+          </div>
+        </div>
+        <div class="tl-year" data-tl-year="2028">
+          <h3 class="tl-year-head">2028 <span>— 3 trips · 106 nights away</span></h3>
+          <div class="tl-months" aria-hidden="true"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span></div>
+          <div class="tl-track">
+            <div class="tl-gap" style="left:10.11%;width:8.20%">30 days home</div>
+            <div class="tl-gap" style="left:33.88%;width:31.97%">117 days home</div>
+            <div class="tl-bar tl-cruise" data-trip="legend-vision" data-tl-start="2028-01-07" data-tl-end="2028-02-06" style="left:1.64%;width:8.47%" title="Legend &amp; Vision · Jan 7–Feb 6, 2028" aria-label="Legend and Vision, January 7 to February 6, 2028"><span class="tl-bar-label">Legend &amp; Vision · Jan 7–Feb 6</span></div>
+            <div class="tl-bar tl-cruise" data-trip="japan" data-tl-start="2028-03-08" data-tl-end="2028-05-03" style="left:18.31%;width:15.57%" title="Japan · Mar 8–May 3, 2028" aria-label="Japan, March 8 to May 3, 2028"><span class="tl-bar-label">Japan · Mar 8–May 3</span></div>
+            <div class="tl-bar tl-cruise" data-trip="iceland-greenland" data-tl-start="2028-08-29" data-tl-end="2028-09-15" style="left:65.85%;width:4.92%" title="Iceland &amp; Greenland · Aug 29–Sep 15, 2028" aria-label="Iceland and Greenland, August 29 to September 15, 2028"><span class="tl-bar-label">Iceland &amp; Greenland · Aug 29–Sep 15</span></div>
+          </div>
+        </div>
+        <p class="tl-legend">
+          <span class="tl-legend-item"><span class="tl-swatch tl-cruise" aria-hidden="true"></span> Cruise</span>
+          <span class="tl-legend-item"><span class="tl-swatch tl-land" aria-hidden="true"></span> Land / wedding</span>
+          <span class="tl-legend-item"><span class="tl-swatch tl-tentative" aria-hidden="true"></span> Tentative</span>
+          <span class="tl-legend-note">Gaps of 10+ days are labelled with the days at home. Bars with trip details open them on tap — or switch to Cards.</span>
+        </p>
+      </div>
+      <div class="future-cards" id="future-cards" hidden>
       <div class="journeys">
         <article class="next-primary" data-start="2026-11-19">
           <div data-cd-slot><span class="date">November 19–23, 2026</span><h3>Seattle &amp; Redmond</h3><p>A family wedding weekend in Washington, with a little time around the Eastside and Seattle.</p></div>
@@ -52,6 +123,7 @@
           <div class="trip-row" data-start="2028-03-08" data-end="2028-05-03" data-trip="japan"><time>Mar 8<br />May 3<br />2028</time><div data-cd-slot><strong>Japan</strong><span>Shanghai to Seattle via Tokyo &amp; Kyoto</span></div></div>
           <div class="trip-row" data-start="2028-08-29" data-end="2028-09-15" data-trip="iceland-greenland"><time>Aug 29<br />Sep 15<br />2028</time><div data-cd-slot><strong>Iceland &amp; Greenland</strong><span>Jewel of the Seas, 17n — Copenhagen to Boston via Iceland &amp; Greenland</span></div></div>
         </div>
+      </div>
       </div>
       <!-- The trip-details dialog lives INSIDE this Future section, not
            after </main>: the GitHub Pages publisher builds each page
@@ -6360,7 +6432,7 @@
  ]
 }
   </script>
-<script src="app.js?v=20261109-143207" defer></script>
+<script src="app.js?v=20261109-220516" defer></script>
 <script>
 (function () {
   var PAGES = {"today": "index.html", "next": "next.html", "future": "future.html", "past": "past.html", "venice-transatlantic": "past/venice-transatlantic-oct-nov-2026.html", "spain-transatlantic-jul-aug-2026": "past/spain-transatlantic-jul-aug-2026.html", "cape-cod-jul-2026": "past/cape-cod-jul-2026.html", "bayonne-miami-sep-2026": "past/bayonne-miami-sep-2026.html", "alaska-may-jun-2026": "past/alaska-may-jun-2026.html", "san-juan-rome-apr-may-2026": "past/san-juan-rome-apr-may-2026.html", "miami-jan-feb-2026": "past/miami-jan-feb-2026.html", "december-caribbean-nov-dec-2025": "past/december-caribbean-nov-dec-2025.html", "fall-transatlantic-oct-nov-2025": "past/fall-transatlantic-oct-nov-2025.html", "eastern-canada-sep-oct-2025": "past/eastern-canada-sep-oct-2025.html", "star-cococay-aug-2025": "past/star-cococay-aug-2025.html", "jewel-cococay-jul-2025": "past/jewel-cococay-jul-2025.html", "cape-cod-jun-jul-2025": "past/cape-cod-jun-jul-2025.html", "odyssey-mediterranean-may-2025": "past/odyssey-mediterranean-may-2025.html", "vision-baltimore-mar-2025": "past/vision-baltimore-mar-2025.html", "adventure-caribbean-dec-2024": "past/adventure-caribbean-dec-2024.html", "oasis-transatlantic-oct-2024": "past/oasis-transatlantic-oct-2024.html", "brilliance-alaska-may-2024": "past/brilliance-alaska-may-2024.html", "symphony-caribbean-mar-2024": "past/symphony-caribbean-mar-2024.html", "adventure-caribbean-dec-2023": "past/adventure-caribbean-dec-2023.html", "oasis-caribbean-sep-2023": "past/oasis-caribbean-sep-2023.html", "harmony-caribbean-mar-2023": "past/harmony-caribbean-mar-2023.html", "allure-caribbean-oct-2022": "past/allure-caribbean-oct-2022.html"};
