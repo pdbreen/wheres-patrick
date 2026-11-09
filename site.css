@@ -794,22 +794,23 @@ h1 {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(16,59,64,.34), transparent 30%), linear-gradient(0deg, rgba(7,27,29,.72), transparent 50%);
+  background: linear-gradient(90deg, rgba(16,59,64,.34), transparent 30%), linear-gradient(0deg, rgba(7,27,29,.78), transparent 62%);
 }
 .photo-label {
   position: absolute;
   z-index: 2;
   left: 28px;
   right: 28px;
-  bottom: 26px;
+  bottom: 48px;
   display: flex;
   align-items: end;
   justify-content: space-between;
   gap: 16px;
 }
-.photo-label strong { display: block; font: 650 2.15rem/1 "Newsreader", serif; }
+.photo-label > div { min-width: 0; }
+.photo-label strong { display: block; font: 650 clamp(1.7rem, 2.4vw, 2.15rem)/1.05 "Newsreader", serif; }
 .photo-label span { color: rgba(255,255,255,.82); font-size: .84rem; }
-.photo-label .coords { text-align: right; letter-spacing: .04em; }
+.photo-label .coords { flex: 0 0 auto; white-space: nowrap; text-align: right; letter-spacing: .04em; }
 .hero-next {
   position: absolute;
   z-index: 2;
@@ -828,11 +829,13 @@ h1 {
 .hero-credit {
   position: absolute;
   z-index: 2;
+  left: 28px;
   right: 28px;
-  bottom: 7px;
+  bottom: 8px;
   margin: 0;
   color: rgba(255, 255, 255, .78);
   font-size: .7rem;
+  line-height: 1.45;
   letter-spacing: .01em;
   text-align: right;
   text-shadow: 0 1px 4px rgba(7, 27, 29, .55);
@@ -1130,10 +1133,10 @@ footer a { text-underline-offset: 3px; }
   .hero-copy { min-height: 430px; padding: 30px 24px 34px; }
   h1 { font-size: clamp(3rem, 14vw, 4.1rem); overflow-wrap: break-word; }
   .hero-photo { min-height: 330px; }
-  .photo-label { left: 22px; right: 22px; bottom: 20px; }
+  .photo-label { left: 22px; right: 22px; bottom: 46px; }
   .photo-label .coords { display: none; }
   .hero-next { top: 16px; left: 22px; }
-  .hero-credit { right: 22px; }
+  .hero-credit { left: 22px; right: 22px; }
   .tracking-note { grid-template-columns: auto 1fr; }
   .tracking-link { grid-column: 1 / -1; width: 100%; }
   .days { grid-template-columns: 1fr; }

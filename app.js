@@ -74,7 +74,10 @@ try {
       "Manarola": "assets/hero-cinque-terre.jpg"
     };
     // Generic fallback: a cruise ship at sea, used when a port has no photo.
-    const HERO_FALLBACK = "assets/img-666542a14bb3.jpg";
+    // It points at hero-at-sea.jpg — a file that has shipped with the page
+    // from the start and has a HERO_CREDITS entry — never at a file that
+    // could be missing from a publish or render a blank credit line.
+    const HERO_FALLBACK = "assets/hero-at-sea.jpg";
     // Photo credits for the hero images above — most hero photos are freely
     // licensed via Wikimedia Commons ("url" is the Commons file page); the
     // Nov 2026 Bahamas ports credit their source page instead, and carry a
@@ -141,6 +144,21 @@ try {
           creditEl.appendChild(a);
         }
       }
+      // A hero photo that fails to load must never leave a blank panel.
+      // That is exactly what happened on the live site in Nov 2026: a
+      // publish carried this file (pointing at the new Port Canaveral,
+      // CocoCay and Nassau photos) but not the image files themselves,
+      // so the hero went blank where the shuttle photo should have been.
+      // Any hero src that errors now falls back to the ship-at-sea photo
+      // and its credit; the guard re-arms for each new src, and gives up
+      // only if the fallback itself is the file that failed.
+      img.addEventListener("error", function () {
+        var cur = img.getAttribute("src") || "";
+        if (cur.indexOf("hero-at-sea.jpg") !== -1) { return; }
+        img.src = HERO_FALLBACK;
+        img.alt = "A cruise ship at sea";
+        setCredit(HERO_FALLBACK);
+      });
       function fmtHeroCoords(lat, lng) {
         return Math.abs(lat).toFixed(2) + "° " + (lat >= 0 ? "N" : "S") + "<br />" +
           Math.abs(lng).toFixed(2) + "° " + (lng >= 0 ? "E" : "W");
