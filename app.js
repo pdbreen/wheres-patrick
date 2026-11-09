@@ -1739,12 +1739,66 @@ try {
         }
       };
 
+      // Permanent shareable slugs: stable, identity-based (not date-based),
+      // unique across all 13 future trips. Internal TRIP_DETAILS keys stay
+      // as they are; this map translates them to the public slug used in
+      // https://wherespatrick.today/future.html#trip-<slug>
+      var TRIP_SLUGS = {
+        "seattle-redmond": "seattle-redmond",
+        "december-caribbean": "caribbean",
+        "january-caribbean": "eastern-southern-caribbean",
+        "february-caribbean": "florida-bahamas",
+        "australia": "pacific-crossing",
+        "legend": "spain-mediterranean",
+        "annual-summer-vacation": "annual-summer-vacation",
+        "alaska": "alaska",
+        "panama-canal": "panama-canal",
+        "liberty-mariner": "liberty-mariner",
+        "legend-vision": "legend-vision",
+        "japan": "japan",
+        "iceland-greenland": "iceland-greenland"
+      };
+      window.__TRIP_SLUGS = TRIP_SLUGS;
+      function tripSlugFor(key, row) {
+        if (row && row.getAttribute("data-slug")) { return row.getAttribute("data-slug"); }
+        return TRIP_SLUGS[key] || key;
+      }
+      function tripUrlFor(key, row) {
+        return "https://wherespatrick.today/future.html#trip-" + tripSlugFor(key, row);
+      }
+      window.__tripUrlFor = tripUrlFor;
+      function copyTextToClipboard(text, done) {
+        function fallback() {
+          try {
+            var ta = document.createElement("textarea");
+            ta.value = text;
+            ta.setAttribute("readonly", "");
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            var ok = false;
+            try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+            document.body.removeChild(ta);
+            if (done) { done(ok); }
+          } catch (e2) { if (done) { done(false); } }
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () { if (done) { done(true); } }, fallback);
+        } else { fallback(); }
+      }
+      window.__copyTripText = copyTextToClipboard;
+
       var modal = document.getElementById("trip-modal");
       var titleEl = document.getElementById("trip-modal-title");
       var datesEl = document.getElementById("trip-modal-dates");
       var flagEl = document.getElementById("trip-modal-flag");
       var bookingsEl = document.getElementById("trip-modal-bookings");
       var stopsEl = document.getElementById("trip-modal-stops");
+      var shareUrlEl = document.getElementById("trip-modal-share-url");
+      var shareCopyBtn = document.getElementById("trip-modal-share-copy");
+      var shareCopiedEl = document.getElementById("trip-modal-share-copied");
+      var currentShareUrl = "";
       // The dialog markup lives inside the Future section so the
       // multi-page publisher carries it onto future.html (it used to
       // sit outside the page groups, no published page carried it, and
@@ -1767,6 +1821,7 @@ try {
             '<p class="trip-modal-dates" id="trip-modal-dates"></p>' +
             '<p class="trip-modal-flag" id="trip-modal-flag" hidden></p>' +
             '<h3 id="trip-modal-title"></h3>' +
+            '<div class="trip-modal-share" id="trip-modal-share"><span class="trip-modal-share-label">Shareable link to this trip</span><div class="trip-modal-share-row"><span class="trip-modal-share-url" id="trip-modal-share-url"></span><button class="trip-modal-share-copy" id="trip-modal-share-copy" type="button">Copy</button></div><span class="trip-modal-share-copied" id="trip-modal-share-copied" hidden>Copied</span></div>' +
             '<h4>Headline bookings</h4>' +
             '<ul class="trip-modal-bookings" id="trip-modal-bookings"></ul>' +
             '<h4>Ports &amp; stops</h4>' +
@@ -1779,9 +1834,39 @@ try {
           flagEl = document.getElementById("trip-modal-flag");
           bookingsEl = document.getElementById("trip-modal-bookings");
           stopsEl = document.getElementById("trip-modal-stops");
+          shareUrlEl = document.getElementById("trip-modal-share-url");
+          shareCopyBtn = document.getElementById("trip-modal-share-copy");
+          shareCopiedEl = document.getElementById("trip-modal-share-copied");
         } catch (e) { /* fall through to the bail-out below */ }
       }
       if (!modal || !titleEl || !datesEl || !flagEl || !bookingsEl || !stopsEl) { return; }
+      // If the dialog shipped without the share block (older publish), add it.
+      if (!shareUrlEl && titleEl && titleEl.parentNode) {
+        try {
+          var shareDiv = document.createElement("div");
+          shareDiv.className = "trip-modal-share";
+          shareDiv.id = "trip-modal-share";
+          shareDiv.innerHTML = '<span class="trip-modal-share-label">Shareable link to this trip</span><div class="trip-modal-share-row"><span class="trip-modal-share-url" id="trip-modal-share-url"></span><button class="trip-modal-share-copy" id="trip-modal-share-copy" type="button">Copy</button></div><span class="trip-modal-share-copied" id="trip-modal-share-copied" hidden>Copied</span>';
+          titleEl.parentNode.insertBefore(shareDiv, titleEl.nextSibling);
+          shareUrlEl = document.getElementById("trip-modal-share-url");
+          shareCopyBtn = document.getElementById("trip-modal-share-copy");
+          shareCopiedEl = document.getElementById("trip-modal-share-copied");
+        } catch (e) { /* share block is additive; dialog still works without it */ }
+      }
+      if (shareCopyBtn) {
+        shareCopyBtn.addEventListener("click", function () {
+          if (!currentShareUrl) { return; }
+          copyTextToClipboard(currentShareUrl, function () {
+            if (shareCopiedEl) { shareCopiedEl.hidden = false; }
+            var old = shareCopyBtn.textContent;
+            shareCopyBtn.textContent = "Copied";
+            setTimeout(function () {
+              shareCopyBtn.textContent = old || "Copy";
+              if (shareCopiedEl) { shareCopiedEl.hidden = true; }
+            }, 2000);
+          });
+        });
+      }
       var lastTrigger = null;
 
       function fillList(ul, items, isStops) {
@@ -1811,6 +1896,12 @@ try {
         lastTrigger = trigger || null;
         titleEl.textContent = d.title;
         datesEl.textContent = d.range;
+        currentShareUrl = tripUrlFor(key, trigger && trigger.getAttribute ? trigger : null);
+        // If trigger is a card row, its data-slug is authoritative; if it
+        // is a timeline bar (no data-slug), the map above supplies it.
+        if (shareUrlEl) { shareUrlEl.textContent = currentShareUrl; }
+        if (shareCopiedEl) { shareCopiedEl.hidden = true; }
+        if (shareCopyBtn) { shareCopyBtn.textContent = "Copy"; }
         if (d.tentative) {
           flagEl.textContent = "Tentative — nothing booked yet; firm once the first booking lands";
           flagEl.hidden = false;
@@ -1869,6 +1960,40 @@ try {
             openTrip(key, row);
           }
         });
+      });
+
+      // Permanent link affordance on every future trip card — subtle
+      // Copy link button that copies the trip's shareable URL. Runs for
+      // ALL cards (including short trips that get no Details hint), and
+      // stops propagation so copying never opens the Details dialog.
+      Array.prototype.forEach.call(document.querySelectorAll(".trip-row[data-trip], .trip-row[data-slug]"), function (row) {
+        var key = row.getAttribute("data-trip");
+        if (!key && !row.getAttribute("data-slug")) { return; }
+        if (row.querySelector(".trip-copy-link")) { return; }
+        var url = tripUrlFor(key, row);
+        var slot = row.querySelector("[data-cd-slot]") || row;
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "trip-copy-link";
+        btn.setAttribute("aria-label", "Copy link to this trip");
+        btn.setAttribute("data-trip-url", url);
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg><span>Copy link</span>';
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          e.preventDefault();
+          copyTextToClipboard(url, function () {
+            var label = btn.querySelector("span");
+            var old = label ? label.textContent : "";
+            btn.classList.add("is-copied");
+            if (label) { label.textContent = "Copied"; }
+            setTimeout(function () {
+              btn.classList.remove("is-copied");
+              if (label) { label.textContent = old || "Copy link"; }
+            }, 2000);
+          });
+        });
+        btn.addEventListener("keydown", function (e) { e.stopPropagation(); });
+        slot.appendChild(btn);
       });
 
       // The Summary timeline's bars open the same dialog as the cards.
@@ -2806,6 +2931,67 @@ try {
       });
       mo.observe(document.body, { subtree: true, attributes: true, attributeFilter: ["class"] });
     }
+  })();
+
+  // ----- Future trip deep links: #trip-<slug> -----
+  // Opening future.html#trip-<slug> (or the single-page artifact with
+  // that hash) switches the Future section to Cards view, scrolls the
+  // named trip's card into view and highlights it with a teal outline /
+  // glow that fades after a few seconds. It does NOT open the Details
+  // dialog — the card itself is the destination. An unknown slug is
+  // ignored and the page shows normally. This block runs last, after
+  // the multi-page router has settled, so it can reveal the Future
+  // page group when the artifact is viewed as a single page.
+  (function () {
+    function handleTripHash() {
+      var hash = window.location.hash || "";
+      var m = hash.match(/^#trip-([a-z0-9-]+)$/);
+      if (!m) { return; }
+      var slug = m[1];
+      var el = document.getElementById("trip-" + slug);
+      if (!el) { return; }
+      // Reveal the Future page group in the single-page view.
+      var main = document.getElementById("view-main");
+      if (main) {
+        main.hidden = false;
+        var groups = main.querySelectorAll("[data-page]");
+        var hasFuture = false;
+        groups.forEach(function (g) {
+          if (g.getAttribute("data-page").split(/\s+/).indexOf("future") !== -1) { hasFuture = true; }
+        });
+        if (hasFuture) {
+          groups.forEach(function (g) {
+            g.hidden = g.getAttribute("data-page").split(/\s+/).indexOf("future") === -1;
+          });
+          document.querySelectorAll(".nav-links a[data-nav]").forEach(function (a) {
+            if (a.getAttribute("data-nav") === "future") { a.setAttribute("aria-current", "page"); }
+            else { a.removeAttribute("aria-current"); }
+          });
+          document.title = "What's in the Future \u00b7 Where's Patrick?";
+        }
+      }
+      // Switch to Cards view (absolute state, same as the toggle).
+      var summary = document.getElementById("future-summary");
+      var cards = document.getElementById("future-cards");
+      var btnSum = document.getElementById("future-btn-summary");
+      var btnCards = document.getElementById("future-btn-cards");
+      if (summary && cards) {
+        summary.hidden = true;
+        cards.hidden = false;
+        if (btnSum) { btnSum.classList.remove("is-active"); btnSum.setAttribute("aria-pressed", "false"); }
+        if (btnCards) { btnCards.classList.add("is-active"); btnCards.setAttribute("aria-pressed", "true"); }
+      }
+      setTimeout(function () {
+        try { el.scrollIntoView({ behavior: "smooth", block: "center" }); } catch (e) { el.scrollIntoView(); }
+        el.classList.remove("trip-highlight-fading");
+        el.classList.add("trip-highlight");
+        setTimeout(function () { el.classList.add("trip-highlight-fading"); }, 3200);
+        setTimeout(function () { el.classList.remove("trip-highlight"); el.classList.remove("trip-highlight-fading"); }, 4200);
+      }, 90);
+    }
+    window.addEventListener("hashchange", handleTripHash);
+    setTimeout(handleTripHash, 60);
+    setTimeout(handleTripHash, 350);
   })();
 
 } catch (e) { if (window.console) console.warn('page script:', e); }
