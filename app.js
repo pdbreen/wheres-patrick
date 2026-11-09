@@ -75,6 +75,43 @@ try {
       var coords = document.getElementById("hero-label-coords");
       var creditEl = document.getElementById("hero-credit");
 
+      // Fallback derivation of the "Next stop" label, from the trip data
+      // itself. The card-based logic further down reads the "What's next"
+      // day-cards, but those cards live in a different page group: on the
+      // published home page they are not in the document at all, the card
+      // logic finds nothing, and the hero keeps whatever label was baked
+      // into the markup — which is how it could still name a port already
+      // departed. CURRENT_TRIP_STOPS (defined below, and the same list the
+      // home-page map renders) always names where Patrick is today and
+      // which stops are still to come, so when today is an at-sea stop the
+      // next "going" stop is the hero's next stop. Deferred with
+      // setTimeout so the const further down this file is initialized
+      // before it is read. The daily refresh advances the stops' statuses,
+      // so this label advances with the trip on its own (Port Canaveral,
+      // then CocoCay, then Nassau on this sailing).
+      var HERO_STOP_LABELS = { "Port Canaveral, Florida": "Orlando (Port Canaveral), Florida" };
+      function fmtHeroCoords(lat, lng) {
+        return Math.abs(lat).toFixed(2) + "° " + (lat >= 0 ? "N" : "S") + "<br />" +
+          Math.abs(lng).toFixed(2) + "° " + (lng >= 0 ? "E" : "W");
+      }
+      function heroFromStops() {
+        if (!placeEl || typeof CURRENT_TRIP_STOPS === "undefined") { return; }
+        var ti = -1, i, s;
+        for (i = 0; i < CURRENT_TRIP_STOPS.length; i++) {
+          if (CURRENT_TRIP_STOPS[i].status === "today") { ti = i; break; }
+        }
+        if (ti === -1 || !/^at sea/i.test(CURRENT_TRIP_STOPS[ti].name)) { return; }
+        for (i = ti + 1; i < CURRENT_TRIP_STOPS.length; i++) {
+          s = CURRENT_TRIP_STOPS[i];
+          if (s.status !== "going" || /^at sea/i.test(s.name)) { continue; }
+          if (kicker) { kicker.textContent = "Next stop"; }
+          placeEl.textContent = HERO_STOP_LABELS[s.name] || s.name;
+          if (coords && !coords.textContent.trim()) { coords.innerHTML = fmtHeroCoords(s.lat, s.lng); }
+          return;
+        }
+      }
+      setTimeout(heroFromStops, 0);
+
       function norm(s) { return (s || "").toLowerCase().replace(/\s+/g, " ").trim(); }
       // Port photo for a day-card title: exact PORT_HEROES key first, then the
       // longest key contained in (or containing) the title.
@@ -210,7 +247,7 @@ try {
       { name: "At sea, North Atlantic", detail: "Nov 3–7 — sea days aboard Odyssey of the Seas, en route to Cape Liberty (approximate position)", lat: 38.8, lng: -42.0, status: "been" },
       { name: "Cape Liberty (Bayonne), New Jersey", detail: "Sun · Nov 8 — the transatlantic ended here and the Bahamas finale boarded", lat: 40.6650, lng: -74.1130, status: "been" },
       { name: "At sea aboard Odyssey of the Seas", detail: "Today · Mon Nov 9 — a full day at sea, en route to Port Canaveral (approximate position)", lat: 36.0, lng: -75.3, status: "today" },
-      { name: "Port Canaveral, Florida", detail: "Still to come — on the Nov 8–15 Bahamas finale", lat: 28.4103, lng: -80.6188, status: "going" },
+      { name: "Port Canaveral, Florida", detail: "Still to come — on the Nov 8–15 Bahamas finale", lat: 28.4077, lng: -80.5985, status: "going" },
       { name: "Perfect Day at CocoCay, Bahamas", detail: "Still to come — on the Nov 8–15 Bahamas finale", lat: 25.8172, lng: -77.9375, status: "going" },
       { name: "Nassau, Bahamas", detail: "Still to come — on the Nov 8–15 Bahamas finale", lat: 25.0480, lng: -77.3554, status: "going" },
       { name: "Boston, Massachusetts", detail: "Sun · Nov 15 — back in New England, home after forty days away", lat: 42.3601, lng: -71.0589, status: "going" }
