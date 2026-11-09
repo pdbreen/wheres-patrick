@@ -459,8 +459,8 @@ try {
         var start = new Date(+parts[0], +parts[1] - 1, +parts[2]);
         var days = Math.round((start - today) / 86400000);
         var label;
-        if (days > 1) { label = days + " days to go"; }
-        else if (days === 1) { label = "1 day to go"; }
+        if (days > 1) { label = "in " + days + " days"; }
+        else if (days === 1) { label = "in 1 day"; }
         else { label = "underway now"; }
         var slot = el.querySelector("[data-cd-slot]") || el;
         var span = document.createElement("span");
