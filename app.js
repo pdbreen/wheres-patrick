@@ -83,12 +83,17 @@ try {
       // into the markup — which is how it could still name a port already
       // departed. CURRENT_TRIP_STOPS (defined below, and the same list the
       // home-page map renders) always names where Patrick is today and
-      // which stops are still to come, so when today is an at-sea stop the
-      // next "going" stop is the hero's next stop. Deferred with
-      // setTimeout so the const further down this file is initialized
-      // before it is read. The daily refresh advances the stops' statuses,
-      // so this label advances with the trip on its own (Port Canaveral,
-      // then CocoCay, then Nassau on this sailing).
+      // which stops are still to come, so the first "going" stop after
+      // today — whether today is an at-sea day or a port day — is the
+      // hero's next stop, and its coordinates replace the label's coords
+      // whenever the label advances. When no stop is still to come,
+      // today is the trip's final stop (the arrival home) and the label
+      // shows that stop as a home line instead of a stale "Next stop".
+      // Deferred with setTimeout so the const further down this file is
+      // initialized before it is read. The daily refresh advances the
+      // stops' statuses, so this label advances with the trip on its own
+      // (Port Canaveral, then CocoCay, then Nassau, then home on this
+      // sailing).
       var HERO_STOP_LABELS = { "Port Canaveral, Florida": "Orlando (Port Canaveral), Florida" };
       function fmtHeroCoords(lat, lng) {
         return Math.abs(lat).toFixed(2) + "° " + (lat >= 0 ? "N" : "S") + "<br />" +
@@ -100,14 +105,25 @@ try {
         for (i = 0; i < CURRENT_TRIP_STOPS.length; i++) {
           if (CURRENT_TRIP_STOPS[i].status === "today") { ti = i; break; }
         }
-        if (ti === -1 || !/^at sea/i.test(CURRENT_TRIP_STOPS[ti].name)) { return; }
+        if (ti === -1) { return; }
         for (i = ti + 1; i < CURRENT_TRIP_STOPS.length; i++) {
           s = CURRENT_TRIP_STOPS[i];
           if (s.status !== "going" || /^at sea/i.test(s.name)) { continue; }
           if (kicker) { kicker.textContent = "Next stop"; }
           placeEl.textContent = HERO_STOP_LABELS[s.name] || s.name;
-          if (coords && !coords.textContent.trim()) { coords.innerHTML = fmtHeroCoords(s.lat, s.lng); }
+          if (coords) { coords.innerHTML = fmtHeroCoords(s.lat, s.lng); }
           return;
+        }
+        // No stop still to come: today is the trip's last stop — the
+        // arrival home. Show it as a home line rather than leaving a
+        // stale "Next stop" naming a port already visited. An at-sea
+        // final stop keeps the baked label (there is no home port to
+        // name), as does a today stop that is not the list's last entry.
+        s = CURRENT_TRIP_STOPS[ti];
+        if (ti === CURRENT_TRIP_STOPS.length - 1 && !/^at sea/i.test(s.name)) {
+          if (kicker) { kicker.textContent = "Home"; }
+          placeEl.textContent = HERO_STOP_LABELS[s.name] || s.name;
+          if (coords) { coords.innerHTML = fmtHeroCoords(s.lat, s.lng); }
         }
       }
       setTimeout(heroFromStops, 0);
