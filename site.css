@@ -1523,46 +1523,26 @@ h3 .fav-star { width: 19px; height: 19px; vertical-align: -3px; margin-right: 7p
   overflow: hidden;
   padding: 0 9px;
 }
-.tl-bar-label { overflow: hidden; text-overflow: ellipsis; }
-.tl-year[data-tl-year="2026"] .tl-track { margin-top: 24px; }
+.tl-bar-label { overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1 1 auto; }
 .tl-bar--next { overflow: visible; z-index: 3; box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px #0f766e; }
 .tl-bar--next .tl-bar-label { min-width: 0; flex: 1 1 auto; }
-.tl-next-tag {
-  position: absolute;
-  top: -23px;
-  right: 0;
-  padding: 3px 8px 4px;
-  border-radius: 999px;
-  background: #0f766e;
-  color: #fff;
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: .05em;
-  text-transform: uppercase;
-  line-height: 1.25;
-  white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(7, 27, 29, .25);
-}
-.tl-next-tag::after { content: ""; position: absolute; right: 11px; bottom: -4px; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid #0f766e; }
 .tl-cruise { background: #0f766e; }
 .tl-land { background: #b45309; }
 .tl-tentative { background: repeating-linear-gradient(45deg, #d97706 0 8px, #f59e0b 8px 16px); }
-.tl-bar.clickable { cursor: pointer; }
+.tl-bar.clickable { cursor: pointer; touch-action: manipulation; }
 .tl-bar.clickable:hover { filter: brightness(1.1); }
 .tl-bar.clickable:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
-.tl-gap {
-  position: absolute;
-  top: 0;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  color: var(--muted);
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-}
+/* The whole bar is the tap target, not just its label: a transparent
+   pseudo-element widens the hit area of the narrow bars (a few percent
+   of the track on phone screens) without changing how they draw. It
+   lives inside the bar, so it needs the bar's overflow visible — the
+   label span clips its own text, so nothing spills visually. */
+.tl-bar.clickable { overflow: visible; }
+.tl-bar.clickable::after { content: ""; position: absolute; inset: 0 -7px; }
+/* Gap stretches between bars are days at home. Nothing is printed in
+   them — each gap element carries the count in its title, so hovering
+   the blank stretch shows it as a tooltip. */
+.tl-gap { position: absolute; top: 0; height: 44px; }
 .tl-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; margin: 20px 0 0; color: var(--muted); font-size: .8rem; }
 .tl-legend-item { display: inline-flex; align-items: center; gap: 7px; color: var(--ink); font-weight: 600; }
 .tl-swatch { display: inline-block; width: 11px; height: 11px; border-radius: 3px; flex: 0 0 auto; }
@@ -1571,6 +1551,11 @@ h3 .fav-star { width: 19px; height: 19px; vertical-align: -3px; margin-right: 7p
   .future-toggle-btn { padding: 9px 18px; }
   .tl-months span { font-size: 9.5px; }
   .tl-bar { font-size: 11px; padding: 0 6px; border-radius: 8px; }
-  .tl-gap { font-size: 10px; }
   .tl-year-head { font-size: 1.25rem; }
+  /* The trip Details dialog keeps clear of the screen edges and gives
+     its stops list a narrower date column on phones. */
+  .trip-modal { padding: 12px; }
+  .trip-modal-card { padding: 24px 20px 22px; border-radius: 16px; }
+  .trip-modal-card h3 { font-size: 1.55rem; }
+  .trip-modal-stops li { grid-template-columns: 72px 1fr; gap: 10px; }
 }

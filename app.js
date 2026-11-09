@@ -107,7 +107,7 @@ try {
       "assets/hero-lisbon.jpg": { text: "Photo: Rodrigo Tetsuo Argenton, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Torre_de_Bel%C3%A9m_por_Rodrigo_Tetsuo_Argenton_(2).jpg" },
       "assets/hero-ponta-delgada.jpg": { text: "Photo: Diego Delso, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Portas_da_Cidade,_Ponta_Delgada,_isla_de_San_Miguel,_Azores,_Portugal,_2020-07-29,_DD_123-125_HDR.jpg" },
       "assets/hero-at-sea.jpg": { text: "Photo: Richard Mc Neil, CC BY 3.0", url: "https://commons.wikimedia.org/wiki/File:Oasis_of_the_seas_sailing_out_of_Port_Everglades_inlet._Le_plus_gros_paquebot_du_monde_sortant_du_port..._-_panoramio.jpg" },
-      "assets/hero-port-canaveral.jpg": { text: "Photo: NASA — a Space Shuttle launch from Kennedy Space Center, Cape Canaveral", url: "https://th.hotels.com/go/usa/cape-canaveral", label: "Hotels.com Go Guides" },
+      "assets/hero-port-canaveral.jpg": { text: "Photo: NASA — a Space Shuttle launch from Kennedy Space Center, Cape Canaveral", url: "https://www.nasa.gov/kennedy/", label: "NASA" },
       "assets/hero-cococay.jpg": { text: "Photo: Adam Hendel / Royal Caribbean — Perfect Day at CocoCay from the air", url: "https://sailawaze.com/utopia-of-the-seas-review/", label: "Sailawaze" },
       "assets/hero-nassau.jpg": { text: "Photo: Nassau harbour, with Paradise Island and Atlantis beyond", url: "https://blog.asaptickets.com/popular-spring-break-destinations-2024/", label: "ASAP Tickets blog" }
     };
@@ -1401,14 +1401,16 @@ try {
       });
     })();
 
-    // ===== Trip detail popups (upcoming trips longer than 7 days) =====
+    // ===== Trip detail popups (upcoming trips) =====
     // Detail content below was built at build time from the trip itineraries
     // in ~/workspace/goals/*/files/itinerary.md — specifically:
+    //   goals/jj-s-wedding/files/itinerary.md
     //   goals/december-caribbean/files/itinerary.md
     //   goals/january-caribbean/files/itinerary.md
     //   goals/february-caribbean/files/itinerary.md
     //   goals/australia/files/itinerary.md
     //   goals/legend/files/itinerary.md
+    //   goals/annual-summer-vacation/files/itinerary.md
     //   goals/alaska-land-trip-and-cruise/files/itinerary.md
     //   goals/panama-canal/files/itinerary.md
     //   goals/2027-11-liberty-mariner/files/itinerary.md
@@ -1420,6 +1422,17 @@ try {
     // itinerary changes, refresh the matching entry here from that file.
     (function () {
       var TRIP_DETAILS = {
+        "seattle-redmond": {
+          title: "Seattle & Redmond",
+          range: "November 19 – 23, 2026 · 4 days",
+          stops: [
+            ["Nov 19", "Seattle", "Fly in; pick up the Hertz SUV and drive to Redmond"],
+            ["Nov 20", "Redmond", "Free day around Redmond and Seattle"],
+            ["Nov 21", "Redmond & Seattle", "JJ and Jessica's wedding at St. Jude, Redmond; reception dinner at Canlis, Seattle"],
+            ["Nov 22", "Redmond", "Possible Microsoft campus tour with JJ"],
+            ["Nov 23", "Seattle", "Drop the SUV at SeaTac; fly home to Boston"]
+          ]
+        },
         "december-caribbean": {
           title: "Caribbean",
           range: "November 28 – December 19, 2026 · 21 days",
@@ -1544,6 +1557,15 @@ try {
             ["May 23–24", "Málaga", "Alcazaba, Atarazanas market & the Picasso Museum"],
             ["May 25–27", "Seville", "Cathedral, Real Alcázar & Plaza de España"],
             ["May 27–29", "Córdoba", "The Mezquita; train to Madrid and home on May 29"]
+          ]
+        },
+        "annual-summer-vacation": {
+          title: "Annual Summer Vacation",
+          range: "July 10 – 17, 2027 · 7 days",
+          stops: [
+            ["Jul 10", "Scituate, Massachusetts", "Arrive at the beach house"],
+            ["Jul 11–16", "Scituate, Massachusetts", "Beach house days — no set plans yet"],
+            ["Jul 17", "Scituate, Massachusetts", "Head home"]
           ]
         },
         "alaska": {
@@ -1796,7 +1818,14 @@ try {
           flagEl.textContent = "";
           flagEl.hidden = true;
         }
-        fillList(bookingsEl, d.bookings, false);
+        // Some trips ship no bookings list at all (dates, places and
+        // stops only); hide the whole bookings section for those rather
+        // than show an empty heading.
+        var bookings = d.bookings || [];
+        fillList(bookingsEl, bookings, false);
+        bookingsEl.hidden = bookings.length === 0;
+        var bookingsHead = bookingsEl.previousElementSibling;
+        if (bookingsHead) { bookingsHead.hidden = bookings.length === 0; }
         fillList(stopsEl, d.stops, true);
         modal.hidden = false;
         document.body.style.overflow = "hidden";
@@ -1842,17 +1871,18 @@ try {
         });
       });
 
-      // The Summary timeline's bars open the same dialog as the cards
-      // for every trip that has a Details entry (same >7-day rule).
-      // Bars carry data-tl-start / data-tl-end rather than data-start /
-      // data-end so the countdown feature never appends a "days to go"
-      // label inside a bar.
+      // The Summary timeline's bars open the same dialog as the cards.
+      // Unlike the cards, bars carry no length rule: every bar opens
+      // its trip's dialog, short trips included, so the whole timeline
+      // is tappable — the narrow bars especially need it on phones,
+      // where a bar can be only a few pixels wide (the clickable CSS
+      // widens their hit area beyond the drawn box). Bars carry
+      // data-tl-start / data-tl-end rather than data-start / data-end
+      // so the countdown feature never appends a "days to go" label
+      // inside a bar.
       Array.prototype.forEach.call(document.querySelectorAll(".tl-bar[data-tl-start][data-tl-end][data-trip]"), function (bar) {
-        var start = new Date(bar.getAttribute("data-tl-start") + "T00:00:00");
-        var end = new Date(bar.getAttribute("data-tl-end") + "T00:00:00");
-        var days = Math.round((end - start) / 86400000);
         var key = bar.getAttribute("data-trip");
-        if (!(days > 7) || !TRIP_DETAILS[key]) { return; }
+        if (!TRIP_DETAILS[key]) { return; }
         bar.classList.add("clickable");
         bar.setAttribute("tabindex", "0");
         bar.setAttribute("role", "button");
@@ -1941,9 +1971,10 @@ try {
         });
         var lanes = Math.max(1, laneEnds.length);
         track.style.height = (lanes * BAR_H + (lanes - 1) * LANE_GAP) + "px";
-        // Gap labels describe the home stretch on the main row; if a
-        // year ever grows extra lanes they would sit across the first
-        // lane's bars, so hide them rather than mislabel.
+        // Gap markers carry the home-stretch count in their title
+        // (a hover tooltip); if a year ever grows extra lanes they
+        // would sit across the first lane's bars, so hide them rather
+        // than mislabel.
         if (lanes > 1) {
           Array.prototype.forEach.call(track.querySelectorAll(".tl-gap"), function (gap) {
             gap.style.display = "none";
@@ -2698,7 +2729,7 @@ try {
     var main = document.getElementById("view-main");
     if (!main) { return; }
     var PAGES = { "": "today", today: "today", next: "next", future: "future", past: "past", "venice-transatlantic": "history" };
-    var TITLES = { today: "Where's Patrick?", next: "Next · Where's Patrick?", future: "Future · Where's Patrick?", past: "Past trips · Where's Patrick?", history: "Venice & Transatlantic · Where's Patrick?" };
+    var TITLES = { today: "Where's Patrick?", next: "Next · Where's Patrick?", future: "What's in the Future · Where's Patrick?", past: "Past trips · Where's Patrick?", history: "Venice & Transatlantic · Where's Patrick?" };
     var groups = main.querySelectorAll("[data-page]");
     var navLinks = document.querySelectorAll(".nav-links a[data-nav]");
     var toggle = document.getElementById("nav-toggle");
