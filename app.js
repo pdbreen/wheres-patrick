@@ -1795,9 +1795,7 @@ try {
       var flagEl = document.getElementById("trip-modal-flag");
       var bookingsEl = document.getElementById("trip-modal-bookings");
       var stopsEl = document.getElementById("trip-modal-stops");
-      var shareUrlEl = document.getElementById("trip-modal-share-url");
-      var shareCopyBtn = document.getElementById("trip-modal-share-copy");
-      var shareCopiedEl = document.getElementById("trip-modal-share-copied");
+      var shareLinkBtn = document.getElementById("trip-modal-link");
       var currentShareUrl = "";
       // The dialog markup lives inside the Future section so the
       // multi-page publisher carries it onto future.html (it used to
@@ -1821,7 +1819,7 @@ try {
             '<p class="trip-modal-dates" id="trip-modal-dates"></p>' +
             '<p class="trip-modal-flag" id="trip-modal-flag" hidden></p>' +
             '<h3 id="trip-modal-title"></h3>' +
-            '<div class="trip-modal-share" id="trip-modal-share"><span class="trip-modal-share-label">Shareable link to this trip</span><div class="trip-modal-share-row"><span class="trip-modal-share-url" id="trip-modal-share-url"></span><button class="trip-modal-share-copy" id="trip-modal-share-copy" type="button">Copy</button></div><span class="trip-modal-share-copied" id="trip-modal-share-copied" hidden>Copied</span></div>' +
+            '<button class="trip-modal-link" id="trip-modal-link" type="button" aria-label="Copy link to this trip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg><span>Link to this trip</span></button>' +
             '<h4>Headline bookings</h4>' +
             '<ul class="trip-modal-bookings" id="trip-modal-bookings"></ul>' +
             '<h4>Ports &amp; stops</h4>' +
@@ -1834,35 +1832,36 @@ try {
           flagEl = document.getElementById("trip-modal-flag");
           bookingsEl = document.getElementById("trip-modal-bookings");
           stopsEl = document.getElementById("trip-modal-stops");
-          shareUrlEl = document.getElementById("trip-modal-share-url");
-          shareCopyBtn = document.getElementById("trip-modal-share-copy");
-          shareCopiedEl = document.getElementById("trip-modal-share-copied");
+          shareLinkBtn = document.getElementById("trip-modal-link");
         } catch (e) { /* fall through to the bail-out below */ }
       }
       if (!modal || !titleEl || !datesEl || !flagEl || !bookingsEl || !stopsEl) { return; }
-      // If the dialog shipped without the share block (older publish), add it.
-      if (!shareUrlEl && titleEl && titleEl.parentNode) {
+      // If the dialog shipped without the link affordance (older
+      // publish), add it — the same small day-link-style button the
+      // static markup carries, right under the dialog title.
+      if (!shareLinkBtn && titleEl && titleEl.parentNode) {
         try {
-          var shareDiv = document.createElement("div");
-          shareDiv.className = "trip-modal-share";
-          shareDiv.id = "trip-modal-share";
-          shareDiv.innerHTML = '<span class="trip-modal-share-label">Shareable link to this trip</span><div class="trip-modal-share-row"><span class="trip-modal-share-url" id="trip-modal-share-url"></span><button class="trip-modal-share-copy" id="trip-modal-share-copy" type="button">Copy</button></div><span class="trip-modal-share-copied" id="trip-modal-share-copied" hidden>Copied</span>';
-          titleEl.parentNode.insertBefore(shareDiv, titleEl.nextSibling);
-          shareUrlEl = document.getElementById("trip-modal-share-url");
-          shareCopyBtn = document.getElementById("trip-modal-share-copy");
-          shareCopiedEl = document.getElementById("trip-modal-share-copied");
-        } catch (e) { /* share block is additive; dialog still works without it */ }
+          var shareBtn = document.createElement("button");
+          shareBtn.className = "trip-modal-link";
+          shareBtn.id = "trip-modal-link";
+          shareBtn.type = "button";
+          shareBtn.setAttribute("aria-label", "Copy link to this trip");
+          shareBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg><span>Link to this trip</span>';
+          titleEl.parentNode.insertBefore(shareBtn, titleEl.nextSibling);
+          shareLinkBtn = document.getElementById("trip-modal-link");
+        } catch (e) { /* link affordance is additive; dialog still works without it */ }
       }
-      if (shareCopyBtn) {
-        shareCopyBtn.addEventListener("click", function () {
+      if (shareLinkBtn) {
+        shareLinkBtn.addEventListener("click", function () {
           if (!currentShareUrl) { return; }
           copyTextToClipboard(currentShareUrl, function () {
-            if (shareCopiedEl) { shareCopiedEl.hidden = false; }
-            var old = shareCopyBtn.textContent;
-            shareCopyBtn.textContent = "Copied";
+            var label = shareLinkBtn.querySelector("span");
+            var old = label ? label.textContent : "";
+            shareLinkBtn.classList.add("is-copied");
+            if (label) { label.textContent = "Copied"; }
             setTimeout(function () {
-              shareCopyBtn.textContent = old || "Copy";
-              if (shareCopiedEl) { shareCopiedEl.hidden = true; }
+              shareLinkBtn.classList.remove("is-copied");
+              if (label) { label.textContent = old || "Link to this trip"; }
             }, 2000);
           });
         });
@@ -1899,9 +1898,11 @@ try {
         currentShareUrl = tripUrlFor(key, trigger && trigger.getAttribute ? trigger : null);
         // If trigger is a card row, its data-slug is authoritative; if it
         // is a timeline bar (no data-slug), the map above supplies it.
-        if (shareUrlEl) { shareUrlEl.textContent = currentShareUrl; }
-        if (shareCopiedEl) { shareCopiedEl.hidden = true; }
-        if (shareCopyBtn) { shareCopyBtn.textContent = "Copy"; }
+        if (shareLinkBtn) {
+          shareLinkBtn.classList.remove("is-copied");
+          var shareLabel = shareLinkBtn.querySelector("span");
+          if (shareLabel) { shareLabel.textContent = "Link to this trip"; }
+        }
         if (d.tentative) {
           flagEl.textContent = "Tentative — nothing booked yet; firm once the first booking lands";
           flagEl.hidden = false;
@@ -1962,10 +1963,13 @@ try {
         });
       });
 
-      // Permanent link affordance on every future trip card — subtle
-      // Copy link button that copies the trip's shareable URL. Runs for
-      // ALL cards (including short trips that get no Details hint), and
-      // stops propagation so copying never opens the Details dialog.
+      // Permanent link affordance on every future trip card — the same
+      // small, muted day-link treatment the journal cards use ("Link to
+      // this day"): a 13px chain icon and quiet text, no pill. Clicking
+      // copies the trip's shareable URL and briefly swaps the label to
+      // "Copied". Runs for ALL cards (including short trips that get no
+      // Details hint), and stops propagation so copying never opens the
+      // Details dialog.
       Array.prototype.forEach.call(document.querySelectorAll(".trip-row[data-trip], .trip-row[data-slug]"), function (row) {
         var key = row.getAttribute("data-trip");
         if (!key && !row.getAttribute("data-slug")) { return; }
@@ -1977,7 +1981,7 @@ try {
         btn.className = "trip-copy-link";
         btn.setAttribute("aria-label", "Copy link to this trip");
         btn.setAttribute("data-trip-url", url);
-        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg><span>Copy link</span>';
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg><span>Link to this trip</span>';
         btn.addEventListener("click", function (e) {
           e.stopPropagation();
           e.preventDefault();
@@ -1988,7 +1992,7 @@ try {
             if (label) { label.textContent = "Copied"; }
             setTimeout(function () {
               btn.classList.remove("is-copied");
-              if (label) { label.textContent = old || "Copy link"; }
+              if (label) { label.textContent = old || "Link to this trip"; }
             }, 2000);
           });
         });
