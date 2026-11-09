@@ -31,6 +31,16 @@ try {
     // day-cards do the rest. Keys are matched case-insensitively; a key that
     // appears inside a longer card title still matches (e.g. "Civitavecchia"
     // matches "Rome (Civitavecchia), Italy").
+    //
+    // STANDING RULE for the daily build & publish process (added Nov 9,
+    // 2026, at Patrick's request): every port on a trip must have a hero
+    // photo BEFORE the trip starts — when a new trip is loaded, source an
+    // iconic photo for each of its ports, save it as assets/hero-<port>.jpg
+    // and add its PORT_HEROES, STOP_HEROES and HERO_CREDITS entries in the
+    // same publish. A port with no entry silently falls back to the generic
+    // ship-at-sea photo, which is how Port Canaveral, CocoCay and Nassau
+    // shipped without photos on the Nov 2026 Bahamas finale until they
+    // were added by hand.
     const PORT_HEROES = {
       "Mykonos": "assets/hero-mykonos.jpg",
       "Naples": "assets/hero-naples.jpg",
@@ -41,7 +51,23 @@ try {
       "Barcelona": "assets/hero-barcelona.jpg",
       "Cartagena": "assets/hero-cartagena.jpg",
       "Lisbon": "assets/hero-lisbon.jpg",
-      "Ponta Delgada": "assets/hero-ponta-delgada.jpg"
+      "Ponta Delgada": "assets/hero-ponta-delgada.jpg",
+      "Port Canaveral": "assets/hero-port-canaveral.jpg",
+      "Orlando (Port Canaveral)": "assets/hero-port-canaveral.jpg",
+      "Orlando": "assets/hero-port-canaveral.jpg",
+      "CocoCay": "assets/hero-cococay.jpg",
+      "Perfect Day at CocoCay": "assets/hero-cococay.jpg",
+      "Nassau": "assets/hero-nassau.jpg"
+    };
+    // STOP_HEROES is the same mapping keyed by CURRENT_TRIP_STOPS names
+    // (defined below): heroFromStops uses it to advance the hero PHOTO
+    // along with the "Next stop" label on pages where the day-cards are
+    // not in the document (the published home page), so the image follows
+    // the trip on its own between publishes, exactly as the label does.
+    const STOP_HEROES = {
+      "Port Canaveral, Florida": "assets/hero-port-canaveral.jpg",
+      "Perfect Day at CocoCay, Bahamas": "assets/hero-cococay.jpg",
+      "Nassau, Bahamas": "assets/hero-nassau.jpg"
     };
     const PLAN_HEROES = {
       "Cinque Terre": "assets/hero-cinque-terre.jpg",
@@ -49,9 +75,12 @@ try {
     };
     // Generic fallback: a cruise ship at sea, used when a port has no photo.
     const HERO_FALLBACK = "assets/img-666542a14bb3.jpg";
-    // Photo credits for the hero images above — every hero photo is freely
-    // licensed via Wikimedia Commons; "url" is its Commons file page. The
-    // credit line is rendered unobtrusively in the hero's corner.
+    // Photo credits for the hero images above — most hero photos are freely
+    // licensed via Wikimedia Commons ("url" is the Commons file page); the
+    // Nov 2026 Bahamas ports credit their source page instead, and carry a
+    // "label" for the credit link (the link text defaults to
+    // "Wikimedia Commons"). The credit line is rendered unobtrusively in
+    // the hero's corner.
     const HERO_CREDITS = {
       "assets/hero-mykonos.jpg": { text: "Photo: dronepicr, CC BY 2.0", url: "https://commons.wikimedia.org/wiki/File:The_windmills_in_Mykonos,_Greece_-_50661524068.jpg" },
       "assets/hero-naples.jpg": { text: "Photo: Wolfgang Moroder, CC BY-SA 3.0", url: "https://commons.wikimedia.org/wiki/File:Naples_from_the_Castello_Sant_Elmo_with_Abbazia_San_Martino_the_port_and_the_Vesuv.jpg" },
@@ -63,7 +92,10 @@ try {
       "assets/hero-cartagena.jpg": { text: "Photo: Diego Delso, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Teatro_romano_de_Cartagena,_Espa%C3%B1a,_2022-07-16,_DD_02.jpg" },
       "assets/hero-lisbon.jpg": { text: "Photo: Rodrigo Tetsuo Argenton, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Torre_de_Bel%C3%A9m_por_Rodrigo_Tetsuo_Argenton_(2).jpg" },
       "assets/hero-ponta-delgada.jpg": { text: "Photo: Diego Delso, CC BY-SA 4.0", url: "https://commons.wikimedia.org/wiki/File:Portas_da_Cidade,_Ponta_Delgada,_isla_de_San_Miguel,_Azores,_Portugal,_2020-07-29,_DD_123-125_HDR.jpg" },
-      "assets/hero-at-sea.jpg": { text: "Photo: Richard Mc Neil, CC BY 3.0", url: "https://commons.wikimedia.org/wiki/File:Oasis_of_the_seas_sailing_out_of_Port_Everglades_inlet._Le_plus_gros_paquebot_du_monde_sortant_du_port..._-_panoramio.jpg" }
+      "assets/hero-at-sea.jpg": { text: "Photo: Richard Mc Neil, CC BY 3.0", url: "https://commons.wikimedia.org/wiki/File:Oasis_of_the_seas_sailing_out_of_Port_Everglades_inlet._Le_plus_gros_paquebot_du_monde_sortant_du_port..._-_panoramio.jpg" },
+      "assets/hero-port-canaveral.jpg": { text: "Photo: NASA — a Space Shuttle launch from Kennedy Space Center, Cape Canaveral", url: "https://th.hotels.com/go/usa/cape-canaveral", label: "Hotels.com Go Guides" },
+      "assets/hero-cococay.jpg": { text: "Photo: Adam Hendel / Royal Caribbean — Perfect Day at CocoCay from the air", url: "https://sailawaze.com/utopia-of-the-seas-review/", label: "Sailawaze" },
+      "assets/hero-nassau.jpg": { text: "Photo: Nassau harbour, with Paradise Island and Atlantis beyond", url: "https://blog.asaptickets.com/popular-spring-break-destinations-2024/", label: "ASAP Tickets blog" }
     };
 
     (function () {
@@ -95,6 +127,20 @@ try {
       // (Port Canaveral, then CocoCay, then Nassau, then home on this
       // sailing).
       var HERO_STOP_LABELS = { "Port Canaveral, Florida": "Orlando (Port Canaveral), Florida" };
+      function setCredit(file) {
+        if (!creditEl) { return; }
+        creditEl.textContent = "";
+        var c = HERO_CREDITS[file];
+        if (c) {
+          creditEl.appendChild(document.createTextNode(c.text + " · "));
+          var a = document.createElement("a");
+          a.href = c.url;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          a.textContent = c.label || "Wikimedia Commons";
+          creditEl.appendChild(a);
+        }
+      }
       function fmtHeroCoords(lat, lng) {
         return Math.abs(lat).toFixed(2) + "° " + (lat >= 0 ? "N" : "S") + "<br />" +
           Math.abs(lng).toFixed(2) + "° " + (lng >= 0 ? "E" : "W");
@@ -112,6 +158,17 @@ try {
           if (kicker) { kicker.textContent = "Next stop"; }
           placeEl.textContent = HERO_STOP_LABELS[s.name] || s.name;
           if (coords) { coords.innerHTML = fmtHeroCoords(s.lat, s.lng); }
+          // On a sea day the hero PHOTO advances to the next stop too,
+          // mirroring the day-card logic below — this is what carries
+          // the photo change on the published home page, where the
+          // day-cards are absent. On a port day the photo stays with
+          // today's port (the card logic, or the baked markup, owns it).
+          var stopFile = STOP_HEROES[s.name];
+          if (stopFile && /^at sea/i.test(CURRENT_TRIP_STOPS[ti].name)) {
+            img.src = stopFile;
+            img.alt = "Iconic view of " + (HERO_STOP_LABELS[s.name] || s.name) + ", the next port";
+            setCredit(stopFile);
+          }
           return;
         }
         // No stop still to come: today is the trip's last stop — the
@@ -172,19 +229,7 @@ try {
           if (nextCaption) { caption.textContent = nextCaption; caption.hidden = false; }
           else { caption.textContent = ""; caption.hidden = true; }
         }
-        if (creditEl) {
-          creditEl.textContent = "";
-          var c = HERO_CREDITS[file];
-          if (c) {
-            creditEl.appendChild(document.createTextNode(c.text + " · "));
-            var a = document.createElement("a");
-            a.href = c.url;
-            a.target = "_blank";
-            a.rel = "noopener noreferrer";
-            a.textContent = "Wikimedia Commons";
-            creditEl.appendChild(a);
-          }
-        }
+        setCredit(file);
       }
 
       var cards = Array.prototype.slice.call(document.querySelectorAll(".days .day"));
