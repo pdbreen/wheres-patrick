@@ -10,9 +10,9 @@
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac8ec613a4e94bc989bad09cb803ab8b"}'></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,650&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="site.css?v=20261109-083955">
+<link rel="stylesheet" href="site.css?v=20261109-085732">
 <link rel="icon" href="data:," />
-<script>window.__SITE_VERSION__="20261109-083955";</script>    <meta property="og:type" content="website" />
+<script>window.__SITE_VERSION__="20261109-085732";</script>    <meta property="og:type" content="website" />
     <meta property="og:title" content="Where&#x27;s Patrick? · Orlando (Port Canaveral), Florida" />
     <meta property="og:description" content="Mon Nov 9, 2026: A full day at sea aboard Odyssey of the Seas on the 7-night Perfect Day Bahamas sailing (Nov 8–15), a Cape Liberty round-trip." />
     <meta property="og:image" content="https://wherespatrick.today/assets/img-f77832bfa0a2.jpg" />
@@ -67,22 +67,31 @@
            even though the files sat in assets/. app.js resolves each hero
            path through the matching embed's src, so the photo it names is
            always one the page itself carries. When the daily refresh adds
-           a port's hero photo, add its embed line here in the same publish. -->
+           a port's hero photo, add its embed line here in the same publish.
+           The embed is keyed by data-hero-key, a bare slug (hero-<slug>.jpg
+           is the file it stands for) — NEVER by the file path itself: the
+           publish rewrites every path-valued attribute (a data attribute
+           holding "assets/hero-….jpg" came back as the extracted
+           "assets/img-<hash>.jpg", exactly like the src), so a path-keyed
+           lookup missed on the live site and the script swapped the
+           working baked hero for a file name that does not exist there —
+           the flash-then-broken-image bug of Nov 9, 2026. A slug is not a
+           path, so no publish step rewrites it and the key always matches. -->
       <div class="hero-embeds" hidden aria-hidden="true">
-        <img data-hero-embed="assets/img-666542a14bb3.jpg" src="assets/img-666542a14bb3.jpg" alt="" loading="lazy" />
-        <img data-hero-embed="assets/img-9623ffbd1ccc.jpg" src="assets/img-9623ffbd1ccc.jpg" alt="" loading="lazy" />
-        <img data-hero-embed="assets/img-35108218479a.jpg" src="assets/img-35108218479a.jpg" alt="" loading="lazy" />
-        <img data-hero-embed="assets/img-0d6aeb9c2346.jpg" src="assets/img-0d6aeb9c2346.jpg" alt="" loading="lazy" />
-        <img data-hero-embed="assets/img-e2dcbef014e5.jpg" src="assets/img-e2dcbef014e5.jpg" alt="" loading="lazy" />
-        <img data-hero-embed="assets/img-7e438a4f42d4.jpg" src="assets/img-7e438a4f42d4.jpg" alt="" loading="lazy" />
-        <img data-hero-embed="assets/img-2d9e44d8e95a.jpg" src="assets/img-2d9e44d8e95a.jpg" alt="" loading="lazy" />
-        <img data-hero-embed="assets/img-3f11d8998473.jpg" src="assets/img-3f11d8998473.jpg" alt="" loading="lazy" />
-        <img data-hero-embed="assets/img-3c9df831552c.jpg" src="assets/img-3c9df831552c.jpg" alt="" loading="lazy" />
-        <img data-hero-embed="assets/img-96ba6f23e353.jpg" src="assets/img-96ba6f23e353.jpg" alt="" loading="lazy" />
-        <img data-hero-embed="assets/img-a57ec275020e.jpg" src="assets/img-a57ec275020e.jpg" alt="" loading="lazy" />
-        <img data-hero-embed="assets/img-c7bf84673473.jpg" src="assets/img-c7bf84673473.jpg" alt="" loading="lazy" />
-        <img data-hero-embed="assets/img-f77832bfa0a2.jpg" src="assets/img-f77832bfa0a2.jpg" alt="" loading="lazy" />
-        <img data-hero-embed="assets/img-e0c69cf6d0c8.jpg" src="assets/img-e0c69cf6d0c8.jpg" alt="" loading="lazy" />
+        <img data-hero-key="at-sea" src="assets/img-666542a14bb3.jpg" alt="" loading="lazy" />
+        <img data-hero-key="barcelona" src="assets/img-9623ffbd1ccc.jpg" alt="" loading="lazy" />
+        <img data-hero-key="cartagena" src="assets/img-35108218479a.jpg" alt="" loading="lazy" />
+        <img data-hero-key="cinque-terre" src="assets/img-0d6aeb9c2346.jpg" alt="" loading="lazy" />
+        <img data-hero-key="cococay" src="assets/img-e2dcbef014e5.jpg" alt="" loading="lazy" />
+        <img data-hero-key="herculaneum" src="assets/img-7e438a4f42d4.jpg" alt="" loading="lazy" />
+        <img data-hero-key="la-spezia" src="assets/img-2d9e44d8e95a.jpg" alt="" loading="lazy" />
+        <img data-hero-key="lisbon" src="assets/img-3f11d8998473.jpg" alt="" loading="lazy" />
+        <img data-hero-key="mykonos" src="assets/img-3c9df831552c.jpg" alt="" loading="lazy" />
+        <img data-hero-key="naples" src="assets/img-96ba6f23e353.jpg" alt="" loading="lazy" />
+        <img data-hero-key="nassau" src="assets/img-a57ec275020e.jpg" alt="" loading="lazy" />
+        <img data-hero-key="ponta-delgada" src="assets/img-c7bf84673473.jpg" alt="" loading="lazy" />
+        <img data-hero-key="port-canaveral" src="assets/img-f77832bfa0a2.jpg" alt="" loading="lazy" />
+        <img data-hero-key="rome" src="assets/img-e0c69cf6d0c8.jpg" alt="" loading="lazy" />
       </div>
     </article>
 <section class="home-map" aria-labelledby="current-map-heading">
@@ -6455,7 +6464,7 @@
  ]
 }
   </script>
-<script src="app.js?v=20261109-083955" defer></script>
+<script src="app.js?v=20261109-085732" defer></script>
 <script>
 (function () {
   var PAGES = {"today": "index.html", "next": "next.html", "future": "future.html", "past": "past.html", "venice-transatlantic": "past/venice-transatlantic-oct-nov-2026.html", "spain-transatlantic-jul-aug-2026": "past/spain-transatlantic-jul-aug-2026.html", "cape-cod-jul-2026": "past/cape-cod-jul-2026.html", "bayonne-miami-sep-2026": "past/bayonne-miami-sep-2026.html", "alaska-may-jun-2026": "past/alaska-may-jun-2026.html", "san-juan-rome-apr-may-2026": "past/san-juan-rome-apr-may-2026.html", "miami-jan-feb-2026": "past/miami-jan-feb-2026.html", "december-caribbean-nov-dec-2025": "past/december-caribbean-nov-dec-2025.html", "fall-transatlantic-oct-nov-2025": "past/fall-transatlantic-oct-nov-2025.html", "eastern-canada-sep-oct-2025": "past/eastern-canada-sep-oct-2025.html", "star-cococay-aug-2025": "past/star-cococay-aug-2025.html", "jewel-cococay-jul-2025": "past/jewel-cococay-jul-2025.html", "cape-cod-jun-jul-2025": "past/cape-cod-jun-jul-2025.html", "odyssey-mediterranean-may-2025": "past/odyssey-mediterranean-may-2025.html", "vision-baltimore-mar-2025": "past/vision-baltimore-mar-2025.html", "adventure-caribbean-dec-2024": "past/adventure-caribbean-dec-2024.html", "oasis-transatlantic-oct-2024": "past/oasis-transatlantic-oct-2024.html", "brilliance-alaska-may-2024": "past/brilliance-alaska-may-2024.html", "symphony-caribbean-mar-2024": "past/symphony-caribbean-mar-2024.html", "adventure-caribbean-dec-2023": "past/adventure-caribbean-dec-2023.html", "oasis-caribbean-sep-2023": "past/oasis-caribbean-sep-2023.html", "harmony-caribbean-mar-2023": "past/harmony-caribbean-mar-2023.html", "allure-caribbean-oct-2022": "past/allure-caribbean-oct-2022.html"};

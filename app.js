@@ -37,7 +37,7 @@ try {
     // photo BEFORE the trip starts — when a new trip is loaded, source an
     // iconic photo for each of its ports, save it as assets/hero-<port>.jpg
     // and add its PORT_HEROES, STOP_HEROES and HERO_CREDITS entries in the
-    // same publish — AND its embed line (<img data-hero-embed>) in the hero
+    // same publish — AND its embed line (<img data-hero-key="<port-slug>">) in the hero
     // article in index.html: the publish only carries photos embedded as
     // <img> elements in the page, so a hero file with no embed never
     // reaches the live site no matter what these maps say. A port with no entry silently falls back to the generic
@@ -133,11 +133,33 @@ try {
       // artifact the embed's src is the plain file path; after a publish
       // it is the extracted file the pipeline wrote. Either way the photo
       // displays. A file with no embed keeps its literal path.
+      //
+      // The embeds are keyed by data-hero-key, a bare slug — never by the
+      // file path. The first version keyed them by path (data-hero-embed=
+      // "assets/hero-….jpg"), but the publish rewrites path-valued
+      // attributes just as it rewrites srcs: on the live site the key came
+      // back as the extracted "assets/img-<hash>.jpg", the lookup by
+      // "assets/hero-….jpg" missed, heroSrc fell back to the literal path
+      // — a file that does not exist under that name on the live site —
+      // and the script swapped the working baked hero photo for a broken
+      // image (the flash-then-missing-icon bug of Nov 9, 2026; the error
+      // fallback below missed the same way, so it could not rescue it).
+      // A slug is not a path and is never rewritten, so the key survives
+      // every publish. The old data-hero-embed key is still honoured when
+      // it holds a hero path (pre-publish markup), as a fallback only.
       var heroEmbedSrc = {};
-      Array.prototype.slice.call(document.querySelectorAll("img[data-hero-embed]")).forEach(function (el) {
-        heroEmbedSrc[el.getAttribute("data-hero-embed")] = el.getAttribute("src");
+      Array.prototype.slice.call(document.querySelectorAll("img[data-hero-key], img[data-hero-embed]")).forEach(function (el) {
+        var src = el.getAttribute("src");
+        if (!src) { return; }
+        var key = el.getAttribute("data-hero-key");
+        if (key) { heroEmbedSrc["assets/hero-" + key + ".jpg"] = src; }
+        var legacy = el.getAttribute("data-hero-embed");
+        if (legacy && legacy.indexOf("hero-") !== -1) { heroEmbedSrc[legacy] = src; }
       });
       function heroSrc(file) { return heroEmbedSrc[file] || file; }
+      // True when this file's published src is known — its embed is in the
+      // page, so the src heroSrc returns is a file the publish carried.
+      function heroKnown(file) { return Object.prototype.hasOwnProperty.call(heroEmbedSrc, file); }
 
       // Fallback derivation of the "Next stop" label, from the trip data
       // itself. The card-based logic further down reads the "What's next"
@@ -214,7 +236,11 @@ try {
         var todayStop = CURRENT_TRIP_STOPS[ti];
         if (!document.querySelector(".days .day") && !/^at sea/i.test(todayStop.name)) {
           var todayFile = STOP_HEROES[todayStop.name];
-          if (todayFile) {
+          // Only swap when the publish provably carried this photo (its
+          // embed resolved). An unresolved file would be a literal path
+          // that may not exist on the live site — keeping the baked hero
+          // is always better than swapping it for a broken image.
+          if (todayFile && heroKnown(todayFile)) {
             img.src = heroSrc(todayFile);
             img.alt = "Iconic view of " + (HERO_STOP_LABELS[todayStop.name] || todayStop.name);
             setCredit(todayFile);
@@ -232,7 +258,7 @@ try {
           // day-cards are absent. On a port day the photo stays with
           // today's port (the card logic, or the baked markup, owns it).
           var stopFile = STOP_HEROES[s.name];
-          if (stopFile && /^at sea/i.test(CURRENT_TRIP_STOPS[ti].name)) {
+          if (stopFile && heroKnown(stopFile) && /^at sea/i.test(CURRENT_TRIP_STOPS[ti].name)) {
             img.src = heroSrc(stopFile);
             img.alt = "Iconic view of " + (HERO_STOP_LABELS[s.name] || s.name) + ", the next port";
             setCredit(stopFile);
@@ -288,6 +314,12 @@ try {
       function planOf(card) { var p = card.querySelector("p"); return p ? p.textContent : ""; }
 
       function show(file, place, kickerText, alt, nextCaption) {
+        // Never swap the hero to a file the publish did not carry (no
+        // embed resolved for it): on the live site that literal path does
+        // not exist and the swap renders a broken image. Degrade to the
+        // ship-at-sea fallback photo instead, exactly as a port with no
+        // photo of its own does.
+        if (!heroKnown(file) && heroKnown(HERO_FALLBACK)) { file = HERO_FALLBACK; alt = "A cruise ship at sea"; }
         img.src = heroSrc(file);
         img.alt = alt;
         if (placeEl) { placeEl.textContent = place; }
