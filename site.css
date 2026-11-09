@@ -1526,8 +1526,7 @@ h3 .fav-star { width: 19px; height: 19px; vertical-align: -3px; margin-right: 7p
 .tl-bar-label { overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1 1 auto; }
 .tl-bar--next { overflow: visible; z-index: 3; box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px #0f766e; }
 .tl-bar--next .tl-bar-label { min-width: 0; flex: 1 1 auto; }
-.tl-cruise { background: #0f766e; }
-.tl-land { background: #b45309; }
+.tl-confirmed { background: #0f766e; }
 .tl-tentative { background: repeating-linear-gradient(45deg, #d97706 0 8px, #f59e0b 8px 16px); }
 .tl-bar.clickable { cursor: pointer; touch-action: manipulation; }
 .tl-bar.clickable:hover { filter: brightness(1.1); }
