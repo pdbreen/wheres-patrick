@@ -1965,11 +1965,13 @@ try {
 
       // Permanent link affordance on every future trip card — the same
       // small, muted day-link treatment the journal cards use ("Link to
-      // this day"): a 13px chain icon and quiet text, no pill. Clicking
-      // copies the trip's shareable URL and briefly swaps the label to
-      // "Copied". Runs for ALL cards (including short trips that get no
-      // Details hint), and stops propagation so copying never opens the
-      // Details dialog.
+      // this day"): a 13px chain icon and quiet text, no pill. It sits
+      // directly beneath the trip name, immediately after the card's
+      // <strong> heading — the same spot the day link occupies under a
+      // journal card's heading. Clicking copies the trip's shareable
+      // URL and briefly swaps the label to "Copied". Runs for ALL cards
+      // (including short trips that get no Details hint), and stops
+      // propagation so copying never opens the Details dialog.
       Array.prototype.forEach.call(document.querySelectorAll(".trip-row[data-trip], .trip-row[data-slug]"), function (row) {
         var key = row.getAttribute("data-trip");
         if (!key && !row.getAttribute("data-slug")) { return; }
@@ -1997,7 +1999,18 @@ try {
           });
         });
         btn.addEventListener("keydown", function (e) { e.stopPropagation(); });
-        slot.appendChild(btn);
+        // Place the link directly under the trip name: insert it
+        // immediately after the card's <strong> heading (past the
+        // NEXT UP badge on the featured card, which sits above the
+        // name), mirroring how the day link follows a journal card's
+        // heading. Fall back to the end of the slot if a card ever
+        // ships without a name heading.
+        var nameEl = slot.querySelector("strong");
+        if (nameEl && nameEl.parentNode === slot) {
+          slot.insertBefore(btn, nameEl.nextSibling);
+        } else {
+          slot.appendChild(btn);
+        }
       });
 
       // The Summary timeline's bars open the same dialog as the cards.

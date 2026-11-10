@@ -1339,7 +1339,7 @@ h3 .fav-star { width: 19px; height: 19px; vertical-align: -3px; margin-right: 7p
 .trip-hint svg { width: 13px; height: 13px; }
 .trip-row .trip-tag { display: inline-block; margin-left: 8px; padding: 2px 8px 3px; border-radius: 999px; background: var(--gold); color: #122625; font-size: .66rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; vertical-align: 2px; }
 .trip-row { scroll-margin-top: 24px; scroll-margin-bottom: 24px; }
-.trip-copy-link { display: inline-flex; align-items: center; gap: 6px; margin: 8px 0 0 14px; padding: 3px 0; border: 0; background: none; color: var(--muted); font: inherit; font-size: .78rem; font-weight: 600; letter-spacing: .03em; cursor: pointer; vertical-align: middle; }
+.trip-copy-link { display: flex; width: fit-content; align-items: center; gap: 6px; margin: 2px 0 8px; padding: 3px 0; border: 0; background: none; color: var(--muted); font: inherit; font-size: .78rem; font-weight: 600; letter-spacing: .03em; cursor: pointer; }
 .trip-copy-link svg { width: 13px; height: 13px; flex: 0 0 auto; }
 .trip-copy-link:hover { color: var(--deep-2); text-decoration: underline; text-underline-offset: 3px; }
 .trip-copy-link:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
