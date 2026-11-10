@@ -1412,7 +1412,6 @@ try {
     //   goals/legend/files/itinerary.md
     //   goals/annual-summer-vacation/files/itinerary.md
     //   goals/alaska-land-trip-and-cruise/files/itinerary.md
-    //   goals/panama-canal/files/itinerary.md
     //   goals/2027-11-liberty-mariner/files/itinerary.md
     //   goals/2028-01-legend-vision/files/itinerary.md
     //   goals/2028-03-japan/files/itinerary.md
@@ -1568,14 +1567,23 @@ try {
             ["Jul 17", "Scituate, Massachusetts", "Head home"]
           ]
         },
-        "alaska": {
-          title: "Alaska",
-          range: "August 20 – September 3, 2027 · 14 days",
+        "alaska-panama-canal": {
+          title: "Alaska & Panama Canal",
+          range: "August 20 – October 30, 2027 · 71 days",
           bookings: [
             "Alaska Airlines Boston → Fairbanks via Seattle (Aug 20); Enterprise rental SUV",
             "Sophie Station Suites, Fairbanks (2n); Denali Cabins (2n); Denali Fireside Cabin, Talkeetna (1n)",
             "Alaska Railroad Coastal Classic, Anchorage → Seward (Aug 27) — GoldStar Service",
-            "Anthem of the Seas, 7nt Southbound Alaska & Hubbard Glacier — Ocean View Balcony Guarantee"
+            "Anthem of the Seas, 7nt Southbound Alaska & Hubbard Glacier — Ocean View Balcony Guarantee",
+            "Anthem of the Seas, 7nt Northbound Alaska, Vancouver → Seward (Sep 3–10) — to be booked",
+            "Anthem of the Seas, 7nt Southbound Alaska & Hubbard Glacier, Seward → Vancouver (Sep 10–17) — to be booked",
+            "Vancouver hotel, 2 nights between sailings (Sep 17–19) — to be booked",
+            "Serenade of the Seas, 7nt Alaska Inside Passage from Vancouver — Ocean View",
+            "Serenade of the Seas, 7nt Pacific Coastal Vancouver → San Diego — Ocean View Balcony Guarantee",
+            "San Diego, 4 nights between sailings (Oct 3–7)",
+            "Serenade of the Seas, 15nt Panama Canal eastward — Spacious Ocean View Balcony, Deluxe Beverage Package booked",
+            "Amtrak Tampa → Miami (Oct 22); 1 night in Miami",
+            "Hero of the Seas, 7nt Perfect Day CocoCay & East Caribbean — Ocean View"
           ],
           stops: [
             ["Aug 20–21", "Fairbanks", "Chena Hot Springs self-drive day trip (Aug 21)"],
@@ -1588,23 +1596,19 @@ try {
             ["Aug 30", "Skagway", "Self-guided gold-rush town walk"],
             ["Aug 31", "Icy Strait Point", "Port day — excursion still being decided"],
             ["Sep 1", "Ketchikan", "Self-guided waterfront walk"],
-            ["Sep 3", "Vancouver", "Disembark"]
-          ]
-        },
-        "panama-canal": {
-          title: "Panama Canal",
-          range: "September 19 – October 30, 2027 · 41 days",
-          bookings: [
-            "Serenade of the Seas, 7nt Pacific Coastal Vancouver → San Diego — Ocean View Balcony Guarantee",
-            "San Diego, 4 nights between sailings (Oct 3–7)",
-            "Serenade of the Seas, 15nt Panama Canal eastward — Spacious Ocean View Balcony, Deluxe Beverage Package booked",
-            "Amtrak Tampa → Miami (Oct 22); 1 night in Miami",
-            "Hero of the Seas, 7nt Perfect Day CocoCay & East Caribbean — Ocean View"
-          ],
-          stops: [
+            ["Sep 3", "Vancouver", "Same-day turnaround — straight onto the Anthem northbound"],
+            ["Sep 3–10", "Vancouver → Seward", "Anthem of the Seas northbound — the Alaska ports in reverse; port days to be confirmed once booked"],
+            ["Sep 10", "Seward", "Same-day turnaround — straight onto the Anthem southbound"],
+            ["Sep 10–17", "Seward → Vancouver", "Anthem of the Seas southbound again — Hubbard Glacier, Juneau, Skagway, Icy Strait Point & Ketchikan a third time"],
+            ["Sep 17–19", "Vancouver", "Two nights ashore between the Anthem and Serenade sailings"],
+            ["Sep 21", "Sitka", "Port day — excursion still being decided"],
+            ["Sep 22", "Juneau", "Fourth Juneau call of the trip — excursion still being decided"],
+            ["Sep 23", "Ketchikan", "Fourth Ketchikan call of the trip — excursion still being decided"],
+            ["Sep 24", "Prince Rupert, British Columbia", "Port day — excursion still being decided"],
+            ["Sep 26", "Vancouver", "Turn-around day — straight onto the Pacific Coastal sailing, same ship"],
             ["Sep 28", "Astoria, Oregon", "Port day on the Columbia River"],
             ["Sep 30–Oct 1", "San Francisco", "Overnight in port"],
-            ["Oct 3–6", "San Diego", "Old Town, Coronado & the Hotel del Coronado"],
+            ["Oct 3–6", "San Diego", "Old Town, Balboa Park, Cabrillo, the USS Midway & Coronado"],
             ["Oct 10", "Puerto Vallarta, Mexico", "Self-guided Malecón & Zona Romántica day"],
             ["Oct 13", "Puerto Quetzal, Guatemala", "Port day — excursion still being decided"],
             ["Oct 15", "Puntarenas, Costa Rica", "Forest Skywalks & Tarcoles River eco-cruise"],
@@ -1740,7 +1744,7 @@ try {
       };
 
       // Permanent shareable slugs: stable, identity-based (not date-based),
-      // unique across all 13 future trips. Internal TRIP_DETAILS keys stay
+      // unique across all 12 future trips. Internal TRIP_DETAILS keys stay
       // as they are; this map translates them to the public slug used in
       // https://wherespatrick.today/future.html#trip-<slug>
       var TRIP_SLUGS = {
@@ -1751,8 +1755,7 @@ try {
         "australia": "pacific-crossing",
         "legend": "spain-mediterranean",
         "annual-summer-vacation": "annual-summer-vacation",
-        "alaska": "alaska",
-        "panama-canal": "panama-canal",
+        "alaska-panama-canal": "alaska-panama-canal",
         "liberty-mariner": "liberty-mariner",
         "legend-vision": "legend-vision",
         "japan": "japan",
