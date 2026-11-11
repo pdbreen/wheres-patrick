@@ -408,8 +408,8 @@ try {
       { name: "At sea, North Atlantic", detail: "Nov 3–7 — sea days aboard Odyssey of the Seas, en route to Cape Liberty (approximate position)", lat: 38.8, lng: -42.0, status: "been" },
       { name: "Cape Liberty (Bayonne), New Jersey", detail: "Sun · Nov 8 — the transatlantic ended here and the Bahamas finale boarded", lat: 40.6650, lng: -74.1130, status: "been" },
       { name: "At sea aboard Odyssey of the Seas", detail: "Mon · Nov 9 — a full day at sea, en route to Port Canaveral (approximate position)", lat: 36.0, lng: -75.3, status: "been" },
-      { name: "Port Canaveral, Florida", detail: "Today · Tue Nov 10 — in port 11:59 AM–8:00 PM, Ron Jon Cocoa Beach shuttle excursion", lat: 28.4077, lng: -80.5985, status: "today" },
-      { name: "Perfect Day at CocoCay, Bahamas", detail: "Still to come — on the Nov 8–15 Bahamas finale", lat: 25.8172, lng: -77.9375, status: "going" },
+      { name: "Port Canaveral, Florida", detail: "Tue · Nov 10 — in port 11:59 AM–8:00 PM, Ron Jon Cocoa Beach shuttle excursion", lat: 28.4077, lng: -80.5985, status: "been" },
+      { name: "Perfect Day at CocoCay, Bahamas", detail: "Today · Wed Nov 11 — in port 8:30 AM–5:00 PM, Hideaway Beach day pass", lat: 25.8172, lng: -77.9375, status: "today" },
       { name: "Nassau, Bahamas", detail: "Still to come — on the Nov 8–15 Bahamas finale", lat: 25.0480, lng: -77.3554, status: "going" },
       { name: "Boston, Massachusetts", detail: "Sun · Nov 15 — back in New England, home after forty days away", lat: 42.3601, lng: -71.0589, status: "going" }
     ];
