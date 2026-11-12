@@ -409,8 +409,9 @@ try {
       { name: "Cape Liberty (Bayonne), New Jersey", detail: "Sun · Nov 8 — the transatlantic ended here and the Bahamas finale boarded", lat: 40.6650, lng: -74.1130, status: "been" },
       { name: "At sea aboard Odyssey of the Seas", detail: "Mon · Nov 9 — a full day at sea, en route to Port Canaveral (approximate position)", lat: 36.0, lng: -75.3, status: "been" },
       { name: "Port Canaveral, Florida", detail: "Tue · Nov 10 — in port 11:59 AM–8:00 PM, Ron Jon Cocoa Beach shuttle excursion", lat: 28.4077, lng: -80.5985, status: "been" },
-      { name: "Perfect Day at CocoCay, Bahamas", detail: "Today · Wed Nov 11 — in port 8:30 AM–5:00 PM, Hideaway Beach day pass", lat: 25.8172, lng: -77.9375, status: "today" },
-      { name: "Nassau, Bahamas", detail: "Still to come — on the Nov 8–15 Bahamas finale", lat: 25.0480, lng: -77.3554, status: "going" },
+      { name: "Perfect Day at CocoCay, Bahamas", detail: "Wed · Nov 11 — in port 8:30 AM–5:00 PM, Hideaway Beach day pass", lat: 25.8172, lng: -77.9375, status: "been" },
+      { name: "Nassau, Bahamas", detail: "Today · Thu Nov 12 — in port 8:00 AM–5:00 PM, Royal Beach Club day pass", lat: 25.0480, lng: -77.3554, status: "today" },
+      { name: "Cape Liberty (Bayonne), New Jersey", detail: "Sun · Nov 15 — disembark Odyssey of the Seas at 6:00 AM, then fly home to Boston", lat: 40.6650, lng: -74.1130, status: "going" },
       { name: "Boston, Massachusetts", detail: "Sun · Nov 15 — back in New England, home after forty days away", lat: 42.3601, lng: -71.0589, status: "going" }
     ];
 
@@ -1779,27 +1780,6 @@ try {
         return "https://wherespatrick.today/future.html#trip-" + tripSlugFor(key, row);
       }
       window.__tripUrlFor = tripUrlFor;
-      function copyTextToClipboard(text, done) {
-        function fallback() {
-          try {
-            var ta = document.createElement("textarea");
-            ta.value = text;
-            ta.setAttribute("readonly", "");
-            ta.style.position = "fixed";
-            ta.style.opacity = "0";
-            document.body.appendChild(ta);
-            ta.select();
-            var ok = false;
-            try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
-            document.body.removeChild(ta);
-            if (done) { done(ok); }
-          } catch (e2) { if (done) { done(false); } }
-        }
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text).then(function () { if (done) { done(true); } }, fallback);
-        } else { fallback(); }
-      }
-      window.__copyTripText = copyTextToClipboard;
 
       var modal = document.getElementById("trip-modal");
       var titleEl = document.getElementById("trip-modal-title");
@@ -1831,7 +1811,7 @@ try {
             '<p class="trip-modal-dates" id="trip-modal-dates"></p>' +
             '<p class="trip-modal-flag" id="trip-modal-flag" hidden></p>' +
             '<h3 id="trip-modal-title"></h3>' +
-            '<button class="trip-modal-link" id="trip-modal-link" type="button" aria-label="Copy link to this trip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg><span>Link to this trip</span></button>' +
+            '<button class="trip-modal-link" id="trip-modal-link" type="button" aria-label="Link to this trip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg><span>Link to this trip</span></button>' +
             '<h4>Headline bookings</h4>' +
             '<ul class="trip-modal-bookings" id="trip-modal-bookings"></ul>' +
             '<h4>Ports &amp; stops</h4>' +
@@ -1856,26 +1836,65 @@ try {
           var shareBtn = document.createElement("button");
           shareBtn.className = "trip-modal-link";
           shareBtn.id = "trip-modal-link";
-          shareBtn.type = "button";
-          shareBtn.setAttribute("aria-label", "Copy link to this trip");
+          shareBtn.setAttribute("type", "button");
+          shareBtn.setAttribute("aria-label", "Link to this trip");
           shareBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg><span>Link to this trip</span>';
           titleEl.parentNode.insertBefore(shareBtn, titleEl.nextSibling);
           shareLinkBtn = document.getElementById("trip-modal-link");
         } catch (e) { /* link affordance is additive; dialog still works without it */ }
       }
+      // Copy-on-click for the trip's permanent deep link, shared by
+      // the dialog control and the card controls below: write the URL
+      // to the clipboard (with a textarea fallback for browsers that
+      // deny clipboard permission) and flash "Copied." in place of
+      // the label before reverting. Clicking never navigates.
+      function copyTextToClipboard(text, onDone) {
+        function legacyCopy() {
+          try {
+            var ta = document.createElement("textarea");
+            ta.value = text;
+            ta.setAttribute("readonly", "");
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand("copy"); } catch (e) { /* ignore */ }
+            document.body.removeChild(ta);
+          } catch (e) { /* ignore */ }
+          if (onDone) { onDone(); }
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () {
+            if (onDone) { onDone(); }
+          }, legacyCopy);
+        } else {
+          legacyCopy();
+        }
+      }
+      function flashCopied(btn) {
+        var label = btn.querySelector("span");
+        if (!label) { return; }
+        if (btn.getAttribute("data-copy-timer")) {
+          window.clearTimeout(Number(btn.getAttribute("data-copy-timer")));
+        }
+        var original = label.getAttribute("data-label") || label.textContent;
+        label.setAttribute("data-label", original);
+        label.textContent = "Copied.";
+        btn.classList.add("is-copied");
+        var timer = window.setTimeout(function () {
+          label.textContent = original;
+          btn.classList.remove("is-copied");
+          btn.removeAttribute("data-copy-timer");
+        }, 1600);
+        btn.setAttribute("data-copy-timer", String(timer));
+      }
+      // The dialog's trip link copies the currently open trip's
+      // permanent deep link (currentShareUrl is set in openTrip).
       if (shareLinkBtn) {
-        shareLinkBtn.addEventListener("click", function () {
+        shareLinkBtn.addEventListener("click", function (e) {
+          e.preventDefault();
           if (!currentShareUrl) { return; }
-          copyTextToClipboard(currentShareUrl, function () {
-            var label = shareLinkBtn.querySelector("span");
-            var old = label ? label.textContent : "";
-            shareLinkBtn.classList.add("is-copied");
-            if (label) { label.textContent = "Copied"; }
-            setTimeout(function () {
-              shareLinkBtn.classList.remove("is-copied");
-              if (label) { label.textContent = old || "Link to this trip"; }
-            }, 2000);
-          });
+          copyTextToClipboard(currentShareUrl, function () { flashCopied(shareLinkBtn); });
         });
       }
       var lastTrigger = null;
@@ -1910,11 +1929,7 @@ try {
         currentShareUrl = tripUrlFor(key, trigger && trigger.getAttribute ? trigger : null);
         // If trigger is a card row, its data-slug is authoritative; if it
         // is a timeline bar (no data-slug), the map above supplies it.
-        if (shareLinkBtn) {
-          shareLinkBtn.classList.remove("is-copied");
-          var shareLabel = shareLinkBtn.querySelector("span");
-          if (shareLabel) { shareLabel.textContent = "Link to this trip"; }
-        }
+        if (shareLinkBtn) { shareLinkBtn.setAttribute("data-trip-url", currentShareUrl); }
         if (d.tentative) {
           flagEl.textContent = "Tentative — nothing booked yet; firm once the first booking lands";
           flagEl.hidden = false;
@@ -1980,10 +1995,12 @@ try {
       // this day"): a 13px chain icon and quiet text, no pill. It sits
       // directly beneath the trip name, immediately after the card's
       // <strong> heading — the same spot the day link occupies under a
-      // journal card's heading. Clicking copies the trip's shareable
-      // URL and briefly swaps the label to "Copied". Runs for ALL cards
-      // (including short trips that get no Details hint), and stops
-      // propagation so copying never opens the Details dialog.
+      // journal card's heading. Clicking copies the trip's permanent
+      // deep link (wherespatrick.today/future.html#trip-…) to the
+      // clipboard and flashes "Copied."; it never navigates. Runs for
+      // ALL cards (including short trips that get no Details hint),
+      // and stops propagation so copying never also opens the Details
+      // dialog.
       Array.prototype.forEach.call(document.querySelectorAll(".trip-row[data-trip], .trip-row[data-slug]"), function (row) {
         var key = row.getAttribute("data-trip");
         if (!key && !row.getAttribute("data-slug")) { return; }
@@ -1991,24 +2008,15 @@ try {
         var url = tripUrlFor(key, row);
         var slot = row.querySelector("[data-cd-slot]") || row;
         var btn = document.createElement("button");
-        btn.type = "button";
         btn.className = "trip-copy-link";
-        btn.setAttribute("aria-label", "Copy link to this trip");
+        btn.type = "button";
+        btn.setAttribute("aria-label", "Link to this trip");
         btn.setAttribute("data-trip-url", url);
         btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg><span>Link to this trip</span>';
         btn.addEventListener("click", function (e) {
-          e.stopPropagation();
           e.preventDefault();
-          copyTextToClipboard(url, function () {
-            var label = btn.querySelector("span");
-            var old = label ? label.textContent : "";
-            btn.classList.add("is-copied");
-            if (label) { label.textContent = "Copied"; }
-            setTimeout(function () {
-              btn.classList.remove("is-copied");
-              if (label) { label.textContent = old || "Link to this trip"; }
-            }, 2000);
-          });
+          e.stopPropagation();
+          copyTextToClipboard(url, function () { flashCopied(btn); });
         });
         btn.addEventListener("keydown", function (e) { e.stopPropagation(); });
         // Place the link directly under the trip name: insert it
