@@ -1585,6 +1585,50 @@ h3 .fav-star { width: 19px; height: 19px; vertical-align: -3px; margin-right: 7p
    its bars are plain links to each trip's journal (the same targets
    as the archive cards), so they need link resets the Future bars —
    dialog openers, not links — never did. */
+/* ---------- World map page (Map): pins only, no routes ----------
+   Three pin families, deliberately unlike each other and unlike the
+   trip maps' check / pulse / ring pins: visited places are filled
+   teal discs carrying a trip count, places still to come are hollow
+   orange rings carrying an upcoming-trip count, a visited place that
+   is also coming up again wears an orange halo, and favorites are
+   larger gold discs with a star. Clusters (several places too close
+   to separate at the current zoom) are deep-teal discs counting the
+   places inside, with a gold halo when a favorite is among them. */
+.past-map-link { margin: -14px 2px 22px; font-size: .92rem; }
+.past-map-link a { color: var(--deep-2); font-weight: 600; text-underline-offset: 3px; }
+.past-map-link a:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+.world-map-page .section-head { margin-bottom: 18px; }
+.world-legend { margin-bottom: 16px; }
+.legend-wpast { background: #1d585a; color: #fff; border: 2px solid #fff; box-shadow: 0 1px 5px rgba(7, 27, 29, .4); font-size: 10px; }
+.legend-wboth { background: #1d585a; color: #fff; border: 2px solid #fff; box-shadow: 0 0 0 3px var(--orange), 0 1px 5px rgba(7, 27, 29, .4); font-size: 10px; }
+.legend-wfuture { background: var(--surface); color: #c2531f; border: 3px solid var(--orange); font-size: 10px; }
+.legend-wfav { background: var(--gold); color: #122625; border: 2px solid #fff; box-shadow: 0 1px 5px rgba(7, 27, 29, .4); font-size: 11px; }
+.world-filters { margin-bottom: 16px; }
+.world-map { height: 560px; margin-top: 0; }
+.world-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.wp2-pin-wrap { background: none; border: none; }
+.wp2-pin { position: relative; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; font: 700 12px/1 "IBM Plex Sans", sans-serif; }
+.wp2-past { background: #1d585a; color: #fff; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(7, 27, 29, .45); }
+.wp2-both { background: #1d585a; color: #fff; border: 2px solid #fff; box-shadow: 0 0 0 3px var(--orange), 0 2px 8px rgba(7, 27, 29, .45); }
+.wp2-future { background: #fff; color: #c2531f; border: 3px solid var(--orange); box-shadow: 0 2px 8px rgba(7, 27, 29, .35); }
+.wp2-fav { width: 36px; height: 36px; background: var(--gold); color: #122625; border: 2px solid #fff; box-shadow: 0 2px 10px rgba(7, 27, 29, .5); font-size: 17px; }
+.wp2-cluster { width: 36px; height: 36px; background: var(--deep); color: #f7fffb; border: 2px solid #fff; box-shadow: 0 2px 10px rgba(7, 27, 29, .5); font-size: 12px; cursor: pointer; }
+.wp2-cluster-fav { box-shadow: 0 0 0 3px var(--gold), 0 2px 10px rgba(7, 27, 29, .5); }
+.world-pop-fav { color: #8a6410; font-weight: 700; }
+@media (prefers-color-scheme: dark) { .world-pop-fav { color: var(--gold); } .wp2-future { background: var(--surface); } }
+.world-favs { margin-top: 30px; }
+.world-favs h3 { margin: 0 0 6px; font: 650 1.5rem/1.15 "Newsreader", serif; letter-spacing: -.01em; }
+.world-favs p { margin: 0 0 14px; color: var(--muted); font-size: .92rem; }
+.world-fav-list { display: flex; flex-wrap: wrap; gap: 10px; }
+.world-fav-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 18px; border: 1px solid color-mix(in srgb, var(--gold) 55%, var(--line)); border-radius: 999px; background: color-mix(in srgb, var(--gold) 9%, var(--surface)); color: var(--ink); font: 600 .92rem "IBM Plex Sans", sans-serif; cursor: pointer; }
+.world-fav-btn:hover { border-color: var(--gold); }
+.world-fav-btn:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+.world-fav-btn .fav-star { margin-right: 0; }
+@media (max-width: 580px) {
+  .world-map { height: 440px; }
+  .world-stats { grid-template-columns: 1fr 1fr; }
+}
+
 .past-bar { text-decoration: none; }
 .past-bar:hover { filter: brightness(1.1); }
 .past-bar:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }

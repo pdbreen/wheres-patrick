@@ -669,6 +669,569 @@ try {
       }
     })();
 
+    // ----- Feature 4: the world map (Map page) — pins only, no routes.
+    // One pin per place. The "been there" pins are DERIVED from the
+    // search index, exactly as the place counters derive the city
+    // list: every entry's "c" keys are the cities visited that day,
+    // and a city's number is its VISIT count — one visit per
+    // unbroken run of consecutive days in the city on one trip (a
+    // multi-day stay counts once, a turnaround day counts once, and
+    // excursion cities count in their own right, so places like
+    // Sete Cidades, Peggy's Cove, Lübeck, Valldemossa and Cassis —
+    // visited on day trips, never a route stop — are pinned too).
+    // Deriving from PAST_TRIP_ROUTES instead undercounts: route
+    // stops miss every excursion-only city. CITY_GEO below holds
+    // the one piece of data the entries don't carry — each city
+    // key's verified coordinates and pin display name. The popup
+    // names the most recent trip there. WORLD_FUTURE_PLACES below —
+    // aggregated by hand from the Future page's TRIP_DETAILS stops,
+    // one entry per place — gives the "still to come" pins (number
+    // = upcoming trips stopping there, popup names the next one).
+    // A place in both sets wears the visited pin with an orange
+    // halo. Favorites (the placeMeta "fav" flags — the same three
+    // the place counters flag: Trieste, Kotor, Roseau) get a larger
+    // gold star pin instead of a number. Sea days get no pin.
+    // Nearby places cluster into a counting pin until the zoom
+    // separates them. When a future trip is booked into the journal
+    // or a new trip is planned, update WORLD_FUTURE_PLACES in the
+    // same pass as TRIP_DETAILS — a future place whose name matches
+    // a visited place's display name exactly merges into that
+    // place's pin. A brand-new visited city needs one CITY_GEO
+    // entry (verified coordinates) the first time it appears in
+    // the index; without one it is reported in the console and
+    // left unpinned rather than guessed at.
+    var WORLD_TRIP_LABELS = {
+      "spain-transatlantic-jul-aug-2026": ["Spain & Transatlantic · Jul–Aug 2026", "2026-08-29"],
+      "cape-cod-jul-2026": ["Annual Summer Vacation 2026 · Jul 2026", "2026-07-18"],
+      "bayonne-miami-sep-2026": ["New England, Bermuda & Virgin Voyages · Sep 2026", "2026-09-28"],
+      "alaska-may-jun-2026": ["Alaska 2026 · May–Jun 2026", "2026-06-27"],
+      "san-juan-rome-apr-may-2026": ["San Juan to Rome 2026 · Apr–May 2026", "2026-05-25"],
+      "miami-jan-feb-2026": ["Miami 2026 · Jan–Feb 2026", "2026-02-04"],
+      "december-caribbean-nov-dec-2025": ["December Caribbean 2025 · Nov–Dec 2025", "2025-12-20"],
+      "fall-transatlantic-oct-nov-2025": ["Fall Transatlantic 2025 · Oct–Nov 2025", "2025-11-21"],
+      "eastern-canada-sep-oct-2025": ["Eastern Canada 2025 · Sep–Oct 2025", "2025-10-05"],
+      "star-cococay-aug-2025": ["Star of the Seas · Aug 2025", "2025-08-31"],
+      "jewel-cococay-jul-2025": ["Jewel of the Seas · Jul 2025", "2025-07-28"],
+      "cape-cod-jun-jul-2025": ["Annual Summer Vacation 2025 · Jun–Jul 2025", "2025-07-05"],
+      "odyssey-mediterranean-may-2025": ["Odyssey Mediterranean · May 2025", "2025-05-25"],
+      "vision-baltimore-mar-2025": ["Vision of the Seas · Mar 2025", "2025-03-29"],
+      "adventure-caribbean-dec-2024": ["Adventure of the Seas · Dec 2024–Jan 2025", "2025-01-06"],
+      "oasis-transatlantic-oct-2024": ["Oasis Transatlantic · Oct–Nov 2024", "2024-11-07"],
+      "brilliance-alaska-may-2024": ["Brilliance Alaska · May–Jun 2024", "2024-06-02"],
+      "symphony-caribbean-mar-2024": ["Symphony of the Seas · Mar 2024", "2024-03-23"],
+      "adventure-caribbean-dec-2023": ["Adventure of the Seas · Dec 2023–Jan 2024", "2024-01-05"],
+      "oasis-caribbean-sep-2023": ["Oasis of the Seas · Sep 2023", "2023-09-10"],
+      "harmony-caribbean-mar-2023": ["Harmony of the Seas · Mar–Apr 2023", "2023-04-01"],
+      "allure-caribbean-oct-2022": ["Allure of the Seas · Oct–Nov 2022", "2022-11-05"],
+      "venice-transatlantic": ["Venice & Transatlantic · Oct–Nov 2026 (current trip)", "2026-11-15"]
+    };
+    // [name, lat, lng, upcoming trips stopping there, next stop there]
+    var WORLD_FUTURE_PLACES = [
+      ["Seattle, Washington", 47.6062, -122.3321, 3, "Nov 2026"],
+      ["Redmond, Washington", 47.674, -122.1215, 1, "Nov 2026"],
+      ["Ft Lauderdale, Florida", 26.0919, -80.1143, 2, "Nov 2026"],
+      ["Nassau, Bahamas", 25.048, -77.3554, 2, "Nov 2026"],
+      ["Saman\u00e1, Dominican Republic", 19.2056, -69.3367, 1, "Dec 2026"],
+      ["Puerto Plata, Dominican Republic", 19.7935, -70.6871, 2, "Dec 2026"],
+      ["Oranjestad, Aruba", 12.519, -70.037, 2, "Dec 2026"],
+      ["Willemstad, Cura\u00e7ao", 12.1224, -68.9335, 2, "Dec 2026"],
+      ["Cozumel, Mexico", 20.5103, -86.9493, 3, "Dec 2026"],
+      ["Puerto Costa Maya, Mexico", 18.7328, -87.6915, 3, "Dec 2026"],
+      ["Cape Liberty (Bayonne), New Jersey", 40.665, -74.113, 1, "Jan 2027"],
+      ["Philipsburg, St. Maarten", 18.0237, -63.0458, 2, "Jan 2027"],
+      ["St. John\u2019s, Antigua", 17.1274, -61.8468, 2, "Jan 2027"],
+      ["Basseterre, St. Kitts", 17.3026, -62.7177, 1, "Jan 2027"],
+      ["Charlotte Amalie, St. Thomas", 18.3419, -64.9307, 3, "Jan 2027"],
+      ["Castries, St. Lucia", 14.0167, -60.9833, 1, "Jan 2027"],
+      ["Bridgetown, Barbados", 13.1132, -59.5988, 2, "Jan 2027"],
+      ["Miami, Florida", 25.7617, -80.1918, 2, "Feb 2027"],
+      ["Estero, Florida", 26.4384, -81.8068, 1, "Feb 2027"],
+      ["Perfect Day at CocoCay, Bahamas", 25.8172, -77.9375, 3, "Feb 2027"],
+      ["Honolulu, Hawaii", 21.3099, -157.8581, 1, "Feb 2027"],
+      ["Sydney, Australia", -33.8688, 151.2093, 1, "Mar 2027"],
+      ["Airlie Beach, Australia", -20.2691, 148.7193, 1, "Mar 2027"],
+      ["Cairns (Yorkeys Knob), Australia", -16.8634, 145.7169, 1, "Mar 2027"],
+      ["Port Douglas, Australia", -16.4839, 145.4653, 1, "Mar 2027"],
+      ["Newcastle, Australia", -32.9267, 151.7789, 1, "Mar 2027"],
+      ["Milford, Doubtful & Dusky Sounds, New Zealand", -44.6414, 167.8974, 1, "Mar 2027"],
+      ["Dunedin, New Zealand", -45.8741, 170.5036, 1, "Mar 2027"],
+      ["Christchurch (Lyttelton), New Zealand", -43.6033, 172.7189, 1, "Mar 2027"],
+      ["Tauranga, New Zealand", -37.6368, 176.1869, 1, "Mar 2027"],
+      ["Auckland, New Zealand", -36.8485, 174.7633, 1, "Mar 2027"],
+      ["Noumea, New Caledonia", -22.2711, 166.4572, 1, "Mar 2027"],
+      ["Suva, Fiji", -18.1416, 178.4419, 1, "Mar 2027"],
+      ["Lautoka, Fiji", -17.6041, 177.4383, 1, "Mar 2027"],
+      ["Mystery Island, Vanuatu", -20.2468, 169.7719, 1, "Apr 2027"],
+      ["Lifou, New Caledonia", -21.0452, 167.2846, 1, "Apr 2027"],
+      ["Port Vila, Vanuatu", -17.7406, 168.3138, 1, "Apr 2027"],
+      ["Brisbane, Australia", -27.4698, 153.0251, 1, "Apr 2027"],
+      ["Papeete, Tahiti", -17.535, -149.5696, 1, "Apr 2027"],
+      ["Moorea, French Polynesia", -17.5388, -149.8294, 1, "Apr 2027"],
+      ["Raiatea, French Polynesia", -16.7314, -151.4446, 1, "Apr 2027"],
+      ["Barcelona, Spain", 41.3874, 2.1686, 1, "May 2027"],
+      ["Palma de Mallorca, Spain", 39.5696, 2.6502, 1, "May 2027"],
+      ["Marseille, France", 43.2965, 5.3698, 1, "May 2027"],
+      ["La Spezia, Italy", 44.1025, 9.8241, 1, "May 2027"],
+      ["Civitavecchia (Rome), Italy", 42.0956, 11.7879, 1, "May 2027"],
+      ["Naples, Italy", 40.8518, 14.2681, 1, "May 2027"],
+      ["M\u00e1laga, Spain", 36.7213, -4.4214, 1, "May 2027"],
+      ["Seville, Spain", 37.3891, -5.9845, 1, "May 2027"],
+      ["C\u00f3rdoba, Spain", 37.8847, -4.7792, 1, "May 2027"],
+      ["Scituate, Massachusetts", 42.1956, -70.7263, 1, "Jul 2027"],
+      ["Fairbanks, Alaska", 64.8378, -147.7164, 1, "Aug 2027"],
+      ["Denali, Alaska", 63.7, -148.88, 1, "Aug 2027"],
+      ["Talkeetna, Alaska", 62.3209, -150.1066, 1, "Aug 2027"],
+      ["Anchorage, Alaska", 61.2181, -149.9003, 1, "Aug 2027"],
+      ["Seward, Alaska", 60.1042, -149.442, 1, "Aug 2027"],
+      ["Hubbard Glacier, Alaska", 60.0147, -139.4947, 1, "Aug 2027"],
+      ["Juneau, Alaska", 58.3019, -134.4197, 1, "Aug 2027"],
+      ["Skagway, Alaska", 59.4583, -135.3139, 1, "Aug 2027"],
+      ["Icy Strait Point, Alaska", 58.1228, -135.4447, 1, "Aug 2027"],
+      ["Ketchikan, Alaska", 55.3422, -131.6461, 1, "Sep 2027"],
+      ["Vancouver, British Columbia, Canada", 49.2827, -123.1207, 1, "Sep 2027"],
+      ["Sitka, Alaska", 57.0531, -135.33, 1, "Sep 2027"],
+      ["Prince Rupert, British Columbia, Canada", 54.315, -130.3209, 1, "Sep 2027"],
+      ["Astoria, Oregon", 46.1879, -123.8313, 1, "Sep 2027"],
+      ["San Francisco, California", 37.7749, -122.4194, 1, "Sep 2027"],
+      ["San Diego, California", 32.7157, -117.1611, 1, "Oct 2027"],
+      ["Puerto Vallarta, Mexico", 20.6597, -105.3499, 1, "Oct 2027"],
+      ["Puerto Quetzal, Guatemala", 13.917, -90.783, 1, "Oct 2027"],
+      ["Puntarenas, Costa Rica", 9.9763, -84.833, 1, "Oct 2027"],
+      ["Panama Canal, Panama", 9.27, -79.92, 1, "Oct 2027"],
+      ["Cartagena, Colombia", 10.4236, -75.5512, 1, "Oct 2027"],
+      ["George Town, Grand Cayman", 19.2866, -81.3749, 2, "Oct 2027"],
+      ["Tampa, Florida", 27.9506, -82.4572, 1, "Oct 2027"],
+      ["Houston, Texas", 29.7604, -95.3698, 1, "Nov 2027"],
+      ["Galveston, Texas", 29.3013, -94.7977, 1, "Nov 2027"],
+      ["New Orleans, Louisiana", 29.9511, -90.0715, 1, "Dec 2027"],
+      ["Belize City, Belize", 17.4986, -88.3018, 1, "Dec 2027"],
+      ["Falmouth, Jamaica", 18.4936, -77.6556, 1, "Dec 2027"],
+      ["San Juan, Puerto Rico", 18.4655, -66.1057, 1, "Jan 2028"],
+      ["Cabo Rojo, Dominican Republic", 17.9052, -71.6726, 1, "Jan 2028"],
+      ["Kingstown, St. Vincent", 13.16, -61.2248, 1, "Jan 2028"],
+      ["St. George\u2019s, Grenada", 12.0561, -61.7488, 1, "Jan 2028"],
+      ["Fort-de-France, Martinique", 14.6037, -61.0662, 1, "Jan 2028"],
+      ["Shanghai, China", 31.2304, 121.4737, 1, "Mar 2028"],
+      ["Kumamoto (Yatsushiro), Japan", 32.5239, 130.6073, 1, "Mar 2028"],
+      ["Kagoshima, Japan", 31.589, 130.5571, 1, "Mar 2028"],
+      ["Kobe, Japan", 34.6901, 135.1956, 1, "Mar 2028"],
+      ["Tokyo, Japan", 35.6762, 139.6503, 1, "Mar 2028"],
+      ["Kyoto, Japan", 35.0116, 135.7681, 1, "Mar 2028"],
+      ["Osaka, Japan", 34.6937, 135.5023, 1, "Apr 2028"],
+      ["Jeju (Seogwipo), South Korea", 33.2392, 126.5609, 1, "Apr 2028"],
+      ["Fukuoka, Japan", 33.5904, 130.4017, 1, "Apr 2028"],
+      ["Okinawa (Naha), Japan", 26.2124, 127.6809, 1, "Apr 2028"],
+      ["Shimizu (Mt Fuji), Japan", 35.0159, 138.4896, 1, "Apr 2028"],
+      ["Sapporo (Muroran), Japan", 42.3239, 140.9677, 1, "Apr 2028"],
+      ["Copenhagen, Denmark", 55.6761, 12.5683, 1, "Aug 2028"],
+      ["Aarhus, Denmark", 56.1629, 10.2039, 1, "Aug 2028"],
+      ["Reykjavik, Iceland", 64.1466, -21.9426, 1, "Sep 2028"],
+      ["Isafjordur, Iceland", 66.0747, -23.1267, 1, "Sep 2028"],
+      ["Akureyri, Iceland", 65.6885, -18.1262, 1, "Sep 2028"],
+      ["Prins Christian Sund, Greenland", 60.1, -43.6, 1, "Sep 2028"],
+      ["Qaqortoq, Greenland", 60.7184, -46.0357, 1, "Sep 2028"],
+      ["Halifax, Nova Scotia, Canada", 44.6488, -63.5752, 1, "Sep 2028"],
+      ["St. John\u2019s, Newfoundland, Canada", 47.5615, -52.7126, 1, "Sep 2028"],
+      ["Boston, Massachusetts", 42.3601, -71.0589, 1, "Sep 2028"]
+    ];
+    // CITY_GEO: city key (as the search-index entries carry it in
+    // their "c" lists) -> [pin display name, latitude, longitude].
+    // Display names follow the site's existing pin names, so a
+    // future place whose name matches merges into the visited pin.
+    // Coordinates for route-stop cities are the ones the trip maps
+    // already use; the excursion-only cities (Sete Cidades,
+    // Peggy's Cove, Lübeck, Valldemossa, Cassis, the Cinque Terre
+    // villages, Burano, Murano, Perast, Trogir, the Segovia–Ávila–
+    // Toledo day-trip towns and the rest) were verified against
+    // the real places when this table was built.
+    var CITY_GEO = {
+      "ajaccio": ["Ajaccio, Corsica, France", 41.9192, 8.7386],
+      "alicante": ["Alicante, Spain", 38.3452, -0.4815],
+      "athens": ["Athens (Piraeus), Greece", 37.9429, 23.6469],
+      "baltimore": ["Baltimore, Maryland", 39.2904, -76.6122],
+      "barcelona": ["Barcelona, Spain", 41.3874, 2.1686],
+      "basseterre-st-kitts": ["Basseterre, St. Kitts", 17.3026, -62.7177],
+      "bimini": ["Bimini, Bahamas", 25.7275, -79.2976],
+      "boston": ["Boston, Massachusetts", 42.3601, -71.0589],
+      "burano": ["Burano, Italy", 45.4872, 12.4165],
+      "cape-canaveral": ["Cape Canaveral, Florida", 28.3847, -80.6044],
+      "bayonne": ["Cape Liberty (Bayonne), New Jersey", 40.665, -74.113],
+      "capri": ["Capri, Italy", 40.5501, 14.2417],
+      "cartagena": ["Cartagena, Spain", 37.6257, -0.9966],
+      "cassis": ["Cassis, France", 43.2142, 5.543],
+      "charleston": ["Charleston, South Carolina", 32.7765, -79.9311],
+      "charlotte-amalie-st-thomas": ["Charlotte Amalie, St. Thomas", 18.3419, -64.9307],
+      "charlottetown": ["Charlottetown, Prince Edward Island, Canada", 46.2382, -63.1311],
+      "civitavecchia-rome": ["Civitavecchia (Rome), Italy", 42.0956, 11.7879],
+      "cocoa-beach": ["Cocoa Beach, Florida", 28.3182, -80.6101],
+      "cozumel": ["Cozumel, Mexico", 20.5103, -86.9493],
+      "cadiz": ["Cádiz, Spain", 36.5271, -6.2886],
+      "dubrovnik": ["Dubrovnik, Croatia", 42.6507, 18.0944],
+      "eastham": ["Eastham, Massachusetts", 41.8301, -69.9743],
+      "falmouth": ["Falmouth, Jamaica", 18.4936, -77.6556],
+      "fort-myers": ["Fort Myers, Florida", 26.6406, -81.8723],
+      "frigiliana": ["Frigiliana, Spain", 36.7911, -3.8951],
+      "ft-lauderdale": ["Ft Lauderdale, Florida", 26.0919, -80.1143],
+      "george-town": ["George Town, Grand Cayman", 19.2866, -81.3749],
+      "grand-bahama": ["Grand Bahama, Bahamas", 26.5412, -78.696],
+      "grand-turk": ["Grand Turk, Turks & Caicos", 21.4675, -71.1369],
+      "haines": ["Haines, Alaska", 59.2358, -135.445],
+      "halifax": ["Halifax, Nova Scotia, Canada", 44.6488, -63.5752],
+      "hamburg": ["Hamburg, Germany", 53.5511, 9.9937],
+      "hamilton": ["Hamilton, Bermuda", 32.2936, -64.7841],
+      "harwich": ["Harwich, Massachusetts", 41.6865, -70.0753],
+      "icy-strait-point": ["Icy Strait Point, Alaska", 58.1228, -135.4447],
+      "juneau": ["Juneau, Alaska", 58.3019, -134.4197],
+      "ketchikan": ["Ketchikan, Alaska", 55.3422, -131.6461],
+      "key-west": ["Key West, Florida", 24.5551, -81.78],
+      "kotor": ["Kotor, Montenegro", 42.4247, 18.7712],
+      "kralendijk-bonaire": ["Kralendijk, Bonaire", 12.1444, -68.2655],
+      "kusadasi": ["Kusadasi (Ephesus), Turkey", 37.8579, 27.261],
+      "la-coruna": ["La Coruña, Spain", 43.3623, -8.3964],
+      "la-spezia": ["La Spezia, Italy", 44.1025, 9.8241],
+      "labadee": ["Labadee, Haiti", 19.7853, -72.2453],
+      "lisbon": ["Lisbon, Portugal", 38.7223, -9.1393],
+      "lubeck": ["Lübeck, Germany", 53.8663, 10.6808],
+      "madrid": ["Madrid, Spain", 40.4168, -3.7038],
+      "manarola": ["Manarola, Italy", 44.1075, 9.7301],
+      "messina": ["Messina, Sicily, Italy", 38.1937, 15.5542],
+      "miami": ["Miami, Florida", 25.7617, -80.1918],
+      "monterosso": ["Monterosso, Italy", 44.1451, 9.6539],
+      "murano": ["Murano, Italy", 45.453, 12.3539],
+      "murcia": ["Murcia, Spain", 37.9831, -1.1314],
+      "mykonos": ["Mykonos, Greece", 37.4467, 25.3289],
+      "malaga": ["Málaga, Spain", 36.7213, -4.4214],
+      "naples": ["Naples, Italy", 40.8518, 14.2681],
+      "nassau": ["Nassau, Bahamas", 25.048, -77.3554],
+      "nerja": ["Nerja, Spain", 36.7524, -3.8758],
+      "newark": ["Newark, New Jersey", 40.7357, -74.1724],
+      "ocho-rios": ["Ocho Rios, Jamaica", 18.4074, -77.1025],
+      "oranjestad-aruba": ["Oranjestad, Aruba", 12.519, -70.037],
+      "orlando": ["Orlando, Florida", 28.5383, -81.3792],
+      "palma-de-mallorca": ["Palma de Mallorca, Spain", 39.5696, 2.6502],
+      "peggys-cove": ["Peggy’s Cove, Nova Scotia, Canada", 44.4952, -63.9146],
+      "perast": ["Perast, Montenegro", 42.4867, 18.7005],
+      "cococay": ["Perfect Day at CocoCay, Bahamas", 25.8172, -77.9375],
+      "philipsburg-st-maarten": ["Philipsburg, St. Maarten", 18.0237, -63.0458],
+      "ponta-delgada": ["Ponta Delgada, Azores, Portugal", 37.7394, -25.6687],
+      "port-canaveral": ["Port Canaveral, Florida", 28.4103, -80.6188],
+      "portland": ["Portland, Maine", 43.6591, -70.2568],
+      "positano": ["Positano, Italy", 40.6296, 14.4823],
+      "puerto-costa-maya": ["Puerto Costa Maya, Mexico", 18.7328, -87.6915],
+      "puerto-plata": ["Puerto Plata, Dominican Republic", 19.7935, -70.6871],
+      "ravenna": ["Ravenna, Italy", 44.4184, 12.2035],
+      "riomaggiore": ["Riomaggiore, Italy", 44.0985, 9.7376],
+      "roatan": ["Roatán, Honduras", 16.3239, -86.5363],
+      "rome": ["Rome, Italy", 41.9033, 12.4956],
+      "roseau": ["Roseau, Dominica", 15.3017, -61.388],
+      "rotterdam": ["Rotterdam, Netherlands", 51.9244, 4.4777],
+      "bermuda-royal-naval-dockyard": ["Royal Naval Dockyard, Bermuda", 32.3265, -64.8354],
+      "saint-john": ["Saint John, New Brunswick, Canada", 45.2733, -66.0633],
+      "salerno": ["Salerno, Italy", 40.6824, 14.7681],
+      "san-juan": ["San Juan, Puerto Rico", 18.4655, -66.1057],
+      "santiago-de-compostela": ["Santiago de Compostela, Spain", 42.8768, -8.5443],
+      "santorini": ["Santorini, Greece", 36.4618, 25.376],
+      "sarande": ["Sarandë, Albania", 39.8756, 20.0053],
+      "seattle": ["Seattle, Washington", 47.6062, -122.3321],
+      "segovia": ["Segovia, Spain", 40.9485, -4.1165],
+      "sete-cidades": ["Sete Cidades, Azores, Portugal", 37.8607, -25.7927],
+      "seward": ["Seward, Alaska", 60.1042, -149.442],
+      "sitka": ["Sitka, Alaska", 57.0531, -135.33],
+      "skagway": ["Skagway, Alaska", 59.4583, -135.3139],
+      "sorrento": ["Sorrento, Italy", 40.6239, 14.3728],
+      "southampton": ["Southampton, England", 50.9049, -1.4043],
+      "split": ["Split, Croatia", 43.5081, 16.4402],
+      "st-croix": ["St. Croix, US Virgin Islands", 17.7125, -64.8814],
+      "st-johns-antigua": ["St. John’s, Antigua", 17.1274, -61.8468],
+      "sydney": ["Sydney, Nova Scotia, Canada", 46.1368, -60.1942],
+      "taormina": ["Taormina, Sicily, Italy", 37.8532, 15.2938],
+      "toledo": ["Toledo, Spain", 39.8618, -4.0252],
+      "tortola": ["Tortola, British Virgin Islands", 18.4236, -64.6185],
+      "toulon": ["Toulon, France", 43.1242, 5.928],
+      "trieste": ["Trieste, Italy", 45.6495, 13.7768],
+      "trogir": ["Trogir, Croatia", 43.5186, 16.2512],
+      "valencia": ["Valencia, Spain", 39.4699, -0.3763],
+      "valldemossa": ["Valldemossa, Spain", 39.7118, 2.6232],
+      "vancouver": ["Vancouver, British Columbia, Canada", 49.2827, -123.1207],
+      "venice": ["Venice, Italy", 45.4408, 12.3155],
+      "vernazza": ["Vernazza, Italy", 44.1323, 9.7024],
+      "vigo": ["Vigo, Spain", 42.2406, -8.7207],
+      "willemstad-curacao": ["Willemstad, Curaçao", 12.1224, -68.9335],
+      "avila": ["Ávila, Spain", 40.6579, -4.6923]
+    };
+    (function () {
+      var el = document.getElementById("world-map");
+      if (!el) { return; }
+      // ----- Aggregate every place -----
+      // The future places are known up front. The visited places
+      // are derived from the search index (loaded further below)
+      // and merged in by display name, so a place in both sets
+      // becomes a single pin.
+      var byName = {}, places = [];
+      function getPlace(name, lat, lng) {
+        var p = byName[name];
+        if (!p) { p = byName[name] = { name: name, lat: lat, lng: lng, past: 0, lastLabel: "", future: 0, next: "", fav: false }; places.push(p); }
+        return p;
+      }
+      WORLD_FUTURE_PLACES.forEach(function (f) {
+        var p = getPlace(f[0], f[1], f[2]);
+        p.future = f[3]; p.next = f[4];
+      });
+      function updateStats() {
+        // Headline numbers, derived — never hand-kept.
+        var nPast = 0, nFuture = 0;
+        places.forEach(function (p) { if (p.past) { nPast++; } if (p.future) { nFuture++; } });
+        var sp = document.getElementById("world-stat-past");
+        var sf = document.getElementById("world-stat-future");
+        var st = document.getElementById("world-stat-total");
+        if (sp) { sp.textContent = nPast; }
+        if (sf) { sf.textContent = nFuture; }
+        if (st) { st.textContent = places.length; }
+      }
+      updateStats();
+
+      // ----- Derive the visited places from the search index -----
+      // The same counting rules as the place counters' city list:
+      // group each city's entry days by trip (the current trip's
+      // entries group under "view-main", exactly as the counters
+      // group them) and count one visit per unbroken run of
+      // consecutive days within a trip.
+      var WORLD_CURRENT_TRIP = "venice-transatlantic";
+      var dataReady = false, dataTimer = null;
+      function isoDayNum(iso) {
+        var p = String(iso || "").split("-");
+        return Date.UTC(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
+      }
+      function derivePast(data) {
+        var cityMeta = (data.placeMeta && data.placeMeta.cities) || {};
+        var cityDays = {};
+        (data.entries || []).forEach(function (e) {
+          if (!e || !e.date || !e.tripId) { return; }
+          var v = e.tripId === WORLD_CURRENT_TRIP ? "view-main" : e.tripId;
+          (e.c || []).forEach(function (k) {
+            (cityDays[k] = cityDays[k] || []).push({ v: v, d: e.date, tripId: e.tripId, trip: e.trip || "" });
+          });
+        });
+        Object.keys(cityDays).forEach(function (k) {
+          var geo = CITY_GEO[k];
+          if (!geo) {
+            if (window.console) { console.warn("world map: no verified coordinates for city key \"" + k + "\" — left unpinned"); }
+            return;
+          }
+          var byTrip = {}, lastDate = "", lastTripId = "", lastTrip = "";
+          cityDays[k].forEach(function (r) {
+            (byTrip[r.v] = byTrip[r.v] || {})[r.d] = true;
+            if (r.d > lastDate) { lastDate = r.d; lastTripId = r.tripId; lastTrip = r.trip; }
+          });
+          var visits = 0;
+          Object.keys(byTrip).forEach(function (v) {
+            var ds = Object.keys(byTrip[v]).sort();
+            ds.forEach(function (d, i) { if (i === 0 || isoDayNum(d) - isoDayNum(ds[i - 1]) !== 86400000) { visits++; } });
+          });
+          var p = getPlace(geo[0], geo[1], geo[2]);
+          p.past = visits;
+          var labelMeta = WORLD_TRIP_LABELS[lastTripId];
+          p.lastLabel = labelMeta ? labelMeta[0] : lastTrip;
+          if ((cityMeta[k] || {}).fav) { p.fav = true; }
+        });
+      }
+      function finishLoad(data) {
+        if (dataReady) { return; }
+        dataReady = true;
+        if (data) { derivePast(data); }
+        updateStats();
+        refresh();
+      }
+      (function loadIndex() {
+        function embeddedIndex() {
+          var elx = document.getElementById("search-index-data");
+          if (!elx) { return null; }
+          try { return JSON.parse(elx.textContent || ""); } catch (e) { return null; }
+        }
+        function normalize(data) {
+          if (!data) { return null; }
+          if (Object.prototype.toString.call(data) === "[object Array]") { data = { entries: data }; }
+          if (!data.entries || !data.entries.length) { return null; }
+          if (!data.placeMeta) {
+            var emb = embeddedIndex();
+            if (emb && emb.placeMeta) { data.placeMeta = emb.placeMeta; }
+          }
+          return data;
+        }
+        // Safety net: never leave the map waiting on the index —
+        // the copy embedded in the page carries the same entries.
+        setTimeout(function () { finishLoad(embeddedIndex()); }, 3000);
+        if (!window.fetch) { finishLoad(embeddedIndex()); return; }
+        var inPast = window.location.pathname.indexOf("/past/") !== -1;
+        var primaryPath = (inPast ? "../assets/search-index.json" : "assets/search-index.json") + "?v=" + (window.__SITE_VERSION__ || "");
+        var secondaryPath = (inPast ? "assets/search-index.json" : "../assets/search-index.json") + "?v=" + (window.__SITE_VERSION__ || "");
+        function tryPath(path) {
+          return fetch(path).then(function (r) {
+            if (!r.ok) { throw new Error("index unavailable"); }
+            return r.json();
+          }).then(function (data) {
+            var norm = normalize(data);
+            if (!norm) { throw new Error("index malformed"); }
+            return norm;
+          });
+        }
+        tryPath(primaryPath).then(finishLoad).catch(function () {
+          tryPath(secondaryPath).then(finishLoad).catch(function () { finishLoad(embeddedIndex()); });
+        });
+      })();
+
+      var filter = "all";
+      var map = null, layer = null, singles = {}, lastZoom = null, leafletTimer = null;
+      function visible(elm) { return !!(elm.offsetParent || elm.getClientRects().length) && elm.clientHeight > 0; }
+      function kindOf(p) { return p.fav ? "fav" : (p.past && p.future) ? "both" : p.past ? "past" : "future"; }
+      function matches(p) {
+        if (filter === "past") { return p.past > 0 && !p.fav; }
+        if (filter === "future") { return p.future > 0 && !p.fav; }
+        if (filter === "fav") { return p.fav; }
+        return true;
+      }
+      function popupHtml(p) {
+        var h = "<strong>" + p.name + "</strong>";
+        if (p.fav) { h += "<br><span class=\"world-pop-fav\">★ Favorite port</span>"; }
+        if (p.past) { h += "<br>" + p.past + (p.past === 1 ? " visit" : " visits") + (p.lastLabel ? "<br>Most recently: " + p.lastLabel : ""); }
+        if (p.future) { h += "<br>Still to come on " + p.future + (p.future === 1 ? " upcoming trip" : " upcoming trips") + (p.next ? " · next: " + p.next : ""); }
+        return h;
+      }
+      function pinIcon(p) {
+        var kind = kindOf(p);
+        var glyph = kind === "fav" ? "★" : (p.past ? p.past : p.future);
+        var size = kind === "fav" ? 36 : 30;
+        return L.divIcon({ className: "wp2-pin-wrap", html: '<span class="wp2-pin wp2-' + kind + '">' + glyph + "</span>", iconSize: [size, size], iconAnchor: [size / 2, size / 2] });
+      }
+      function clusterIcon(members) {
+        var hasFav = members.some(function (m) { return m.fav; });
+        return L.divIcon({ className: "wp2-pin-wrap", html: '<span class="wp2-pin wp2-cluster' + (hasFav ? " wp2-cluster-fav" : "") + '">' + members.length + "</span>", iconSize: [36, 36], iconAnchor: [18, 18] });
+      }
+      function render() {
+        if (!map || !layer) { return; }
+        layer.clearLayers();
+        singles = {};
+        var zoom = map.getZoom();
+        lastZoom = zoom;
+        var list = places.filter(matches);
+        // Notable places seed clusters first: favorites, then the
+        // most-visited, so a cluster sits on its best-known place.
+        list.sort(function (a, b) {
+          var ka = a.fav ? 0 : a.past ? 1 : 2, kb = b.fav ? 0 : b.past ? 1 : 2;
+          if (ka !== kb) { return ka - kb; }
+          if (b.past !== a.past) { return b.past - a.past; }
+          return a.name < b.name ? -1 : 1;
+        });
+        var degPerPixel = 360 / (256 * Math.pow(2, zoom));
+        var used = {}, groups = [];
+        list.forEach(function (p) {
+          if (used[p.name]) { return; }
+          var members = [p];
+          used[p.name] = true;
+          list.forEach(function (q) {
+            if (used[q.name]) { return; }
+            var dx = (q.lng - p.lng) * Math.cos(p.lat * Math.PI / 180);
+            var dy = q.lat - p.lat;
+            if (Math.sqrt(dx * dx + dy * dy) / degPerPixel < 48) { members.push(q); used[q.name] = true; }
+          });
+          groups.push({ seed: p, members: members });
+        });
+        groups.forEach(function (g) {
+          if (g.members.length === 1) {
+            var m = L.marker([g.seed.lat, g.seed.lng], { icon: pinIcon(g.seed) }).addTo(layer).bindPopup(popupHtml(g.seed));
+            singles[g.seed.name] = m;
+          } else {
+            var cm = L.marker([g.seed.lat, g.seed.lng], { icon: clusterIcon(g.members) }).addTo(layer);
+            cm.on("click", function () { map.setView([g.seed.lat, g.seed.lng], Math.min(zoom + 2, 12)); });
+          }
+        });
+      }
+      function init() {
+        if (map || !visible(el)) { return; }
+        if (!dataReady) {
+          if (!dataTimer) { dataTimer = setTimeout(function () { dataTimer = null; init(); }, 250); }
+          return;
+        }
+        if (!window.L) {
+          if (!leafletTimer) { leafletTimer = setTimeout(function () { leafletTimer = null; init(); }, 250); }
+          return;
+        }
+        var fb = el.querySelector(".map-fallback");
+        if (fb && fb.parentNode) { fb.parentNode.removeChild(fb); }
+        el.removeAttribute("role");
+        map = L.map(el, { scrollWheelZoom: false, worldCopyJump: true });
+        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 18,
+          attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+        }).addTo(map);
+        layer = L.layerGroup().addTo(map);
+        var pts = places.map(function (p) { return [p.lat, p.lng]; });
+        map.fitBounds(L.latLngBounds(pts).pad(0.08), { maxZoom: 4 });
+        render();
+        map.on("zoomend", function () { if (map.getZoom() !== lastZoom) { render(); } });
+        setTimeout(function () { map.invalidateSize(); }, 60);
+        setTimeout(function () { map.invalidateSize(); }, 400);
+      }
+      function refresh() {
+        init();
+        if (map) { setTimeout(function () { if (visible(el)) { map.invalidateSize(); } }, 80); }
+      }
+      refresh();
+      window.addEventListener("load", refresh);
+      window.addEventListener("hashchange", function () { setTimeout(refresh, 60); });
+      if (window.IntersectionObserver) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) { if (en.isIntersecting) { refresh(); } });
+        }, { rootMargin: "240px" });
+        io.observe(el);
+      }
+      if (window.MutationObserver) {
+        var mo = new MutationObserver(function () { setTimeout(refresh, 60); });
+        Array.prototype.forEach.call(document.querySelectorAll("#view-main [data-page]"), function (g) {
+          mo.observe(g, { attributes: true, attributeFilter: ["hidden"] });
+        });
+      }
+      window.addEventListener("resize", function () { if (map && visible(el)) { map.invalidateSize(); } });
+      // Filter buttons.
+      Array.prototype.forEach.call(document.querySelectorAll("[data-world-filter]"), function (btn) {
+        btn.addEventListener("click", function () {
+          filter = btn.getAttribute("data-world-filter");
+          Array.prototype.forEach.call(document.querySelectorAll("[data-world-filter]"), function (b) {
+            var on = b === btn;
+            b.classList.toggle("is-active", on);
+            b.setAttribute("aria-pressed", on ? "true" : "false");
+          });
+          render();
+        });
+      });
+      // Favorite focus buttons: fly to the port and open its popup.
+      Array.prototype.forEach.call(document.querySelectorAll("[data-world-focus]"), function (btn) {
+        btn.addEventListener("click", function () {
+          var name = btn.getAttribute("data-world-focus");
+          var p = byName[name];
+          if (!p) { return; }
+          if (!map) { refresh(); }
+          if (!map) { return; }
+          if (filter !== "all" && filter !== "fav") {
+            filter = "all";
+            Array.prototype.forEach.call(document.querySelectorAll("[data-world-filter]"), function (b) {
+              var on = b.getAttribute("data-world-filter") === "all";
+              b.classList.toggle("is-active", on);
+              b.setAttribute("aria-pressed", on ? "true" : "false");
+            });
+          }
+          map.once("moveend", function () {
+            setTimeout(function () {
+              var m = singles[name];
+              if (m) { m.openPopup(); }
+            }, 80);
+          });
+          map.setView([p.lat, p.lng], 9);
+          render();
+        });
+      });
+    })();
+
     // ----- Feature 5: journal search & filters — multi-page, powered by
     // assets/search-index.json. That JSON file is the database: a flat
     // index of every journal entry on every trip page (the current
@@ -2925,8 +3488,8 @@ try {
   (function () {
     var main = document.getElementById("view-main");
     if (!main) { return; }
-    var PAGES = { "": "today", today: "today", next: "next", future: "future", past: "past", "venice-transatlantic": "history" };
-    var TITLES = { today: "Where's Patrick?", next: "Next · Where's Patrick?", future: "What's in the Future · Where's Patrick?", past: "Past trips · Where's Patrick?", history: "Venice & Transatlantic · Where's Patrick?" };
+    var PAGES = { "": "today", today: "today", next: "next", future: "future", past: "past", map: "map", "venice-transatlantic": "history" };
+    var TITLES = { today: "Where's Patrick?", next: "Next · Where's Patrick?", future: "What's in the Future · Where's Patrick?", past: "Past trips · Where's Patrick?", map: "World map · Where's Patrick?", history: "Venice & Transatlantic · Where's Patrick?" };
     var groups = main.querySelectorAll("[data-page]");
     var navLinks = document.querySelectorAll(".nav-links a[data-nav]");
     var toggle = document.getElementById("nav-toggle");
