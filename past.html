@@ -11,9 +11,9 @@
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ac8ec613a4e94bc989bad09cb803ab8b"}'></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,650&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="site.css?v=20261113-110001">
+<link rel="stylesheet" href="site.css?v=20261113-132114">
 <link rel="icon" href="data:," />
-<script>window.__SITE_VERSION__="20261113-110001";</script></head>
+<script>window.__SITE_VERSION__="20261113-132114";</script></head>
 <body>
 <main class="page">
 <nav class="site-nav" aria-label="Pages">
@@ -34,6 +34,119 @@
         <h2 id="archive-heading">Trip archive</h2>
         <p>Earlier journeys, kept day by day — every journal entry and photo from the summer’s travels.</p>
       </div>
+      <!-- Summary | Cards toggle. The switching logic lives in each
+           button's inline onclick (absolute state, never a blind
+           toggle), so it works even if a publish step strips inline
+           scripts or app.js is delayed — the same pattern as the
+           Future page's toggle and the mobile nav toggle. app.js binds
+           the same handlers again as a backup; because the state is
+           set absolutely, running both is harmless. Summary is the
+           default view, as on the Future page. -->
+      <div class="past-toggle" role="group" aria-label="Past trips view">
+        <button class="past-toggle-btn is-active" id="past-btn-summary" type="button" aria-pressed="true" onclick="document.getElementById('past-summary').hidden=false;document.getElementById('past-cards').hidden=true;this.classList.add('is-active');this.setAttribute('aria-pressed','true');var c=document.getElementById('past-btn-cards');c.classList.remove('is-active');c.setAttribute('aria-pressed','false');">Summary</button>
+        <button class="past-toggle-btn" id="past-btn-cards" type="button" aria-pressed="false" onclick="document.getElementById('past-summary').hidden=true;document.getElementById('past-cards').hidden=false;this.classList.add('is-active');this.setAttribute('aria-pressed','true');var s=document.getElementById('past-btn-summary');s.classList.remove('is-active');s.setAttribute('aria-pressed','false');">Cards</button>
+      </div>
+      <!-- Summary timeline: the Past counterpart of the Future
+           page's summary — one Gantt-style row per year, bars laid
+           out left-to-right in date order. Bar left/width
+           percentages are day-of-year based (the no-JS fallback);
+           app.js recomputes them from data-tl-start / data-tl-end
+           and packs overlapping bars into lanes, exactly as it
+           does for the Future rows. A trip spanning New Year
+           draws its in-year portion on each year's row, labelled
+           with the trip's full dates. Every bar is a link to its
+           trip's journal — the same destination as its card. The
+           gaps between trips are days at home: the count is not
+           printed, it rides in each gap element's title, so
+           hovering the blank stretch shows it as a tooltip; the
+           count covers the full home stretch, including any days
+           that spill across the year boundary. -->
+      <div class="past-summary" id="past-summary">
+        <div class="tl-year" data-tl-year="2026">
+          <h3 class="tl-year-head">2026 <span>— 7 trips · 226 nights away</span></h3>
+          <div class="tl-months" aria-hidden="true"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span></div>
+          <div class="tl-track">
+            <a class="tl-bar tl-confirmed past-bar" href="past/miami-jan-feb-2026.html" data-tl-start="2026-01-02" data-tl-end="2026-02-04" style="left:0.27%;width:9.32%" title="Miami 2026 · Jan 2–Feb 4, 2026" aria-label="Miami 2026, January 2 to February 4, 2026"><span class="tl-bar-label">Miami 2026 · Jan 2–Feb 4</span></a>
+            <div class="tl-gap" style="left:9.59%;width:17.81%" title="65 days home" aria-label="65 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/san-juan-rome-apr-may-2026.html" data-tl-start="2026-04-11" data-tl-end="2026-05-25" style="left:27.40%;width:12.33%" title="San Juan to Rome 2026 · Apr 11–May 25, 2026" aria-label="San Juan to Rome 2026, April 11 to May 25, 2026"><span class="tl-bar-label">San Juan to Rome 2026 · Apr 11–May 25</span></a>
+            <div class="tl-gap" style="left:39.73%;width:0.27%" title="1 day home" aria-label="1 day home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/alaska-may-jun-2026.html" data-tl-start="2026-05-27" data-tl-end="2026-06-27" style="left:40.00%;width:8.77%" title="Alaska 2026 · May 27–Jun 27, 2026" aria-label="Alaska 2026, May 27 to June 27, 2026"><span class="tl-bar-label">Alaska 2026 · May 27–Jun 27</span></a>
+            <div class="tl-gap" style="left:48.77%;width:3.56%" title="13 days home" aria-label="13 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/cape-cod-jul-2026.html" data-tl-start="2026-07-11" data-tl-end="2026-07-18" style="left:52.33%;width:2.19%" title="Annual Summer Vacation 2026 · Jul 11–Jul 18, 2026" aria-label="Annual Summer Vacation 2026, July 11 to July 18, 2026"><span class="tl-bar-label">Annual Summer Vacation 2026 · Jul 11–Jul 18</span></a>
+            <div class="tl-gap" style="left:54.52%;width:0.82%" title="3 days home" aria-label="3 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/spain-transatlantic-jul-aug-2026.html" data-tl-start="2026-07-22" data-tl-end="2026-08-29" style="left:55.34%;width:10.68%" title="Spain &amp; Transatlantic · Jul 22–Aug 29, 2026" aria-label="Spain &amp; Transatlantic, July 22 to August 29, 2026"><span class="tl-bar-label">Spain &amp; Transatlantic · Jul 22–Aug 29</span></a>
+            <div class="tl-gap" style="left:66.03%;width:0.82%" title="3 days home" aria-label="3 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/bayonne-miami-sep-2026.html" data-tl-start="2026-09-02" data-tl-end="2026-09-28" style="left:66.85%;width:7.40%" title="New England, Bermuda &amp; Virgin Voyages · Sep 2–Sep 28, 2026" aria-label="New England, Bermuda &amp; Virgin Voyages, September 2 to September 28, 2026"><span class="tl-bar-label">New England, Bermuda &amp; Virgin Voyages · Sep 2–Sep 28</span></a>
+            <div class="tl-gap" style="left:74.25%;width:1.92%" title="7 days home" aria-label="7 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar tl-bar--next" href="past/venice-transatlantic-oct-nov-2026.html" data-tl-start="2026-10-06" data-tl-end="2026-11-15" style="left:76.16%;width:11.23%" title="Current trip: Venice &amp; Transatlantic · Oct 6–Nov 15, 2026" aria-label="Current trip: Venice &amp; Transatlantic, October 6 to November 15, 2026"><span class="tl-bar-label">Venice &amp; Transatlantic · Oct 6–Nov 15</span></a>
+            <div class="tl-gap" style="left:87.40%;width:0.82%" title="3 days home" aria-label="3 days home"></div>
+          </div>
+        </div>
+        <div class="tl-year" data-tl-year="2025">
+          <h3 class="tl-year-head">2025 <span>— 9 trips · 127 nights away</span></h3>
+          <div class="tl-months" aria-hidden="true"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span></div>
+          <div class="tl-track">
+            <a class="tl-bar tl-confirmed past-bar" href="past/adventure-caribbean-dec-2024.html" data-tl-start="2025-01-01" data-tl-end="2025-01-06" style="left:0.00%;width:1.64%" title="Adventure of the Seas, Dec 2024 · Dec 26, 2024–Jan 6, 2025" aria-label="Adventure of the Seas, Dec 2024, December 26, 2024 to January 6, 2025"><span class="tl-bar-label">Adventure of the Seas, Dec 2024 · Dec 26–Jan 6</span></a>
+            <div class="tl-gap" style="left:1.64%;width:19.73%" title="72 days home" aria-label="72 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/vision-baltimore-mar-2025.html" data-tl-start="2025-03-20" data-tl-end="2025-03-29" style="left:21.37%;width:2.74%" title="Vision of the Seas, Mar 2025 · Mar 20–Mar 29, 2025" aria-label="Vision of the Seas, Mar 2025, March 20 to March 29, 2025"><span class="tl-bar-label">Vision of the Seas, Mar 2025 · Mar 20–Mar 29</span></a>
+            <div class="tl-gap" style="left:24.11%;width:12.88%" title="47 days home" aria-label="47 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/odyssey-mediterranean-may-2025.html" data-tl-start="2025-05-16" data-tl-end="2025-05-25" style="left:36.99%;width:2.74%" title="Odyssey of the Seas, May 2025 · May 16–May 25, 2025" aria-label="Odyssey of the Seas, May 2025, May 16 to May 25, 2025"><span class="tl-bar-label">Odyssey of the Seas, May 2025 · May 16–May 25</span></a>
+            <div class="tl-gap" style="left:39.73%;width:9.04%" title="33 days home" aria-label="33 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/cape-cod-jun-jul-2025.html" data-tl-start="2025-06-28" data-tl-end="2025-07-05" style="left:48.77%;width:2.19%" title="Annual Summer Vacation 2025 · Jun 28–Jul 5, 2025" aria-label="Annual Summer Vacation 2025, June 28 to July 5, 2025"><span class="tl-bar-label">Annual Summer Vacation 2025 · Jun 28–Jul 5</span></a>
+            <div class="tl-gap" style="left:50.96%;width:4.93%" title="18 days home" aria-label="18 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/jewel-cococay-jul-2025.html" data-tl-start="2025-07-24" data-tl-end="2025-07-28" style="left:55.89%;width:1.37%" title="Jewel of the Seas, Jul 2025 · Jul 24–Jul 28, 2025" aria-label="Jewel of the Seas, Jul 2025, July 24 to July 28, 2025"><span class="tl-bar-label">Jewel of the Seas, Jul 2025 · Jul 24–Jul 28</span></a>
+            <div class="tl-gap" style="left:57.26%;width:7.67%" title="28 days home" aria-label="28 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/star-cococay-aug-2025.html" data-tl-start="2025-08-26" data-tl-end="2025-08-31" style="left:64.93%;width:1.64%" title="Star of the Seas, Aug 2025 · Aug 26–Aug 31, 2025" aria-label="Star of the Seas, Aug 2025, August 26 to August 31, 2025"><span class="tl-bar-label">Star of the Seas, Aug 2025 · Aug 26–Aug 31</span></a>
+            <div class="tl-gap" style="left:66.58%;width:5.48%" title="20 days home" aria-label="20 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/eastern-canada-sep-oct-2025.html" data-tl-start="2025-09-21" data-tl-end="2025-10-05" style="left:72.05%;width:4.11%" title="Eastern Canada 2025 · Sep 21–Oct 5, 2025" aria-label="Eastern Canada 2025, September 21 to October 5, 2025"><span class="tl-bar-label">Eastern Canada 2025 · Sep 21–Oct 5</span></a>
+            <div class="tl-gap" style="left:76.16%;width:0.55%" title="2 days home" aria-label="2 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/fall-transatlantic-oct-nov-2025.html" data-tl-start="2025-10-08" data-tl-end="2025-11-21" style="left:76.71%;width:12.33%" title="Fall Transatlantic 2025 · Oct 8–Nov 21, 2025" aria-label="Fall Transatlantic 2025, October 8 to November 21, 2025"><span class="tl-bar-label">Fall Transatlantic 2025 · Oct 8–Nov 21</span></a>
+            <div class="tl-gap" style="left:89.04%;width:1.92%" title="7 days home" aria-label="7 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/december-caribbean-nov-dec-2025.html" data-tl-start="2025-11-29" data-tl-end="2025-12-20" style="left:90.96%;width:6.03%" title="December Caribbean 2025 · Nov 29–Dec 20, 2025" aria-label="December Caribbean 2025, November 29 to December 20, 2025"><span class="tl-bar-label">December Caribbean 2025 · Nov 29–Dec 20</span></a>
+            <div class="tl-gap" style="left:96.99%;width:3.01%" title="12 days home" aria-label="12 days home"></div>
+          </div>
+        </div>
+        <div class="tl-year" data-tl-year="2024">
+          <h3 class="tl-year-head">2024 <span>— 5 trips · 41 nights away</span></h3>
+          <div class="tl-months" aria-hidden="true"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span></div>
+          <div class="tl-track">
+            <a class="tl-bar tl-confirmed past-bar" href="past/adventure-caribbean-dec-2023.html" data-tl-start="2024-01-01" data-tl-end="2024-01-05" style="left:0.00%;width:1.37%" title="Adventure of the Seas, Dec 2023 · Dec 30, 2023–Jan 5, 2024" aria-label="Adventure of the Seas, Dec 2023, December 30, 2023 to January 5, 2024"><span class="tl-bar-label">Adventure of the Seas, Dec 2023 · Dec 30–Jan 5</span></a>
+            <div class="tl-gap" style="left:1.37%;width:19.40%" title="71 days home" aria-label="71 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/symphony-caribbean-mar-2024.html" data-tl-start="2024-03-17" data-tl-end="2024-03-23" style="left:20.77%;width:1.91%" title="Symphony of the Seas, Mar 2024 · Mar 17–Mar 23, 2024" aria-label="Symphony of the Seas, Mar 2024, March 17 to March 23, 2024"><span class="tl-bar-label">Symphony of the Seas, Mar 2024 · Mar 17–Mar 23</span></a>
+            <div class="tl-gap" style="left:22.68%;width:17.21%" title="63 days home" aria-label="63 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/brilliance-alaska-may-2024.html" data-tl-start="2024-05-26" data-tl-end="2024-06-02" style="left:39.89%;width:2.19%" title="Brilliance of the Seas, May 2024 · May 26–Jun 2, 2024" aria-label="Brilliance of the Seas, May 2024, May 26 to June 2, 2024"><span class="tl-bar-label">Brilliance of the Seas, May 2024 · May 26–Jun 2</span></a>
+            <div class="tl-gap" style="left:42.08%;width:39.07%" title="143 days home" aria-label="143 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/oasis-transatlantic-oct-2024.html" data-tl-start="2024-10-24" data-tl-end="2024-11-07" style="left:81.15%;width:4.10%" title="Oasis of the Seas, Oct 2024 · Oct 24–Nov 7, 2024" aria-label="Oasis of the Seas, Oct 2024, October 24 to November 7, 2024"><span class="tl-bar-label">Oasis of the Seas, Oct 2024 · Oct 24–Nov 7</span></a>
+            <div class="tl-gap" style="left:85.25%;width:13.11%" title="48 days home" aria-label="48 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/adventure-caribbean-dec-2024.html" data-tl-start="2024-12-26" data-tl-end="2024-12-31" style="left:98.36%;width:1.64%" title="Adventure of the Seas, Dec 2024 · Dec 26, 2024–Jan 6, 2025" aria-label="Adventure of the Seas, Dec 2024, December 26, 2024 to January 6, 2025"><span class="tl-bar-label">Adventure of the Seas, Dec 2024 · Dec 26–Jan 6</span></a>
+          </div>
+        </div>
+        <div class="tl-year" data-tl-year="2023">
+          <h3 class="tl-year-head">2023 <span>— 3 trips · 18 nights away</span></h3>
+          <div class="tl-months" aria-hidden="true"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span></div>
+          <div class="tl-track">
+            <a class="tl-bar tl-confirmed past-bar" href="past/harmony-caribbean-mar-2023.html" data-tl-start="2023-03-25" data-tl-end="2023-04-01" style="left:22.74%;width:2.19%" title="Harmony of the Seas, Mar 2023 · Mar 25–Apr 1, 2023" aria-label="Harmony of the Seas, Mar 2023, March 25 to April 1, 2023"><span class="tl-bar-label">Harmony of the Seas, Mar 2023 · Mar 25–Apr 1</span></a>
+            <div class="tl-gap" style="left:24.93%;width:42.19%" title="154 days home" aria-label="154 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/oasis-caribbean-sep-2023.html" data-tl-start="2023-09-03" data-tl-end="2023-09-10" style="left:67.12%;width:2.19%" title="Oasis of the Seas, Sep 2023 · Sep 3–Sep 10, 2023" aria-label="Oasis of the Seas, Sep 2023, September 3 to September 10, 2023"><span class="tl-bar-label">Oasis of the Seas, Sep 2023 · Sep 3–Sep 10</span></a>
+            <div class="tl-gap" style="left:69.32%;width:30.14%" title="110 days home" aria-label="110 days home"></div>
+            <a class="tl-bar tl-confirmed past-bar" href="past/adventure-caribbean-dec-2023.html" data-tl-start="2023-12-30" data-tl-end="2023-12-31" style="left:99.45%;width:0.55%" title="Adventure of the Seas, Dec 2023 · Dec 30, 2023–Jan 5, 2024" aria-label="Adventure of the Seas, Dec 2023, December 30, 2023 to January 5, 2024"><span class="tl-bar-label">Adventure of the Seas, Dec 2023 · Dec 30–Jan 5</span></a>
+          </div>
+        </div>
+        <div class="tl-year" data-tl-year="2022">
+          <h3 class="tl-year-head">2022 <span>— 1 trip · 8 nights away</span></h3>
+          <div class="tl-months" aria-hidden="true"><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span></div>
+          <div class="tl-track">
+            <a class="tl-bar tl-confirmed past-bar" href="past/allure-caribbean-oct-2022.html" data-tl-start="2022-10-29" data-tl-end="2022-11-05" style="left:82.47%;width:2.19%" title="Allure of the Seas, Oct 2022 · Oct 29–Nov 5, 2022" aria-label="Allure of the Seas, Oct 2022, October 29 to November 5, 2022"><span class="tl-bar-label">Allure of the Seas, Oct 2022 · Oct 29–Nov 5</span></a>
+            <div class="tl-gap" style="left:84.66%;width:15.34%" title="139 days home" aria-label="139 days home"></div>
+          </div>
+        </div>
+        <p class="tl-legend">
+          <span class="tl-legend-item"><span class="tl-swatch tl-confirmed" aria-hidden="true"></span> Trip taken</span>
+          <span class="tl-legend-item"><span class="tl-swatch tl-confirmed tl-swatch--next" aria-hidden="true"></span> Current trip</span>
+          <span class="tl-legend-note">The blank stretches between trips are days at home — hover one to see how many. Every bar opens its trip's journal — or switch to Cards.</span>
+        </p>
+      </div>
+      <div class="past-cards" id="past-cards" hidden>
       <div class="archive-list">
         <a class="archive-card current-card" href="past/venice-transatlantic-oct-nov-2026.html">
           <time>Oct 6 to Nov 15, 2026</time>
@@ -173,6 +286,7 @@
           <span class="desc">Allure of the Seas from Ft Lauderdale — Puerto Plata, Labadee, Nassau and CocoCay. Ports in order from the Cruise Globe.</span>
           <span class="go">View the trip →</span>
         </a>
+      </div>
       </div>
     </section>
 </div>
@@ -6522,7 +6636,7 @@
  ]
 }
   </script>
-<script src="app.js?v=20261113-110001" defer></script>
+<script src="app.js?v=20261113-132114" defer></script>
 <script>
 (function () {
   var PAGES = {"today": "index.html", "next": "next.html", "future": "future.html", "past": "past.html", "venice-transatlantic": "past/venice-transatlantic-oct-nov-2026.html", "spain-transatlantic-jul-aug-2026": "past/spain-transatlantic-jul-aug-2026.html", "cape-cod-jul-2026": "past/cape-cod-jul-2026.html", "bayonne-miami-sep-2026": "past/bayonne-miami-sep-2026.html", "alaska-may-jun-2026": "past/alaska-may-jun-2026.html", "san-juan-rome-apr-may-2026": "past/san-juan-rome-apr-may-2026.html", "miami-jan-feb-2026": "past/miami-jan-feb-2026.html", "december-caribbean-nov-dec-2025": "past/december-caribbean-nov-dec-2025.html", "fall-transatlantic-oct-nov-2025": "past/fall-transatlantic-oct-nov-2025.html", "eastern-canada-sep-oct-2025": "past/eastern-canada-sep-oct-2025.html", "star-cococay-aug-2025": "past/star-cococay-aug-2025.html", "jewel-cococay-jul-2025": "past/jewel-cococay-jul-2025.html", "cape-cod-jun-jul-2025": "past/cape-cod-jun-jul-2025.html", "odyssey-mediterranean-may-2025": "past/odyssey-mediterranean-may-2025.html", "vision-baltimore-mar-2025": "past/vision-baltimore-mar-2025.html", "adventure-caribbean-dec-2024": "past/adventure-caribbean-dec-2024.html", "oasis-transatlantic-oct-2024": "past/oasis-transatlantic-oct-2024.html", "brilliance-alaska-may-2024": "past/brilliance-alaska-may-2024.html", "symphony-caribbean-mar-2024": "past/symphony-caribbean-mar-2024.html", "adventure-caribbean-dec-2023": "past/adventure-caribbean-dec-2023.html", "oasis-caribbean-sep-2023": "past/oasis-caribbean-sep-2023.html", "harmony-caribbean-mar-2023": "past/harmony-caribbean-mar-2023.html", "allure-caribbean-oct-2022": "past/allure-caribbean-oct-2022.html"};

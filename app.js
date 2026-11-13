@@ -2146,6 +2146,33 @@ try {
       });
     })();
 
+    // ----- Past page: Summary | Cards toggle (backup binding). The
+    // toggle buttons switch views through their inline onclick
+    // attributes, so the view works even before this file loads; the
+    // handlers bound here set the same absolute state, so a click
+    // running both never double-toggles. The timeline bars need no
+    // binding at all: they are plain links to each trip's journal,
+    // and the lane layout in the Future block above already lays out
+    // every .tl-year row on the page, Past rows included.
+    (function () {
+      var summary = document.getElementById("past-summary");
+      var cards = document.getElementById("past-cards");
+      var btnSum = document.getElementById("past-btn-summary");
+      var btnCards = document.getElementById("past-btn-cards");
+      if (!summary || !cards || !btnSum || !btnCards) { return; }
+      function showPast(view) {
+        var isSum = view === "summary";
+        summary.hidden = !isSum;
+        cards.hidden = isSum;
+        btnSum.classList.toggle("is-active", isSum);
+        btnCards.classList.toggle("is-active", !isSum);
+        btnSum.setAttribute("aria-pressed", isSum ? "true" : "false");
+        btnCards.setAttribute("aria-pressed", isSum ? "false" : "true");
+      }
+      btnSum.addEventListener("click", function () { showPast("summary"); });
+      btnCards.addEventListener("click", function () { showPast("cards"); });
+    })();
+
     // ----- Day links: opening or following a #entry-YYYY-MM-DD anchor reveals
     // the view that holds that journal entry (the main page or a trip archive
     // view), then scrolls to the entry and flashes its outline. Day-link clicks

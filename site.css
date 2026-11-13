@@ -1505,13 +1505,13 @@ h3 .fav-star { width: 19px; height: 19px; vertical-align: -3px; margin-right: 7p
 @media (max-width: 580px) { .past-map { height: 300px; } }
 
 /* ---------- Future page: Summary | Cards toggle + timeline ---------- */
-.future-toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--surface); margin: 0 0 26px; }
-.future-toggle-btn { min-height: 42px; padding: 9px 22px; border: 0; background: transparent; color: var(--ink); font: 600 .86rem "IBM Plex Sans", sans-serif; cursor: pointer; }
-.future-toggle-btn:hover { color: var(--deep-2); }
-.future-toggle-btn.is-active { background: #0f766e; color: #fff; }
-.future-toggle-btn.is-active:hover { color: #fff; }
-.future-toggle-btn:focus-visible { outline: 3px solid var(--orange); outline-offset: -3px; }
-.future-summary[hidden], .future-cards[hidden] { display: none; }
+.future-toggle, .past-toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--surface); margin: 0 0 26px; }
+.future-toggle-btn, .past-toggle-btn { min-height: 42px; padding: 9px 22px; border: 0; background: transparent; color: var(--ink); font: 600 .86rem "IBM Plex Sans", sans-serif; cursor: pointer; }
+.future-toggle-btn:hover, .past-toggle-btn:hover { color: var(--deep-2); }
+.future-toggle-btn.is-active, .past-toggle-btn.is-active { background: #0f766e; color: #fff; }
+.future-toggle-btn.is-active:hover, .past-toggle-btn.is-active:hover { color: #fff; }
+.future-toggle-btn:focus-visible, .past-toggle-btn:focus-visible { outline: 3px solid var(--orange); outline-offset: -3px; }
+.future-summary[hidden], .future-cards[hidden], .past-summary[hidden], .past-cards[hidden] { display: none; }
 
 .tl-year + .tl-year { margin-top: 30px; }
 .tl-year-head { margin: 0 0 6px; font: 650 1.4rem/1.15 "Newsreader", serif; letter-spacing: -.01em; }
@@ -1561,7 +1561,7 @@ h3 .fav-star { width: 19px; height: 19px; vertical-align: -3px; margin-right: 7p
 .tl-swatch { display: inline-block; width: 11px; height: 11px; border-radius: 3px; flex: 0 0 auto; }
 .tl-legend-note { max-width: 560px; }
 @media (max-width: 580px) {
-  .future-toggle-btn { padding: 9px 18px; }
+  .future-toggle-btn, .past-toggle-btn { padding: 9px 18px; }
   .tl-months span { font-size: 9.5px; }
   .tl-bar { font-size: 11px; padding: 0 6px; border-radius: 8px; }
   .tl-year-head { font-size: 1.25rem; }
@@ -1572,3 +1572,13 @@ h3 .fav-star { width: 19px; height: 19px; vertical-align: -3px; margin-right: 7p
   .trip-modal-card h3 { font-size: 1.55rem; }
   .trip-modal-stops li { grid-template-columns: 72px 1fr; gap: 10px; }
 }
+
+/* ---------- Past page: Summary timeline bars ----------
+   The Past summary reuses the Future timeline's .tl-* styling above;
+   its bars are plain links to each trip's journal (the same targets
+   as the archive cards), so they need link resets the Future bars —
+   dialog openers, not links — never did. */
+.past-bar { text-decoration: none; }
+.past-bar:hover { filter: brightness(1.1); }
+.past-bar:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+.tl-swatch--next { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px #0f766e; }
