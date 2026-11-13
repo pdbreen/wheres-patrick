@@ -1535,9 +1535,15 @@ h3 .fav-star { width: 19px; height: 19px; vertical-align: -3px; margin-right: 7p
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
-  padding: 0 9px;
 }
-.tl-bar-label { overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1 1 auto; }
+/* The bar's horizontal inset lives on the label, not the bar: with
+   border-box sizing, padding on the bar itself floors its rendered
+   width at the padding sum (18px), so a segment narrower than that —
+   the Dec 30–31 slice of a New Year trip, 0.55% of the track — drew
+   18px wide from its 99.45% left and spilled past the track's right
+   edge. On the label the same inset just clips away on narrow bars,
+   and the bar's box stays exactly its percentage width. */
+.tl-bar-label { overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1 1 auto; padding: 0 9px; }
 .tl-bar--next { overflow: visible; z-index: 3; box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px #0f766e; }
 .tl-bar--next .tl-bar-label { min-width: 0; flex: 1 1 auto; }
 .tl-confirmed { background: #0f766e; }
@@ -1563,7 +1569,8 @@ h3 .fav-star { width: 19px; height: 19px; vertical-align: -3px; margin-right: 7p
 @media (max-width: 580px) {
   .future-toggle-btn, .past-toggle-btn { padding: 9px 18px; }
   .tl-months span { font-size: 9.5px; }
-  .tl-bar { font-size: 11px; padding: 0 6px; border-radius: 8px; }
+  .tl-bar { font-size: 11px; border-radius: 8px; }
+  .tl-bar-label { padding: 0 6px; }
   .tl-year-head { font-size: 1.25rem; }
   /* The trip Details dialog keeps clear of the screen edges and gives
      its stops list a narrower date column on phones. */

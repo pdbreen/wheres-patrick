@@ -2128,8 +2128,15 @@ try {
           else { laneEnds[lane] = item.end; }
           var startDay = Math.round((item.start - yearStart) / 86400000);
           var endDay = Math.round((item.end - yearStart) / 86400000);
-          item.bar.style.left = (startDay / daysInYear * 100).toFixed(2) + "%";
-          item.bar.style.width = ((endDay - startDay + 1) / daysInYear * 100).toFixed(2) + "%";
+          var leftPct = startDay / daysInYear * 100;
+          var widthPct = (endDay - startDay + 1) / daysInYear * 100;
+          // Clamp every bar to the track: a segment ending on
+          // Dec 31 fills the year exactly, and neither the date
+          // math nor the two-decimal rounding may push its right
+          // edge past 100%.
+          if (leftPct + widthPct > 100) { widthPct = 100 - leftPct; }
+          item.bar.style.left = leftPct.toFixed(2) + "%";
+          item.bar.style.width = widthPct.toFixed(2) + "%";
           item.bar.style.top = (lane * (BAR_H + LANE_GAP)) + "px";
         });
         var lanes = Math.max(1, laneEnds.length);
