@@ -2954,8 +2954,6 @@ try {
             plural(sailings, " sailing", " sailings") + " and " + plural(nights, " night", " nights") +
             " on board in total. Tap one to find its sailings in the journal and the trip archives.";
         }
-        var note = document.querySelector(".place-counts-note");
-        if (note && latest) { note.textContent = "Through " + fmtISO(latest) + "."; }
       }
 
       // ----- Most-recent dates: a subtle line under each counter entry,
@@ -3051,8 +3049,7 @@ try {
             span + " · <strong>" + pct + "%</strong> of the year traveling · " +
             plural(uniq.country, " country", " countries") + " · " +
             plural(uniq.city, " city", " cities") + " · " +
-            plural(uniq.ship, " ship", " ships") + " " +
-            "<span class=\"year-tracker-note\">(through " + fmtISO(yearLatest) + ")</span>";
+            plural(uniq.ship, " ship", " ships");
         }
         var curYear = latest.slice(0, 4);
         render(el, curYear, true);
