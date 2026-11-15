@@ -60,7 +60,8 @@ try {
       "Orlando": "assets/hero-port-canaveral.jpg",
       "CocoCay": "assets/hero-cococay.jpg",
       "Perfect Day at CocoCay": "assets/hero-cococay.jpg",
-      "Nassau": "assets/hero-nassau.jpg"
+      "Nassau": "assets/hero-nassau.jpg",
+      "Cape Liberty": "assets/hero-cape-liberty.jpg"
     };
     // STOP_HEROES is the same mapping keyed by CURRENT_TRIP_STOPS names
     // (defined below): heroFromStops uses it to advance the hero PHOTO
@@ -78,7 +79,8 @@ try {
       "Ponta Delgada, Azores, Portugal": "assets/hero-ponta-delgada.jpg",
       "Port Canaveral, Florida": "assets/hero-port-canaveral.jpg",
       "Perfect Day at CocoCay, Bahamas": "assets/hero-cococay.jpg",
-      "Nassau, Bahamas": "assets/hero-nassau.jpg"
+      "Nassau, Bahamas": "assets/hero-nassau.jpg",
+      "Cape Liberty (Bayonne), New Jersey": "assets/hero-cape-liberty.jpg"
     };
     const PLAN_HEROES = {
       "Cinque Terre": "assets/hero-cinque-terre.jpg",
@@ -109,7 +111,8 @@ try {
       "assets/hero-at-sea.jpg": { text: "Photo: Richard Mc Neil, CC BY 3.0", url: "https://commons.wikimedia.org/wiki/File:Oasis_of_the_seas_sailing_out_of_Port_Everglades_inlet._Le_plus_gros_paquebot_du_monde_sortant_du_port..._-_panoramio.jpg" },
       "assets/hero-port-canaveral.jpg": { text: "Photo: NASA — a Space Shuttle launch from Kennedy Space Center, Cape Canaveral", url: "https://www.nasa.gov/kennedy/", label: "NASA" },
       "assets/hero-cococay.jpg": { text: "Photo: Adam Hendel / Royal Caribbean — Perfect Day at CocoCay from the air", url: "https://sailawaze.com/utopia-of-the-seas-review/", label: "Sailawaze" },
-      "assets/hero-nassau.jpg": { text: "Photo: Nassau harbour, with Paradise Island and Atlantis beyond", url: "https://blog.asaptickets.com/popular-spring-break-destinations-2024/", label: "ASAP Tickets blog" }
+      "assets/hero-nassau.jpg": { text: "Photo: Nassau harbour, with Paradise Island and Atlantis beyond", url: "https://blog.asaptickets.com/popular-spring-break-destinations-2024/", label: "ASAP Tickets blog" },
+      "assets/hero-cape-liberty.jpg": { text: "Photo: JMcgo1979, public domain — Freedom of the Seas at Cape Liberty on her christening day, May 11, 2006", url: "https://commons.wikimedia.org/wiki/File:Freedom_of_the_Seas.JPG" }
     };
 
     (function () {
@@ -411,9 +414,9 @@ try {
       { name: "Port Canaveral, Florida", detail: "Tue · Nov 10 — in port 11:59 AM–8:00 PM, Ron Jon Cocoa Beach shuttle excursion", lat: 28.4077, lng: -80.5985, status: "been" },
       { name: "Perfect Day at CocoCay, Bahamas", detail: "Wed · Nov 11 — in port 8:30 AM–5:00 PM, Hideaway Beach day pass", lat: 25.8172, lng: -77.9375, status: "been" },
       { name: "Nassau, Bahamas", detail: "Thu · Nov 12 — in port 8:00 AM–5:00 PM, Royal Beach Club day pass", lat: 25.0480, lng: -77.3554, status: "been" },
-      { name: "At sea aboard Odyssey of the Seas", detail: "Fri · Nov 13 & Sat · Nov 14 — full days at sea, en route to Cape Liberty (approximate position)", lat: 29.0, lng: -76.5, status: "today" },
-      { name: "Cape Liberty (Bayonne), New Jersey", detail: "Sun · Nov 15 — disembark Odyssey of the Seas at 6:00 AM, then fly home to Boston", lat: 40.6650, lng: -74.1130, status: "going" },
-      { name: "Boston, Massachusetts", detail: "Sun · Nov 15 — back in New England, home after forty days away", lat: 42.3601, lng: -71.0589, status: "going" }
+      { name: "At sea aboard Odyssey of the Seas", detail: "Fri · Nov 13 & Sat · Nov 14 — full days at sea, en route to Cape Liberty (approximate position)", lat: 29.0, lng: -76.5, status: "been" },
+      { name: "Cape Liberty (Bayonne), New Jersey", detail: "Sun · Nov 15 — disembark Odyssey of the Seas at 6:00 AM, then fly home to Boston", lat: 40.6650, lng: -74.1130, status: "today" },
+      { name: "Boston, Massachusetts", detail: "Sun · Nov 15 — back in New England, home after forty days away", lat: 42.3601, lng: -71.0589, status: "been" }
     ];
 
     // PAST_TRIP_ROUTES: the stops of every finished trip's detail page, in
