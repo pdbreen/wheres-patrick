@@ -2950,12 +2950,12 @@ try {
         // are derived too — no hand-kept totals anywhere.
         var hint = document.querySelector("#place-ships .place-panel-hint");
         if (hint) {
-          hint.textContent = "Every ship on this page, most sailings first — " +
+          hint.textContent = "Every ship, most sailings first — " +
             plural(sailings, " sailing", " sailings") + " and " + plural(nights, " night", " nights") +
             " on board in total. Tap one to find its sailings in the journal and the trip archives.";
         }
         var note = document.querySelector(".place-counts-note");
-        if (note && latest) { note.textContent = "Counts cover page content through " + fmtISO(latest) + "."; }
+        if (note && latest) { note.textContent = "Through " + fmtISO(latest) + "."; }
       }
 
       // ----- Most-recent dates: a subtle line under each counter entry,
@@ -3052,7 +3052,7 @@ try {
             plural(uniq.country, " country", " countries") + " · " +
             plural(uniq.city, " city", " cities") + " · " +
             plural(uniq.ship, " ship", " ships") + " " +
-            "<span class=\"year-tracker-note\">(counted from this page, through " + fmtISO(yearLatest) + ")</span>";
+            "<span class=\"year-tracker-note\">(through " + fmtISO(yearLatest) + ")</span>";
         }
         var curYear = latest.slice(0, 4);
         render(el, curYear, true);
@@ -3428,7 +3428,7 @@ try {
           subEl.textContent = rec.visits + (rec.visits === 1 ? " sailing" : " sailings") + " · " + rec.nights + (rec.nights === 1 ? " night" : " nights") + " on board. Tap a sailing to jump to its first day.";
         } else {
           titleEl.textContent = "Days in " + rec.name;
-          subEl.textContent = rec.days.length + (rec.days.length === 1 ? " day" : " days") + " on this page · " + rec.visits + (rec.visits === 1 ? " visit" : " visits") + " counted. Tap a day to jump to it.";
+          subEl.textContent = rec.days.length + (rec.days.length === 1 ? " day" : " days") + " · " + rec.visits + (rec.visits === 1 ? " visit" : " visits") + " counted. Tap a day to jump to it.";
         }
         listEl.innerHTML = "";
         rec.days.forEach(function (ref) {
