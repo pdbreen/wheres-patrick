@@ -1978,7 +1978,6 @@ try {
     // ===== Trip detail popups (upcoming trips) =====
     // Detail content below was built at build time from the trip itineraries
     // in ~/workspace/goals/*/files/itinerary.md — specifically:
-    //   goals/jj-s-wedding/files/itinerary.md
     //   goals/december-caribbean/files/itinerary.md
     //   goals/january-caribbean/files/itinerary.md
     //   goals/february-caribbean/files/itinerary.md
