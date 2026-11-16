@@ -2001,8 +2001,8 @@ try {
           stops: [
             ["Nov 19", "Seattle", "Fly in; pick up the Hertz SUV and drive to Redmond"],
             ["Nov 20", "Redmond", "Free day around Redmond and Seattle"],
-            ["Nov 21", "Redmond & Seattle", "JJ and Jessica's wedding at St. Jude, Redmond; reception dinner at Canlis, Seattle"],
-            ["Nov 22", "Redmond", "Possible Microsoft campus tour with JJ"],
+            ["Nov 21", "Redmond & Seattle", "Wedding in Redmond; reception dinner at Canlis, Seattle"],
+            ["Nov 22", "Redmond", "Possible Microsoft campus tour"],
             ["Nov 23", "Seattle", "Drop the SUV at SeaTac; fly home to Boston"]
           ]
         },
