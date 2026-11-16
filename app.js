@@ -61,7 +61,9 @@ try {
       "CocoCay": "assets/hero-cococay.jpg",
       "Perfect Day at CocoCay": "assets/hero-cococay.jpg",
       "Nassau": "assets/hero-nassau.jpg",
-      "Cape Liberty": "assets/hero-cape-liberty.jpg"
+      "Cape Liberty": "assets/hero-cape-liberty.jpg",
+      "Seattle": "assets/hero-seattle.jpg",
+      "Redmond": "assets/hero-redmond.jpg"
     };
     // STOP_HEROES is the same mapping keyed by CURRENT_TRIP_STOPS names
     // (defined below): heroFromStops uses it to advance the hero PHOTO
@@ -80,7 +82,9 @@ try {
       "Port Canaveral, Florida": "assets/hero-port-canaveral.jpg",
       "Perfect Day at CocoCay, Bahamas": "assets/hero-cococay.jpg",
       "Nassau, Bahamas": "assets/hero-nassau.jpg",
-      "Cape Liberty (Bayonne), New Jersey": "assets/hero-cape-liberty.jpg"
+      "Cape Liberty (Bayonne), New Jersey": "assets/hero-cape-liberty.jpg",
+      "Seattle, Washington": "assets/hero-seattle.jpg",
+      "Redmond, Washington": "assets/hero-redmond.jpg"
     };
     const PLAN_HEROES = {
       "Cinque Terre": "assets/hero-cinque-terre.jpg",
@@ -112,7 +116,9 @@ try {
       "assets/hero-port-canaveral.jpg": { text: "Photo: NASA — a Space Shuttle launch from Kennedy Space Center, Cape Canaveral", url: "https://www.nasa.gov/kennedy/", label: "NASA" },
       "assets/hero-cococay.jpg": { text: "Photo: Adam Hendel / Royal Caribbean — Perfect Day at CocoCay from the air", url: "https://sailawaze.com/utopia-of-the-seas-review/", label: "Sailawaze" },
       "assets/hero-nassau.jpg": { text: "Photo: Nassau harbour, with Paradise Island and Atlantis beyond", url: "https://blog.asaptickets.com/popular-spring-break-destinations-2024/", label: "ASAP Tickets blog" },
-      "assets/hero-cape-liberty.jpg": { text: "Photo: JMcgo1979, public domain — Freedom of the Seas at Cape Liberty on her christening day, May 11, 2006", url: "https://commons.wikimedia.org/wiki/File:Freedom_of_the_Seas.JPG" }
+      "assets/hero-cape-liberty.jpg": { text: "Photo: JMcgo1979, public domain — Freedom of the Seas at Cape Liberty on her christening day, May 11, 2006", url: "https://commons.wikimedia.org/wiki/File:Freedom_of_the_Seas.JPG" },
+      "assets/hero-seattle.jpg": { text: "Photo: SounderBruce, CC BY-SA 4.0 — the Space Needle and downtown Seattle from Kerry Park", url: "https://commons.wikimedia.org/wiki/File:Seattle_skyline_from_Kerry_Park,_Sept._2018.jpg" },
+      "assets/hero-redmond.jpg": { text: "Photo: Spicypepper999, CC0 — downtown Redmond from the air", url: "https://commons.wikimedia.org/wiki/File:Redmond_aerial,_April_2023.png" }
     };
 
     (function () {
