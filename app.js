@@ -758,15 +758,15 @@ try {
       ["Cozumel, Mexico", 20.5103, -86.9493, 3, "Dec 2026"],
       ["Puerto Costa Maya, Mexico", 18.7328, -87.6915, 3, "Dec 2026"],
       ["Cape Liberty (Bayonne), New Jersey", 40.665, -74.113, 1, "Jan 2027"],
-      ["Philipsburg, St. Maarten", 18.0237, -63.0458, 2, "Jan 2027"],
-      ["St. John\u2019s, Antigua", 17.1274, -61.8468, 2, "Jan 2027"],
-      ["Basseterre, St. Kitts", 17.3026, -62.7177, 1, "Jan 2027"],
-      ["Charlotte Amalie, St. Thomas", 18.3419, -64.9307, 3, "Jan 2027"],
+      ["Philipsburg, St. Maarten", 18.0237, -63.0458, 3, "Jan 2027"],
+      ["St. John\u2019s, Antigua", 17.1274, -61.8468, 3, "Jan 2027"],
+      ["Basseterre, St. Kitts", 17.3026, -62.7177, 2, "Jan 2027"],
+      ["Charlotte Amalie, St. Thomas", 18.3419, -64.9307, 4, "Jan 2027"],
       ["Castries, St. Lucia", 14.0167, -60.9833, 1, "Jan 2027"],
       ["Bridgetown, Barbados", 13.1132, -59.5988, 2, "Jan 2027"],
       ["Miami, Florida", 25.7617, -80.1918, 2, "Feb 2027"],
       ["Estero, Florida", 26.4384, -81.8068, 1, "Feb 2027"],
-      ["Perfect Day at CocoCay, Bahamas", 25.8172, -77.9375, 3, "Feb 2027"],
+      ["Perfect Day at CocoCay, Bahamas", 25.8172, -77.9375, 4, "Feb 2027"],
       ["Honolulu, Hawaii", 21.3099, -157.8581, 1, "Feb 2027"],
       ["Sydney, Australia", -33.8688, 151.2093, 1, "Mar 2027"],
       ["Airlie Beach, Australia", -20.2691, 148.7193, 1, "Mar 2027"],
@@ -797,6 +797,10 @@ try {
       ["M\u00e1laga, Spain", 36.7213, -4.4214, 1, "May 2027"],
       ["Seville, Spain", 37.3891, -5.9845, 1, "May 2027"],
       ["C\u00f3rdoba, Spain", 37.8847, -4.7792, 1, "May 2027"],
+      ["Tortola, British Virgin Islands", 18.4236, -64.6185, 1, "Jun 2027"],
+      ["St. Croix, US Virgin Islands", 17.7125, -64.8814, 1, "Jun 2027"],
+      ["Orlando, Florida", 28.5383, -81.3792, 1, "Jun 2027"],
+      ["Port Canaveral, Florida", 28.4103, -80.6188, 1, "Jun 2027"],
       ["Scituate, Massachusetts", 42.1956, -70.7263, 1, "Jul 2027"],
       ["Fairbanks, Alaska", 64.8378, -147.7164, 1, "Aug 2027"],
       ["Denali, Alaska", 63.7, -148.88, 1, "Aug 2027"],
@@ -826,7 +830,7 @@ try {
       ["New Orleans, Louisiana", 29.9511, -90.0715, 1, "Dec 2027"],
       ["Belize City, Belize", 17.4986, -88.3018, 1, "Dec 2027"],
       ["Falmouth, Jamaica", 18.4936, -77.6556, 1, "Dec 2027"],
-      ["San Juan, Puerto Rico", 18.4655, -66.1057, 1, "Jan 2028"],
+      ["San Juan, Puerto Rico", 18.4655, -66.1057, 2, "Jun 2027"],
       ["Cabo Rojo, Dominican Republic", 17.9052, -71.6726, 1, "Jan 2028"],
       ["Kingstown, St. Vincent", 13.16, -61.2248, 1, "Jan 2028"],
       ["St. George\u2019s, Grenada", 12.0561, -61.7488, 1, "Jan 2028"],
@@ -1994,6 +1998,7 @@ try {
     //   goals/february-caribbean/files/itinerary.md
     //   goals/australia/files/itinerary.md
     //   goals/legend/files/itinerary.md
+    //   goals/2027-06-grandeur-star/files/itinerary.md
     //   goals/annual-summer-vacation/files/itinerary.md
     //   goals/alaska-land-trip-and-cruise/files/itinerary.md
     //   goals/2027-11-liberty-mariner/files/itinerary.md
@@ -2140,6 +2145,33 @@ try {
             ["May 23–24", "Málaga", "Alcazaba, Atarazanas market & the Picasso Museum"],
             ["May 25–27", "Seville", "Cathedral, Real Alcázar & Plaza de España"],
             ["May 27–29", "Córdoba", "The Mezquita; train to Madrid and home on May 29"]
+          ]
+        },
+        "grandeur-star": {
+          title: "Grandeur & Star",
+          range: "June 4 – 20, 2027 · 16 nights",
+          bookings: [
+            "Grandeur of the Seas, 7nt Southern Caribbean from San Juan (Jun 5–12)",
+            "Star of the Seas, 7nt Eastern Caribbean from Port Canaveral (Jun 13–20)",
+            "Flights & hotels still to book: Boston → San Juan (Jun 4), a night in San Juan, San Juan → Orlando (Jun 12), a night in Orlando, home from Orlando (Jun 20)"
+          ],
+          stops: [
+            ["Jun 4", "San Juan, Puerto Rico", "Fly in from Boston; night in San Juan"],
+            ["Jun 5", "San Juan, Puerto Rico", "Board Grandeur of the Seas"],
+            ["Jun 6", "Tortola, British Virgin Islands", "Port day"],
+            ["Jun 7", "Philipsburg, St. Maarten", "Port day"],
+            ["Jun 8", "St. John's, Antigua", "Port day"],
+            ["Jun 9", "Basseterre, St. Kitts", "Port day"],
+            ["Jun 10", "St. Croix, US Virgin Islands", "Port day"],
+            ["Jun 11", "At sea", "Sea day"],
+            ["Jun 12", "San Juan → Orlando", "Disembark; fly to Orlando for the night"],
+            ["Jun 13", "Port Canaveral, Florida", "Board Star of the Seas"],
+            ["Jun 14", "Perfect Day at CocoCay", "Port day"],
+            ["Jun 15", "At sea", "Sea day"],
+            ["Jun 16", "Charlotte Amalie, St. Thomas", "Port day"],
+            ["Jun 17", "Philipsburg, St. Maarten", "Port day — second call of the trip"],
+            ["Jun 18–19", "At sea", "Two sea days"],
+            ["Jun 20", "Port Canaveral, Florida", "Disembark; fly home to Boston from Orlando"]
           ]
         },
         "annual-summer-vacation": {
@@ -2337,7 +2369,7 @@ try {
       };
 
       // Permanent shareable slugs: stable, identity-based (not date-based),
-      // unique across all 12 future trips. Internal TRIP_DETAILS keys stay
+      // unique across all 13 future trips. Internal TRIP_DETAILS keys stay
       // as they are; this map translates them to the public slug used in
       // https://wherespatrick.today/future.html#trip-<slug>
       var TRIP_SLUGS = {
@@ -2347,6 +2379,7 @@ try {
         "february-caribbean": "florida-bahamas",
         "australia": "pacific-crossing",
         "legend": "spain-mediterranean",
+        "grandeur-star": "grandeur-star",
         "annual-summer-vacation": "annual-summer-vacation",
         "alaska-panama-canal": "alaska-panama-canal",
         "liberty-mariner": "liberty-mariner",
