@@ -2037,14 +2037,14 @@ try {
             "JetBlue Boston → Ft Lauderdale (Nov 28), home Dec 19",
             "Bahia Mar, Ft Lauderdale — 1 night before the first sailing",
             "Adventure of the Seas — Ocean View, three back-to-back sailings (6 + 8 + 6 nights), same cabin throughout",
-            "Royal Beach Club day passes booked for all three Nassau stops"
+            "Royal Beach Club day passes booked for the Nov 30 and Dec 18 Nassau stops"
           ],
           stops: [
             ["Nov 28", "Ft Lauderdale", "Fly in; night at Bahia Mar"],
             ["Nov 30", "Nassau, Bahamas", "Royal Beach Club day pass"],
             ["Dec 2", "Samaná, Dominican Republic", "Frontón Beach & snorkeling adventure"],
             ["Dec 3", "Puerto Plata, Dominican Republic", "Amber Beach Club getaway"],
-            ["Dec 6", "Nassau, Bahamas", "Royal Beach Club day pass"],
+            ["Dec 6", "Nassau, Bahamas", "Hero World Challenge final round at Albany Golf Club — gates 10 AM; leave around 3:30 PM, taxi straight back to the ship (or taxi via Baha Mar and the free shuttle)"],
             ["Dec 9", "Oranjestad, Aruba", "Sailaway snorkel cruise — in port until 11:00 PM"],
             ["Dec 10", "Willemstad, Curaçao", "Snorkel the Treasures of Caracas Bay"],
             ["Dec 15", "Cozumel, Mexico", "KUZA Beach day pass"],
