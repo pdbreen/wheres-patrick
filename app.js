@@ -230,6 +230,35 @@ try {
       }
       function heroFromStops() {
         if (!placeEl || typeof CURRENT_TRIP_STOPS === "undefined") { return; }
+        // Pages WITHOUT the day-cards (the published home page) get one
+        // more first-priority signal: the hero's own heading. #current-place
+        // is part of the hero article itself, so it is present on every
+        // rendering, and the daily refresh updates it for the place
+        // Patrick is in that day — while CURRENT_TRIP_STOPS below can
+        // still describe the previous trip (it named Cape Liberty, the
+        // finished transatlantic's last stop, as "today" well into the
+        // Seattle wedding trip, with no Seattle or Redmond stop in the
+        // list at all, so the stops logic had nothing to swap to and
+        // the baked Cape Liberty photo stayed up). When the heading
+        // names a place with a hero photo, that photo IS today's hero —
+        // Seattle today, Redmond when the heading turns to Redmond —
+        // with matching alt, label and credit. Sea-day headings name no
+        // port, so they fall through to the stops logic unchanged, and
+        // where the day-cards ARE present they keep owning the hero
+        // (they can also spot plan-text attractions), exactly as before.
+        if (!document.querySelector(".days .day")) {
+          var cpEl = document.getElementById("current-place");
+          var cpName = cpEl ? cpEl.textContent.replace(/\s+/g, " ").trim() : "";
+          var cpFile = STOP_HEROES[cpName];
+          if (cpFile && heroKnown(cpFile)) {
+            img.src = heroSrc(cpFile);
+            img.alt = "Iconic view of " + cpName;
+            if (kicker) { kicker.textContent = "Today in"; }
+            placeEl.textContent = cpName;
+            setCredit(cpFile);
+            return;
+          }
+        }
         var ti = -1, i, s;
         for (i = 0; i < CURRENT_TRIP_STOPS.length; i++) {
           if (CURRENT_TRIP_STOPS[i].status === "today") { ti = i; break; }
