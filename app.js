@@ -426,32 +426,10 @@ try {
     // passes, and when the trip ends move its route into PAST_TRIP_ROUTES
     // below (all stops there render as visited) and load the next trip.
     const CURRENT_TRIP_STOPS = [
-      { name: "Boston, Massachusetts", detail: "Tue · Oct 6 — the trip begins: travel day out of Boston", lat: 42.3601, lng: -71.0589, status: "been" },
-      { name: "Madrid, Spain", detail: "Wed · Oct 7 — Madrid, then on to Bologna and Venice", lat: 40.4168, lng: -3.7038, status: "been" },
-      { name: "Venice, Italy", detail: "Oct 7–10 — with Murano and Burano", lat: 45.4408, lng: 12.3155, status: "been" },
-      { name: "Ravenna, Italy", detail: "Sat · Oct 10 & Sat · Oct 17", lat: 44.4184, lng: 12.2035, status: "been" },
-      { name: "Kotor, Montenegro", detail: "Sun · Oct 11 — a favorite port", lat: 42.4247, lng: 18.7712, status: "been" },
-      { name: "Santorini, Greece", detail: "Tue · Oct 13 & Wed · Oct 21", lat: 36.4618, lng: 25.3760, status: "been" },
-      { name: "Athens (Piraeus), Greece", detail: "Wed · Oct 14", lat: 37.9429, lng: 23.6469, status: "been" },
-      { name: "Split, Croatia", detail: "Fri · Oct 16", lat: 43.5081, lng: 16.4402, status: "been" },
-      { name: "Civitavecchia (Rome), Italy", detail: "Oct 18 & 25 — aboard Odyssey of the Seas from here", lat: 42.0956, lng: 11.7879, status: "been" },
-      { name: "Messina, Sicily, Italy", detail: "Mon · Oct 19 — with Mt Etna and Taormina", lat: 38.1937, lng: 15.5542, status: "been" },
-      { name: "Mykonos, Greece", detail: "Thu · Oct 22", lat: 37.4467, lng: 25.3289, status: "been" },
-      { name: "Naples, Italy", detail: "Sat · Oct 24", lat: 40.8518, lng: 14.2681, status: "been" },
-      { name: "La Spezia, Italy", detail: "Mon · Oct 26 — Cinque Terre by train", lat: 44.1025, lng: 9.8241, status: "been" },
-      { name: "Barcelona, Spain", detail: "Wed · Oct 28", lat: 41.3874, lng: 2.1686, status: "been" },
-      { name: "Cartagena, Spain", detail: "Thu · Oct 29", lat: 37.6257, lng: -0.9966, status: "been" },
-      { name: "Lisbon, Portugal", detail: "Sat · Oct 31", lat: 38.7223, lng: -9.1393, status: "been" },
-      { name: "Ponta Delgada, Azores, Portugal", detail: "Mon · Nov 2", lat: 37.7394, lng: -25.6687, status: "been" },
-      { name: "At sea, North Atlantic", detail: "Nov 3–7 — sea days aboard Odyssey of the Seas, en route to Cape Liberty (approximate position)", lat: 38.8, lng: -42.0, status: "been" },
-      { name: "Cape Liberty (Bayonne), New Jersey", detail: "Sun · Nov 8 — the transatlantic ended here and the Bahamas finale boarded", lat: 40.6650, lng: -74.1130, status: "been" },
-      { name: "At sea aboard Odyssey of the Seas", detail: "Mon · Nov 9 — a full day at sea, en route to Port Canaveral (approximate position)", lat: 36.0, lng: -75.3, status: "been" },
-      { name: "Port Canaveral, Florida", detail: "Tue · Nov 10 — in port 11:59 AM–8:00 PM, Ron Jon Cocoa Beach shuttle excursion", lat: 28.4077, lng: -80.5985, status: "been" },
-      { name: "Perfect Day at CocoCay, Bahamas", detail: "Wed · Nov 11 — in port 8:30 AM–5:00 PM, Hideaway Beach day pass", lat: 25.8172, lng: -77.9375, status: "been" },
-      { name: "Nassau, Bahamas", detail: "Thu · Nov 12 — in port 8:00 AM–5:00 PM, Royal Beach Club day pass", lat: 25.0480, lng: -77.3554, status: "been" },
-      { name: "At sea aboard Odyssey of the Seas", detail: "Fri · Nov 13 & Sat · Nov 14 — full days at sea, en route to Cape Liberty (approximate position)", lat: 29.0, lng: -76.5, status: "been" },
-      { name: "Cape Liberty (Bayonne), New Jersey", detail: "Sun · Nov 15 — disembark Odyssey of the Seas at 6:00 AM, then fly home to Boston", lat: 40.6650, lng: -74.1130, status: "today" },
-      { name: "Boston, Massachusetts", detail: "Sun · Nov 15 — back in New England, home after forty days away", lat: 42.3601, lng: -71.0589, status: "been" }
+      { name: "Boston, Massachusetts", detail: "Thu · Nov 19 — the trip begins: fly Boston to Seattle (DL 2889, 3:30 PM → 6:59 PM)", lat: 42.3601, lng: -71.0589, status: "been" },
+      { name: "Seattle, Washington", detail: "Thu · Nov 19 — land at Sea-Tac, pick up the rental SUV and drive to Redmond", lat: 47.6062, lng: -122.3321, status: "today" },
+      { name: "Redmond, Washington", detail: "Thu · Nov 19 to Mon · Nov 23 — the wedding weekend, based at WoodSpring Suites Redmond; the wedding is Sat · Nov 21", lat: 47.6740, lng: -122.1215, status: "going" },
+      { name: "Boston, Massachusetts", detail: "Mon · Nov 23 — fly home to Boston", lat: 42.3601, lng: -71.0589, status: "going" }
     ];
 
     // PAST_TRIP_ROUTES: the route of every finished trip's detail page —
@@ -465,12 +443,14 @@ try {
     // counters in the markup count the places (the distinct entries in
     // this list), not the calls.
     const PAST_TRIP_ROUTES = {
-      // Note: the current trip (venice-transatlantic) is NOT in this
-      // table. Its history page carries [data-current-trip-map] and is
-      // rendered from CURRENT_TRIP_STOPS with the same been / today /
-      // going markers, solid + dashed route lines, key and totals as
-      // the home page's "The current trip, mapped" section. Only when
-      // the trip ends should its full route move into this table.
+      // Note: the current trip (jj-wedding-nov-2026, Seattle &
+      // Redmond) is NOT in this table. Its page carries
+      // [data-current-trip-map] and is rendered from
+      // CURRENT_TRIP_STOPS with the same been / today / going markers,
+      // solid + dashed route lines, key and totals as the home page's
+      // "The current trip, mapped" section. Only when the trip ends
+      // should its full route move into this table.
+      "venice-transatlantic": [{ name: "Boston, Massachusetts", lat: 42.3601, lng: -71.0589 }, { name: "Madrid, Spain", lat: 40.4168, lng: -3.7038 }, { name: "Venice, Italy", lat: 45.4408, lng: 12.3155 }, { name: "Ravenna, Italy", lat: 44.4184, lng: 12.2035 }, { name: "Kotor, Montenegro", lat: 42.4247, lng: 18.7712 }, { name: "Santorini, Greece", lat: 36.4618, lng: 25.3760 }, { name: "Athens (Piraeus), Greece", lat: 37.9429, lng: 23.6469 }, { name: "Split, Croatia", lat: 43.5081, lng: 16.4402 }, { name: "Civitavecchia (Rome), Italy", lat: 42.0956, lng: 11.7879 }, { name: "Messina, Sicily, Italy", lat: 38.1937, lng: 15.5542 }, { name: "Mykonos, Greece", lat: 37.4467, lng: 25.3289 }, { name: "Naples, Italy", lat: 40.8518, lng: 14.2681 }, { name: "La Spezia, Italy", lat: 44.1025, lng: 9.8241 }, { name: "Barcelona, Spain", lat: 41.3874, lng: 2.1686 }, { name: "Cartagena, Spain", lat: 37.6257, lng: -0.9966 }, { name: "Lisbon, Portugal", lat: 38.7223, lng: -9.1393 }, { name: "Ponta Delgada, Azores, Portugal", lat: 37.7394, lng: -25.6687 }, { name: "Cape Liberty (Bayonne), New Jersey", lat: 40.6650, lng: -74.1130 }, { name: "Port Canaveral, Florida", lat: 28.4077, lng: -80.5985 }, { name: "Perfect Day at CocoCay, Bahamas", lat: 25.8172, lng: -77.9375 }, { name: "Nassau, Bahamas", lat: 25.0480, lng: -77.3554 }, { name: "Cape Liberty (Bayonne), New Jersey", lat: 40.6650, lng: -74.1130 }, { name: "Boston, Massachusetts", lat: 42.3601, lng: -71.0589 }],
       "spain-transatlantic-jul-aug-2026": [{ name: "Madrid, Spain", lat: 40.4168, lng: -3.7038 }, { name: "Barcelona, Spain", lat: 41.3874, lng: 2.1686 }, { name: "Palma de Mallorca, Spain", lat: 39.5696, lng: 2.6502 }, { name: "Cartagena, Spain", lat: 37.6257, lng: -0.9966 }, { name: "M\u00e1laga, Spain", lat: 36.7213, lng: -4.4214 }, { name: "C\u00e1diz, Spain", lat: 36.5271, lng: -6.2886 }, { name: "Orlando, Florida", lat: 28.5383, lng: -81.3792 }, { name: "Port Canaveral, Florida", lat: 28.4103, lng: -80.6188 }, { name: "Nassau, Bahamas", lat: 25.048, lng: -77.3554 }, { name: "Perfect Day at CocoCay, Bahamas", lat: 25.8172, lng: -77.9375 }, { name: "Port Canaveral, Florida", lat: 28.4103, lng: -80.6188 }, { name: "San Juan, Puerto Rico", lat: 18.4655, lng: -66.1057 }, { name: "Tortola, British Virgin Islands", lat: 18.4236, lng: -64.6185 }, { name: "Philipsburg, St. Maarten", lat: 18.0237, lng: -63.0458 }, { name: "St. John\u2019s, Antigua", lat: 17.1274, lng: -61.8468 }, { name: "Basseterre, St. Kitts", lat: 17.3026, lng: -62.7177 }, { name: "St. Croix, US Virgin Islands", lat: 17.7125, lng: -64.8814 }, { name: "San Juan, Puerto Rico", lat: 18.4655, lng: -66.1057 }, { name: "Charlotte Amalie, St. Thomas", lat: 18.3419, lng: -64.9307 }, { name: "St. Croix, US Virgin Islands", lat: 17.7125, lng: -64.8814 }, { name: "Philipsburg, St. Maarten", lat: 18.0237, lng: -63.0458 }, { name: "St. John\u2019s, Antigua", lat: 17.1274, lng: -61.8468 }, { name: "Roseau, Dominica", lat: 15.3017, lng: -61.388 }, { name: "San Juan, Puerto Rico", lat: 18.4655, lng: -66.1057 }],
       "cape-cod-jul-2026": [{ name: "Harwich, Massachusetts", lat: 41.6865, lng: -70.0753 }],
       "bayonne-miami-sep-2026": [{ name: "Newark, New Jersey", lat: 40.7357, lng: -74.1724 }, { name: "Cape Liberty (Bayonne), New Jersey", lat: 40.665, lng: -74.113 }, { name: "Boston, Massachusetts", lat: 42.3601, lng: -71.0589 }, { name: "Portland, Maine", lat: 43.6591, lng: -70.2568 }, { name: "Saint John, New Brunswick, Canada", lat: 45.2733, lng: -66.0633 }, { name: "Sydney, Nova Scotia, Canada", lat: 46.1368, lng: -60.1942 }, { name: "Cape Liberty (Bayonne), New Jersey", lat: 40.665, lng: -74.113 }, { name: "Royal Naval Dockyard, Bermuda", lat: 32.3265, lng: -64.8354 }, { name: "Cape Liberty (Bayonne), New Jersey", lat: 40.665, lng: -74.113 }, { name: "Miami, Florida", lat: 25.7617, lng: -80.1918 }, { name: "Grand Turk, Turks & Caicos", lat: 21.4675, lng: -71.1369 }, { name: "Bimini, Bahamas", lat: 25.7275, lng: -79.2976 }, { name: "Miami, Florida", lat: 25.7617, lng: -80.1918 }, { name: "Key West, Florida", lat: 24.5551, lng: -81.78 }, { name: "Bimini, Bahamas", lat: 25.7275, lng: -79.2976 }, { name: "Miami, Florida", lat: 25.7617, lng: -80.1918 }],
@@ -772,7 +752,7 @@ try {
       "oasis-caribbean-sep-2023": ["Oasis of the Seas · Sep 2023", "2023-09-10"],
       "harmony-caribbean-mar-2023": ["Harmony of the Seas · Mar–Apr 2023", "2023-04-01"],
       "allure-caribbean-oct-2022": ["Allure of the Seas · Oct–Nov 2022", "2022-11-05"],
-      "venice-transatlantic": ["Venice & Transatlantic · Oct–Nov 2026 (current trip)", "2026-11-15"]
+      "venice-transatlantic": ["Venice & Transatlantic · Oct–Nov 2026", "2026-11-15"]
     };
     // [name, lat, lng, upcoming trips stopping there, next stop there]
     var WORLD_FUTURE_PLACES = [
