@@ -2044,7 +2044,7 @@ try {
             ["Nov 30", "Nassau, Bahamas", "Royal Beach Club day pass"],
             ["Dec 2", "Samaná, Dominican Republic", "Frontón Beach & snorkeling adventure"],
             ["Dec 3", "Puerto Plata, Dominican Republic", "Amber Beach Club getaway"],
-            ["Dec 6", "Nassau, Bahamas", "Hero World Challenge final round at Albany Golf Club — gates 10 AM; leave around 3:30 PM, taxi straight back to the ship (or taxi via Baha Mar and the free shuttle)"],
+            ["Dec 6", "Nassau, Bahamas", "Hero World Challenge final round at Albany Golf Club — gates 10 AM; leave Albany around 3:30 PM, taxi direct back to the ship recommended (alternative: taxi to/from Baha Mar plus the free shuttle)"],
             ["Dec 9", "Oranjestad, Aruba", "Sailaway snorkel cruise — in port until 11:00 PM"],
             ["Dec 10", "Willemstad, Curaçao", "Snorkel the Treasures of Caracas Bay"],
             ["Dec 15", "Cozumel, Mexico", "KUZA Beach day pass"],
