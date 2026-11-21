@@ -752,7 +752,8 @@ try {
       "oasis-caribbean-sep-2023": ["Oasis of the Seas · Sep 2023", "2023-09-10"],
       "harmony-caribbean-mar-2023": ["Harmony of the Seas · Mar–Apr 2023", "2023-04-01"],
       "allure-caribbean-oct-2022": ["Allure of the Seas · Oct–Nov 2022", "2022-11-05"],
-      "venice-transatlantic": ["Venice & Transatlantic · Oct–Nov 2026", "2026-11-15"]
+      "venice-transatlantic": ["Venice & Transatlantic · Oct–Nov 2026", "2026-11-15"],
+      "jj-wedding-nov-2026": ["Seattle & Redmond · Nov 2026", "2026-11-23"]
     };
     // [name, lat, lng, upcoming trips stopping there, next stop there]
     var WORLD_FUTURE_PLACES = [
@@ -953,6 +954,7 @@ try {
       "puerto-costa-maya": ["Puerto Costa Maya, Mexico", 18.7328, -87.6915],
       "puerto-plata": ["Puerto Plata, Dominican Republic", 19.7935, -70.6871],
       "ravenna": ["Ravenna, Italy", 44.4184, 12.2035],
+      "redmond": ["Redmond, Washington", 47.674, -122.1215],
       "riomaggiore": ["Riomaggiore, Italy", 44.0985, 9.7376],
       "roatan": ["Roatán, Honduras", 16.3239, -86.5363],
       "rome": ["Rome, Italy", 41.9033, 12.4956],
