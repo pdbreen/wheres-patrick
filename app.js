@@ -427,8 +427,8 @@ try {
     // below (all stops there render as visited) and load the next trip.
     const CURRENT_TRIP_STOPS = [
       { name: "Boston, Massachusetts", detail: "Thu · Nov 19 — the trip begins: fly Boston to Seattle (DL 2889, 3:30 PM → 6:59 PM)", lat: 42.3601, lng: -71.0589, status: "been" },
-      { name: "Seattle, Washington", detail: "Thu · Nov 19 — land at Sea-Tac, pick up the rental SUV and drive to Redmond", lat: 47.6062, lng: -122.3321, status: "today" },
-      { name: "Redmond, Washington", detail: "Thu · Nov 19 to Mon · Nov 23 — the wedding weekend, based at WoodSpring Suites Redmond; the wedding is Sat · Nov 21", lat: 47.6740, lng: -122.1215, status: "going" },
+      { name: "Seattle, Washington", detail: "Thu · Nov 19 — land at Sea-Tac, pick up the rental SUV and drive to Redmond", lat: 47.6062, lng: -122.3321, status: "been" },
+      { name: "Redmond, Washington", detail: "Thu · Nov 19 to Mon · Nov 23 — the wedding weekend, based at WoodSpring Suites Redmond; the wedding is Sat · Nov 21", lat: 47.6740, lng: -122.1215, status: "today" },
       { name: "Boston, Massachusetts", detail: "Mon · Nov 23 — fly home to Boston", lat: 42.3601, lng: -71.0589, status: "going" }
     ];
 
