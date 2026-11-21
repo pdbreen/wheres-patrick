@@ -1223,7 +1223,7 @@ footer a { text-underline-offset: 3px; }
 .loyalty-head strong { font-size: .95rem; }
 .loyalty-head span { color: var(--muted); font-size: .88rem; font-weight: 600; }
 .loyalty-bar { margin-top: 12px; height: 8px; border-radius: 999px; background: var(--surface-alt); overflow: hidden; }
-.loyalty-fill { height: 100%; width: 91.86%; border-radius: 999px; background: var(--gold); }
+.loyalty-fill { height: 100%; width: 93.86%; border-radius: 999px; background: var(--gold); }
 .loyalty p { margin: 10px 0 0; color: var(--muted); font-size: .85rem; }
 
 .map-caption { margin: 26px 0 0; color: var(--muted); font-size: .92rem; }
