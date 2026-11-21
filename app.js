@@ -2261,11 +2261,11 @@ try {
         "liberty-mariner": {
           title: "Liberty & Mariner",
           range: "November 26 – December 18, 2027 · 22 days",
-          tentative: true,
+          tentative: false,
           bookings: [
-            "Liberty of the Seas, 5nt Western Caribbean from Galveston — Ocean View Balcony (priced, not yet booked)",
-            "Mariner of the Seas, 7nt Western Caribbean from New Orleans — Ocean View Balcony (priced, not yet booked)",
-            "Mariner of the Seas, 7nt Western Caribbean from New Orleans — Ocean View Balcony (priced, not yet booked)",
+            "Liberty of the Seas, 5nt Western Caribbean from Galveston — Ocean View Balcony",
+            "Mariner of the Seas, 7nt Western Caribbean from New Orleans — Ocean View Balcony",
+            "Mariner of the Seas, 7nt Western Caribbean from New Orleans — Ocean View Balcony",
             "Flights & hotels still to book: Boston → Houston (Nov 26), Houston → New Orleans (Dec 2), 2 nights in New Orleans, home Dec 18"
           ],
           stops: [
