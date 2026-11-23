@@ -2326,15 +2326,16 @@ try {
         },
         "japan": {
           title: "Japan",
-          range: "March 8 – May 3, 2028 · 56 days",
+          range: "March 10 – May 3, 2028 · 54 days",
           bookings: [
-            "Positioning: Boston → San Francisco → Shanghai, arriving Mar 12 (flights still to book)",
+            "Positioning: Boston → Seattle (1 night) → Shanghai, arriving Mar 12 (flights still to book)",
             "Spectrum of the Seas, 8nt Shanghai → Yokohama — Ocean View with Large Balcony",
             "Tokyo, 5 nights (Mar 23–28) and Kyoto, 4 nights (Mar 28–Apr 1) — peak cherry-blossom season",
             "Voyager of the Seas, 12nt Japan Cherry Blossoms roundtrip — Sunset Balcony",
             "Voyager of the Seas, 16nt Yokohama → Seattle — Junior Suite"
           ],
           stops: [
+            ["Mar 10", "Seattle", "Fly in from Boston; 1 night — positioning stop en route to Shanghai"],
             ["Mar 12–14", "Shanghai", "Yu Garden, the Bund & Shanghai Tower"],
             ["Mar 17", "Kumamoto (Yatsushiro)", "Port day"],
             ["Mar 18", "Kagoshima", "Port day"],
