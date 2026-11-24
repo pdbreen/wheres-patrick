@@ -2020,6 +2020,59 @@ try {
     // sailing, which is not part of the upcoming-trips list.) When an
     // itinerary changes, refresh the matching entry here from that file.
     (function () {
+      // ==========================================================
+      // CRYSTAL BLOCK SAILINGS — ★ KEEP THIS LIST UP TO DATE ★
+      // One entry per FUTURE sailing that earns a Crown & Anchor
+      // crystal block (points crossing 140, then every 70 points).
+      // The 💎 icon in Headline bookings is driven entirely by this
+      // list — nothing else in the panel hard-codes it.
+      //
+      // WHEN A NEW CRUISE IS BOOKED: check the Crown & Anchor
+      // loyalty tracker. If the new sailing crosses a crystal-block
+      // milestone, add one entry here:
+      //   trip   — the TRIP_DETAILS key for that trip (below);
+      //   match  — text fragments that must ALL appear in that one
+      //            booking line: the ship name, plus a distinguishing
+      //            fragment (itinerary / direction / nights) whenever
+      //            the same ship sails more than once on the trip,
+      //            so sister sailings never get the icon;
+      //   points — the milestone crossed; note — any extra honour
+      //            earned on the same sailing (Pinnacle, free cruise);
+      //   sailing — the sailing's name and dates, shown in the
+      //            icon's tooltip.
+      // WHEN A SAILING ENDS: delete its entry — past sailings get
+      // no icon.
+      // Verified Nov 24, 2026 against the loyalty tracker; these
+      // are the only future sailings that earn a block.
+      // ==========================================================
+      var CRYSTAL_BLOCK_SAILINGS = [
+        { trip: "january-caribbean", match: ["Odyssey of the Seas", "Eastern Caribbean"], points: 700, note: "also Pinnacle Club + free cruise #1", sailing: "Odyssey of the Seas, Eastern Caribbean, Jan 3–14, 2027" },
+        { trip: "australia", match: ["Celebrity Edge", "New Zealand"], points: 770, note: "", sailing: "Celebrity Edge, New Zealand, Mar 13–24, 2027" },
+        { trip: "australia", match: ["Quantum of the Seas", "transpacific"], points: 840, note: "", sailing: "Quantum of the Seas, Transpacific, Apr 11–May 3, 2027" },
+        { trip: "alaska-panama-canal", match: ["Anthem of the Seas", "Northbound"], points: 910, note: "", sailing: "Anthem of the Seas, Alaska Northbound, Sep 3–10, 2027" },
+        { trip: "alaska-panama-canal", match: ["Serenade of the Seas", "Panama Canal"], points: 980, note: "", sailing: "Serenade of the Seas, Panama Canal, Oct 7–22, 2027" },
+        { trip: "legend-vision", match: ["Legend of the Seas", "8nt Southern Caribbean"], points: 1050, note: "also free cruise #2", sailing: "Legend of the Seas, Caribbean, Jan 8–16, 2028" },
+        { trip: "japan", match: ["Voyager of the Seas", "Yokohama → Seattle"], points: 1120, note: "", sailing: "Voyager of the Seas, Tokyo–Seattle, Apr 13–29, 2028" }
+      ];
+      function crystalFor(tripKey, bookingText) {
+        for (var i = 0; i < CRYSTAL_BLOCK_SAILINGS.length; i++) {
+          var c = CRYSTAL_BLOCK_SAILINGS[i];
+          if (c.trip !== tripKey) { continue; }
+          var ok = true;
+          for (var j = 0; j < c.match.length; j++) {
+            if (bookingText.indexOf(c.match[j]) === -1) { ok = false; break; }
+          }
+          if (ok) { return c; }
+        }
+        return null;
+      }
+      function tripHasCrystal(tripKey, bookings) {
+        for (var i = 0; i < bookings.length; i++) {
+          if (crystalFor(tripKey, bookings[i])) { return true; }
+        }
+        return false;
+      }
+
       var TRIP_DETAILS = {
         "seattle-redmond": {
           title: "Seattle & Redmond",
@@ -2164,7 +2217,7 @@ try {
           bookings: [
             "Grandeur of the Seas, 7nt Southern Caribbean from San Juan (Jun 5–12)",
             "Star of the Seas, 7nt Eastern Caribbean from Port Canaveral (Jun 13–20)",
-            "Flights & hotels still to book: Boston → San Juan (Jun 4), a night in San Juan, San Juan → Orlando (Jun 12), a night in Orlando, home from Orlando (Jun 20)"
+            "Flights & hotels: Boston → San Juan (Jun 4), a night in San Juan, San Juan → Orlando (Jun 12), a night in Orlando, home from Orlando (Jun 20)"
           ],
           stops: [
             ["Jun 4", "San Juan, Puerto Rico", "Fly in from Boston; night in San Juan"],
@@ -2202,9 +2255,9 @@ try {
             "Sophie Station Suites, Fairbanks (2n); Denali Cabins (2n); Denali Fireside Cabin, Talkeetna (1n)",
             "Alaska Railroad Coastal Classic, Anchorage → Seward (Aug 27) — GoldStar Service",
             "Anthem of the Seas, 7nt Southbound Alaska & Hubbard Glacier — Ocean View Balcony Guarantee",
-            "Anthem of the Seas, 7nt Northbound Alaska, Vancouver → Seward (Sep 3–10) — to be booked",
-            "Anthem of the Seas, 7nt Southbound Alaska & Hubbard Glacier, Seward → Vancouver (Sep 10–17) — to be booked",
-            "Vancouver hotel, 2 nights between sailings (Sep 17–19) — to be booked",
+            "Anthem of the Seas, 7nt Northbound Alaska, Vancouver → Seward (Sep 3–10)",
+            "Anthem of the Seas, 7nt Southbound Alaska & Hubbard Glacier, Seward → Vancouver (Sep 10–17)",
+            "Vancouver hotel, 2 nights between sailings (Sep 17–19)",
             "Serenade of the Seas, 7nt Alaska Inside Passage from Vancouver — Ocean View",
             "Serenade of the Seas, 7nt Pacific Coastal Vancouver → San Diego — Ocean View Balcony Guarantee",
             "San Diego, 4 nights between sailings (Oct 3–7)",
@@ -2266,7 +2319,7 @@ try {
             "Liberty of the Seas, 5nt Western Caribbean from Galveston — Ocean View Balcony",
             "Mariner of the Seas, 7nt Western Caribbean from New Orleans — Ocean View Balcony",
             "Mariner of the Seas, 7nt Western Caribbean from New Orleans — Ocean View Balcony",
-            "Flights & hotels still to book: Boston → Houston (Nov 26), Houston → New Orleans (Dec 2), 2 nights in New Orleans, home Dec 18"
+            "Flights & hotels: Boston → Houston (Nov 26), Houston → New Orleans (Dec 2), 2 nights in New Orleans, home Dec 18"
           ],
           stops: [
             ["Nov 26", "Houston", "Fly in from Boston; night in Houston or Galveston"],
@@ -2293,9 +2346,9 @@ try {
           bookings: [
             "Legend of the Seas, 8nt Southern Caribbean from Fort Lauderdale — Ocean View (10% obstructed)",
             "Legend of the Seas, 6nt Western Caribbean from Fort Lauderdale — Ocean View (10% obstructed)",
-            "Vision of the Seas, 7nt Southern Caribbean from San Juan — Spacious Ocean View Balcony (priced, not yet booked)",
-            "Vision of the Seas, 7nt Southern Caribbean from San Juan — Spacious Ocean View Balcony (priced, not yet booked)",
-            "Flights & hotels still to book: Boston → Fort Lauderdale (Jan 7), Fort Lauderdale → San Juan (Jan 22), San Juan → Boston (Feb 6); a night each in Fort Lauderdale & San Juan"
+            "Vision of the Seas, 7nt Southern Caribbean from San Juan — Spacious Ocean View Balcony",
+            "Vision of the Seas, 7nt Southern Caribbean from San Juan — Spacious Ocean View Balcony",
+            "Flights & hotels: Boston → Fort Lauderdale (Jan 7), Fort Lauderdale → San Juan (Jan 22), San Juan → Boston (Feb 6); a night each in Fort Lauderdale & San Juan"
           ],
           stops: [
             ["Jan 7", "Fort Lauderdale", "Fly in from Boston; at least one night ashore"],
@@ -2328,7 +2381,7 @@ try {
           title: "Japan",
           range: "March 10 – May 3, 2028 · 54 days",
           bookings: [
-            "Positioning: Boston → Seattle (1 night) → Shanghai, arriving Mar 12 (flights still to book)",
+            "Positioning: Boston → Seattle (1 night) → Shanghai, arriving Mar 12",
             "Spectrum of the Seas, 8nt Shanghai → Yokohama — Ocean View with Large Balcony",
             "Tokyo, 5 nights (Mar 23–28) and Kyoto, 4 nights (Mar 28–Apr 1) — peak cherry-blossom season",
             "Voyager of the Seas, 12nt Japan Cherry Blossoms roundtrip — Sunset Balcony",
@@ -2415,6 +2468,7 @@ try {
       var flagEl = document.getElementById("trip-modal-flag");
       var bookingsEl = document.getElementById("trip-modal-bookings");
       var stopsEl = document.getElementById("trip-modal-stops");
+      var crystalLegendEl = document.getElementById("trip-modal-crystal-legend");
       var shareLinkBtn = document.getElementById("trip-modal-link");
       var currentShareUrl = "";
       // The dialog markup lives inside the Future section so the
@@ -2442,6 +2496,7 @@ try {
             '<button class="trip-modal-link" id="trip-modal-link" type="button" aria-label="Link to this trip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg><span>Link to this trip</span></button>' +
             '<h4>Headline bookings</h4>' +
             '<ul class="trip-modal-bookings" id="trip-modal-bookings"></ul>' +
+            '<p class="trip-modal-crystal-legend" id="trip-modal-crystal-legend" hidden>💎 Marks a sailing that earns a Crown &amp; Anchor crystal block.</p>' +
             '<h4>Ports &amp; stops</h4>' +
             '<ul class="trip-modal-stops" id="trip-modal-stops"></ul>' +
             "</div>";
@@ -2452,6 +2507,7 @@ try {
           flagEl = document.getElementById("trip-modal-flag");
           bookingsEl = document.getElementById("trip-modal-bookings");
           stopsEl = document.getElementById("trip-modal-stops");
+          crystalLegendEl = document.getElementById("trip-modal-crystal-legend");
           shareLinkBtn = document.getElementById("trip-modal-link");
         } catch (e) { /* fall through to the bail-out below */ }
       }
@@ -2470,6 +2526,20 @@ try {
           titleEl.parentNode.insertBefore(shareBtn, titleEl.nextSibling);
           shareLinkBtn = document.getElementById("trip-modal-link");
         } catch (e) { /* link affordance is additive; dialog still works without it */ }
+      }
+      // Same treatment for the crystal-block legend line: if the
+      // dialog shipped without it (older publish), add it right
+      // after the bookings list so the 💎 icons are always explained.
+      if (!crystalLegendEl && bookingsEl && bookingsEl.parentNode) {
+        try {
+          var legendP = document.createElement("p");
+          legendP.className = "trip-modal-crystal-legend";
+          legendP.id = "trip-modal-crystal-legend";
+          legendP.hidden = true;
+          legendP.textContent = "💎 Marks a sailing that earns a Crown & Anchor crystal block.";
+          bookingsEl.parentNode.insertBefore(legendP, bookingsEl.nextSibling);
+          crystalLegendEl = document.getElementById("trip-modal-crystal-legend");
+        } catch (e) { /* legend is additive; dialog still works without it */ }
       }
       // Copy-on-click for the trip's permanent deep link, shared by
       // the dialog control and the card controls below: write the URL
@@ -2527,7 +2597,7 @@ try {
       }
       var lastTrigger = null;
 
-      function fillList(ul, items, isStops) {
+      function fillList(ul, items, isStops, tripKey) {
         ul.textContent = "";
         items.forEach(function (item) {
           var li = document.createElement("li");
@@ -2542,7 +2612,32 @@ try {
             li.appendChild(t);
             li.appendChild(span);
           } else {
-            li.textContent = item;
+            // Headline bookings: a sailing on the CRYSTAL_BLOCK_SAILINGS
+            // list gets a 💎 right after the ship's name (the text up
+            // to the first comma); the milestone rides in the icon's
+            // title / accessible label, and the legend line under the
+            // list (toggled in openTrip) explains the mark.
+            var crystal = tripKey ? crystalFor(tripKey, item) : null;
+            if (!crystal) {
+              li.textContent = item;
+            } else {
+              var tip = "Crystal block at " + crystal.points + " points — " + crystal.sailing + (crystal.note ? " (" + crystal.note + ")" : "");
+              var icon = document.createElement("span");
+              icon.className = "crystal-icon";
+              icon.textContent = "💎";
+              icon.setAttribute("title", tip);
+              icon.setAttribute("role", "img");
+              icon.setAttribute("aria-label", tip);
+              var comma = item.indexOf(",");
+              if (comma > 0) {
+                li.appendChild(document.createTextNode(item.slice(0, comma) + " "));
+                li.appendChild(icon);
+                li.appendChild(document.createTextNode(item.slice(comma)));
+              } else {
+                li.appendChild(document.createTextNode(item + " "));
+                li.appendChild(icon);
+              }
+            }
           }
           ul.appendChild(li);
         });
@@ -2559,7 +2654,7 @@ try {
         // is a timeline bar (no data-slug), the map above supplies it.
         if (shareLinkBtn) { shareLinkBtn.setAttribute("data-trip-url", currentShareUrl); }
         if (d.tentative) {
-          flagEl.textContent = "Tentative — nothing booked yet; firm once the first booking lands";
+          flagEl.textContent = "Tentative — dates and details still coming together";
           flagEl.hidden = false;
         } else {
           flagEl.textContent = "";
@@ -2569,10 +2664,13 @@ try {
         // stops only); hide the whole bookings section for those rather
         // than show an empty heading.
         var bookings = d.bookings || [];
-        fillList(bookingsEl, bookings, false);
+        fillList(bookingsEl, bookings, false, key);
         bookingsEl.hidden = bookings.length === 0;
         var bookingsHead = bookingsEl.previousElementSibling;
         if (bookingsHead) { bookingsHead.hidden = bookings.length === 0; }
+        // The crystal-block legend shows only on trips that actually
+        // carry a 💎 sailing, so panels without one stay uncluttered.
+        if (crystalLegendEl) { crystalLegendEl.hidden = !(bookings.length && tripHasCrystal(key, bookings)); }
         fillList(stopsEl, d.stops, true);
         modal.hidden = false;
         document.body.style.overflow = "hidden";

@@ -1365,6 +1365,9 @@ h3 .fav-star { width: 19px; height: 19px; vertical-align: -3px; margin-right: 7p
 .trip-modal-card ul { margin: 0; padding: 0; list-style: none; }
 .trip-modal-bookings li { padding: 7px 0; color: var(--ink); font-size: .93rem; line-height: 1.5; border-top: 1px solid var(--line); }
 .trip-modal-bookings li:first-child { border-top: 0; padding-top: 2px; }
+.crystal-icon { display: inline-block; font-size: .92em; line-height: 1; }
+.trip-modal-crystal-legend { margin: 10px 0 0; color: var(--muted); font-size: .83rem; line-height: 1.5; }
+.trip-modal-crystal-legend[hidden] { display: none; }
 .trip-modal-stops li { display: grid; grid-template-columns: 92px 1fr; gap: 12px; padding: 6px 0; font-size: .93rem; line-height: 1.5; }
 .trip-modal-stops li + li { border-top: 1px solid var(--line); }
 .trip-modal-stops time { color: var(--orange); font-size: .78rem; font-weight: 600; text-transform: uppercase; line-height: 1.5; padding-top: 2px; }
