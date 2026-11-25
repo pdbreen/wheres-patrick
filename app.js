@@ -63,7 +63,17 @@ try {
       "Nassau": "assets/hero-nassau.jpg",
       "Cape Liberty": "assets/hero-cape-liberty.jpg",
       "Seattle": "assets/hero-seattle.jpg",
-      "Redmond": "assets/hero-redmond.jpg"
+      "Redmond": "assets/hero-redmond.jpg",
+      "Fort Lauderdale": "assets/hero-fort-lauderdale.jpg",
+      "Ft Lauderdale": "assets/hero-fort-lauderdale.jpg",
+      "Samaná": "assets/hero-samana.jpg",
+      "Samana": "assets/hero-samana.jpg",
+      "Puerto Plata": "assets/hero-puerto-plata.jpg",
+      "Oranjestad": "assets/hero-oranjestad.jpg",
+      "Willemstad": "assets/hero-willemstad.jpg",
+      "Cozumel": "assets/hero-cozumel.jpg",
+      "Puerto Costa Maya": "assets/hero-costa-maya.jpg",
+      "Costa Maya": "assets/hero-costa-maya.jpg"
     };
     // STOP_HEROES is the same mapping keyed by CURRENT_TRIP_STOPS names
     // (defined below): heroFromStops uses it to advance the hero PHOTO
@@ -84,7 +94,15 @@ try {
       "Nassau, Bahamas": "assets/hero-nassau.jpg",
       "Cape Liberty (Bayonne), New Jersey": "assets/hero-cape-liberty.jpg",
       "Seattle, Washington": "assets/hero-seattle.jpg",
-      "Redmond, Washington": "assets/hero-redmond.jpg"
+      "Redmond, Washington": "assets/hero-redmond.jpg",
+      "Ft Lauderdale, Florida": "assets/hero-fort-lauderdale.jpg",
+      "Fort Lauderdale, Florida": "assets/hero-fort-lauderdale.jpg",
+      "Samaná, Dominican Republic": "assets/hero-samana.jpg",
+      "Puerto Plata, Dominican Republic": "assets/hero-puerto-plata.jpg",
+      "Oranjestad, Aruba": "assets/hero-oranjestad.jpg",
+      "Willemstad, Curaçao": "assets/hero-willemstad.jpg",
+      "Cozumel, Mexico": "assets/hero-cozumel.jpg",
+      "Puerto Costa Maya, Mexico": "assets/hero-costa-maya.jpg"
     };
     const PLAN_HEROES = {
       "Cinque Terre": "assets/hero-cinque-terre.jpg",
@@ -118,7 +136,14 @@ try {
       "assets/hero-nassau.jpg": { text: "Photo: Nassau harbour, with Paradise Island and Atlantis beyond", url: "https://blog.asaptickets.com/popular-spring-break-destinations-2024/", label: "ASAP Tickets blog" },
       "assets/hero-cape-liberty.jpg": { text: "Photo: JMcgo1979, public domain — Freedom of the Seas at Cape Liberty on her christening day, May 11, 2006", url: "https://commons.wikimedia.org/wiki/File:Freedom_of_the_Seas.JPG" },
       "assets/hero-seattle.jpg": { text: "Photo: SounderBruce, CC BY-SA 4.0 — the Space Needle and downtown Seattle from Kerry Park", url: "https://commons.wikimedia.org/wiki/File:Seattle_skyline_from_Kerry_Park,_Sept._2018.jpg" },
-      "assets/hero-redmond.jpg": { text: "Photo: Spicypepper999, CC0 — downtown Redmond from the air", url: "https://commons.wikimedia.org/wiki/File:Redmond_aerial,_April_2023.png" }
+      "assets/hero-redmond.jpg": { text: "Photo: Spicypepper999, CC0 — downtown Redmond from the air", url: "https://commons.wikimedia.org/wiki/File:Redmond_aerial,_April_2023.png" },
+      "assets/hero-fort-lauderdale.jpg": { text: "Photo: formulanone, CC BY-SA 2.0", url: "https://commons.wikimedia.org/wiki/File:Fort_Lauderdale_Beach_Aerial_(34477278135).jpg" },
+      "assets/hero-samana.jpg": { text: "Photo: Максим Улитин, CC BY 3.0 (Cayo Levantado, Samaná)", url: "https://commons.wikimedia.org/wiki/File:Cayo_Levantado,_Saman%C3%A1_32000,_Dominican_Republic_-_panoramio.jpg" },
+      "assets/hero-puerto-plata.jpg": { text: "Photo: CareAhLine, CC0 — Fortaleza San Felipe, Puerto Plata", url: "https://commons.wikimedia.org/wiki/File:Fortaleza_de_San_Felipe_DR_1.jpg" },
+      "assets/hero-oranjestad.jpg": { text: "Photo: Martin Falbisoner, CC BY-SA 4.0 (Plaza Daniel Leo, Oranjestad)", url: "https://commons.wikimedia.org/wiki/File:Plaza_Daniel_Leo,_Oranjestad,_Aruba_-_February_2020.jpg" },
+      "assets/hero-willemstad.jpg": { text: "Photo: Martin Falbisoner, CC BY-SA 4.0 (Handelskade, Willemstad)", url: "https://commons.wikimedia.org/wiki/File:Facades_of_Handelskade,_Willemstad,_Cura%C3%A7ao_-_February_2020.jpg" },
+      "assets/hero-cozumel.jpg": { text: "Photo: Ken Thomas, public domain — Punta Sur, Cozumel", url: "https://commons.wikimedia.org/wiki/File:Cozumel_Punta_Sur_View-27527.jpg" },
+      "assets/hero-costa-maya.jpg": { text: "Photo: Juan Ortega, CC BY 3.0 (BlueKay Beach, Mahahual)", url: "https://commons.wikimedia.org/wiki/File:BlueKay_Beach_en_Mahahual,_Mexico_(http-www.bluekaymahahual.com)_-_panoramio_(2).jpg" }
     };
 
     (function () {
