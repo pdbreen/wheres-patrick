@@ -451,10 +451,21 @@ try {
     // passes, and when the trip ends move its route into PAST_TRIP_ROUTES
     // below (all stops there render as visited) and load the next trip.
     const CURRENT_TRIP_STOPS = [
-      { name: "Boston, Massachusetts", detail: "Thu · Nov 19 — the trip begins: fly Boston to Seattle (DL 2889, 3:30 PM → 6:59 PM)", lat: 42.3601, lng: -71.0589, status: "been" },
-      { name: "Seattle, Washington", detail: "Thu · Nov 19 — land at Sea-Tac, pick up the rental SUV and drive to Redmond", lat: 47.6062, lng: -122.3321, status: "been" },
-      { name: "Redmond, Washington", detail: "Thu · Nov 19 to Mon · Nov 23 — the wedding weekend, based at WoodSpring Suites Redmond; the wedding is Sat · Nov 21", lat: 47.6740, lng: -122.1215, status: "been" },
-      { name: "Boston, Massachusetts", detail: "Mon · Nov 23 — fly home to Boston (DL 459, SEA 7:20 AM → BOS 3:54 PM)", lat: 42.3601, lng: -71.0589, status: "been" }
+      { name: "Boston, Massachusetts", detail: "Sat · Nov 28 — the trip begins: fly Boston to Ft Lauderdale (B6 69, 10:10 AM → 1:40 PM)", lat: 42.3601, lng: -71.0589, status: "been" },
+      { name: "Ft Lauderdale, Florida", detail: "Sat · Nov 28 — arrive and overnight at Bahia Mar; board Adventure of the Seas Sun · Nov 29", lat: 26.0919, lng: -80.1143, status: "today" },
+      { name: "Nassau, Bahamas", detail: "Mon · Nov 30 — a beach-club day on Paradise Island", lat: 25.048, lng: -77.3554, status: "going" },
+      { name: "Samaná, Dominican Republic", detail: "Wed · Dec 2 — a beach and snorkeling day in Samaná", lat: 19.2056, lng: -69.3367, status: "going" },
+      { name: "Puerto Plata, Dominican Republic", detail: "Thu · Dec 3 — a beach-club day in Puerto Plata", lat: 19.7935, lng: -70.6871, status: "going" },
+      { name: "Ft Lauderdale, Florida", detail: "Sat · Dec 5 — turnaround in Ft Lauderdale; board the second sailing", lat: 26.0919, lng: -80.1143, status: "going" },
+      { name: "Nassau, Bahamas", detail: "Sun · Dec 6 — the Hero World Challenge final round at Albany Golf Club", lat: 25.048, lng: -77.3554, status: "going" },
+      { name: "Oranjestad, Aruba", detail: "Wed · Dec 9 — Oranjestad, Aruba", lat: 12.519, lng: -70.037, status: "going" },
+      { name: "Willemstad, Curaçao", detail: "Thu · Dec 10 — Willemstad, Curaçao", lat: 12.1224, lng: -68.9335, status: "going" },
+      { name: "Ft Lauderdale, Florida", detail: "Sun · Dec 13 — turnaround in Ft Lauderdale; board the third sailing", lat: 26.0919, lng: -80.1143, status: "going" },
+      { name: "Cozumel, Mexico", detail: "Tue · Dec 15 — Cozumel, Mexico", lat: 20.5103, lng: -86.9493, status: "going" },
+      { name: "Puerto Costa Maya, Mexico", detail: "Wed · Dec 16 — Puerto Costa Maya, Mexico", lat: 18.7328, lng: -87.6915, status: "going" },
+      { name: "Nassau, Bahamas", detail: "Fri · Dec 18 — Nassau, Bahamas", lat: 25.048, lng: -77.3554, status: "going" },
+      { name: "Ft Lauderdale, Florida", detail: "Sat · Dec 19 — disembark in Ft Lauderdale", lat: 26.0919, lng: -80.1143, status: "going" },
+      { name: "Boston, Massachusetts", detail: "Sat · Dec 19 — fly home to Boston", lat: 42.3601, lng: -71.0589, status: "going" }
     ];
 
     // PAST_TRIP_ROUTES: the route of every finished trip's detail page —
@@ -468,13 +479,14 @@ try {
     // counters in the markup count the places (the distinct entries in
     // this list), not the calls.
     const PAST_TRIP_ROUTES = {
-      // Note: the current trip (jj-wedding-nov-2026, Seattle &
-      // Redmond) is NOT in this table. Its page carries
+      // Note: the current trip (december-caribbean-nov-dec-2026,
+      // Caribbean) is NOT in this table. Its page carries
       // [data-current-trip-map] and is rendered from
       // CURRENT_TRIP_STOPS with the same been / today / going markers,
       // solid + dashed route lines, key and totals as the home page's
       // "The current trip, mapped" section. Only when the trip ends
       // should its full route move into this table.
+      "jj-wedding-nov-2026": [{ name: "Boston, Massachusetts", lat: 42.3601, lng: -71.0589 }, { name: "Seattle, Washington", lat: 47.6062, lng: -122.3321 }, { name: "Redmond, Washington", lat: 47.6740, lng: -122.1215 }, { name: "Boston, Massachusetts", lat: 42.3601, lng: -71.0589 }],
       "venice-transatlantic": [{ name: "Boston, Massachusetts", lat: 42.3601, lng: -71.0589 }, { name: "Madrid, Spain", lat: 40.4168, lng: -3.7038 }, { name: "Venice, Italy", lat: 45.4408, lng: 12.3155 }, { name: "Ravenna, Italy", lat: 44.4184, lng: 12.2035 }, { name: "Kotor, Montenegro", lat: 42.4247, lng: 18.7712 }, { name: "Santorini, Greece", lat: 36.4618, lng: 25.3760 }, { name: "Athens (Piraeus), Greece", lat: 37.9429, lng: 23.6469 }, { name: "Split, Croatia", lat: 43.5081, lng: 16.4402 }, { name: "Civitavecchia (Rome), Italy", lat: 42.0956, lng: 11.7879 }, { name: "Messina, Sicily, Italy", lat: 38.1937, lng: 15.5542 }, { name: "Mykonos, Greece", lat: 37.4467, lng: 25.3289 }, { name: "Naples, Italy", lat: 40.8518, lng: 14.2681 }, { name: "La Spezia, Italy", lat: 44.1025, lng: 9.8241 }, { name: "Barcelona, Spain", lat: 41.3874, lng: 2.1686 }, { name: "Cartagena, Spain", lat: 37.6257, lng: -0.9966 }, { name: "Lisbon, Portugal", lat: 38.7223, lng: -9.1393 }, { name: "Ponta Delgada, Azores, Portugal", lat: 37.7394, lng: -25.6687 }, { name: "Cape Liberty (Bayonne), New Jersey", lat: 40.6650, lng: -74.1130 }, { name: "Port Canaveral, Florida", lat: 28.4077, lng: -80.5985 }, { name: "Perfect Day at CocoCay, Bahamas", lat: 25.8172, lng: -77.9375 }, { name: "Nassau, Bahamas", lat: 25.0480, lng: -77.3554 }, { name: "Cape Liberty (Bayonne), New Jersey", lat: 40.6650, lng: -74.1130 }, { name: "Boston, Massachusetts", lat: 42.3601, lng: -71.0589 }],
       "spain-transatlantic-jul-aug-2026": [{ name: "Madrid, Spain", lat: 40.4168, lng: -3.7038 }, { name: "Barcelona, Spain", lat: 41.3874, lng: 2.1686 }, { name: "Palma de Mallorca, Spain", lat: 39.5696, lng: 2.6502 }, { name: "Cartagena, Spain", lat: 37.6257, lng: -0.9966 }, { name: "M\u00e1laga, Spain", lat: 36.7213, lng: -4.4214 }, { name: "C\u00e1diz, Spain", lat: 36.5271, lng: -6.2886 }, { name: "Orlando, Florida", lat: 28.5383, lng: -81.3792 }, { name: "Port Canaveral, Florida", lat: 28.4103, lng: -80.6188 }, { name: "Nassau, Bahamas", lat: 25.048, lng: -77.3554 }, { name: "Perfect Day at CocoCay, Bahamas", lat: 25.8172, lng: -77.9375 }, { name: "Port Canaveral, Florida", lat: 28.4103, lng: -80.6188 }, { name: "San Juan, Puerto Rico", lat: 18.4655, lng: -66.1057 }, { name: "Tortola, British Virgin Islands", lat: 18.4236, lng: -64.6185 }, { name: "Philipsburg, St. Maarten", lat: 18.0237, lng: -63.0458 }, { name: "St. John\u2019s, Antigua", lat: 17.1274, lng: -61.8468 }, { name: "Basseterre, St. Kitts", lat: 17.3026, lng: -62.7177 }, { name: "St. Croix, US Virgin Islands", lat: 17.7125, lng: -64.8814 }, { name: "San Juan, Puerto Rico", lat: 18.4655, lng: -66.1057 }, { name: "Charlotte Amalie, St. Thomas", lat: 18.3419, lng: -64.9307 }, { name: "St. Croix, US Virgin Islands", lat: 17.7125, lng: -64.8814 }, { name: "Philipsburg, St. Maarten", lat: 18.0237, lng: -63.0458 }, { name: "St. John\u2019s, Antigua", lat: 17.1274, lng: -61.8468 }, { name: "Roseau, Dominica", lat: 15.3017, lng: -61.388 }, { name: "San Juan, Puerto Rico", lat: 18.4655, lng: -66.1057 }],
       "cape-cod-jul-2026": [{ name: "Harwich, Massachusetts", lat: 41.6865, lng: -70.0753 }],
@@ -782,16 +794,14 @@ try {
     };
     // [name, lat, lng, upcoming trips stopping there, next stop there]
     var WORLD_FUTURE_PLACES = [
-      ["Seattle, Washington", 47.6062, -122.3321, 3, "Nov 2026"],
-      ["Redmond, Washington", 47.674, -122.1215, 1, "Nov 2026"],
-      ["Ft Lauderdale, Florida", 26.0919, -80.1143, 2, "Nov 2026"],
-      ["Nassau, Bahamas", 25.048, -77.3554, 2, "Nov 2026"],
-      ["Saman\u00e1, Dominican Republic", 19.2056, -69.3367, 1, "Dec 2026"],
-      ["Puerto Plata, Dominican Republic", 19.7935, -70.6871, 2, "Dec 2026"],
-      ["Oranjestad, Aruba", 12.519, -70.037, 2, "Dec 2026"],
-      ["Willemstad, Cura\u00e7ao", 12.1224, -68.9335, 2, "Dec 2026"],
-      ["Cozumel, Mexico", 20.5103, -86.9493, 3, "Dec 2026"],
-      ["Puerto Costa Maya, Mexico", 18.7328, -87.6915, 3, "Dec 2026"],
+      ["Seattle, Washington", 47.6062, -122.3321, 2, "May 2027"],
+      ["Ft Lauderdale, Florida", 26.0919, -80.1143, 1, "Jan 2028"],
+      ["Nassau, Bahamas", 25.048, -77.3554, 1, "Feb 2027"],
+      ["Puerto Plata, Dominican Republic", 19.7935, -70.6871, 1, "Feb 2027"],
+      ["Oranjestad, Aruba", 12.519, -70.037, 1, "Jan 2028"],
+      ["Willemstad, Cura\u00e7ao", 12.1224, -68.9335, 1, "Jan 2028"],
+      ["Cozumel, Mexico", 20.5103, -86.9493, 2, "Nov 2027"],
+      ["Puerto Costa Maya, Mexico", 18.7328, -87.6915, 2, "Nov 2027"],
       ["Cape Liberty (Bayonne), New Jersey", 40.665, -74.113, 1, "Jan 2027"],
       ["Philipsburg, St. Maarten", 18.0237, -63.0458, 3, "Jan 2027"],
       ["St. John\u2019s, Antigua", 17.1274, -61.8468, 3, "Jan 2027"],
@@ -988,6 +998,7 @@ try {
       "bermuda-royal-naval-dockyard": ["Royal Naval Dockyard, Bermuda", 32.3265, -64.8354],
       "saint-john": ["Saint John, New Brunswick, Canada", 45.2733, -66.0633],
       "salerno": ["Salerno, Italy", 40.6824, 14.7681],
+      "samana": ["Saman\u00e1, Dominican Republic", 19.2056, -69.3367],
       "san-juan": ["San Juan, Puerto Rico", 18.4655, -66.1057],
       "santiago-de-compostela": ["Santiago de Compostela, Spain", 42.8768, -8.5443],
       "santorini": ["Santorini, Greece", 36.4618, 25.376],
@@ -1056,7 +1067,7 @@ try {
       // entries group under "view-main", exactly as the counters
       // group them) and count one visit per unbroken run of
       // consecutive days within a trip.
-      var WORLD_CURRENT_TRIP = "venice-transatlantic";
+      var WORLD_CURRENT_TRIP = "december-caribbean-nov-dec-2026";
       var dataReady = false, dataTimer = null;
       function isoDayNum(iso) {
         var p = String(iso || "").split("-");
